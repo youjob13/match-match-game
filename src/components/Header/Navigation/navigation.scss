@@ -1,0 +1,46 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  margin-left: 8rem;
+  &__item {
+    position: relative;
+    z-index: 1;
+    min-width: 95px;
+    padding: 0 10px;
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+    &:hover,
+    &.active {
+      color: #fff;
+      &::after {
+        content: "";
+        background-color: rgba(47, 128, 237, 0.4);
+        position: absolute;
+        left: 0;
+        top: -2rem;
+        width: 100%;
+        height: calc(100% + 3rem);
+        z-index: -1;
+      }
+    }
+    &:hover .navigation__text {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    &:active .navigation__text {
+      color: #fff;
+    }
+  }
+  &__text {
+    display: block;
+    font-weight: 400;
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: 0.2s;
+  }
+  &__icon {
+    width: 24px;
+  }
+}

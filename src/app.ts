@@ -1,4 +1,5 @@
 import './styles.scss';
+import Header from './components/Header/Header';
 
 export interface IApplication {
   app: HTMLElement | null;
@@ -11,6 +12,8 @@ export class App {
 
   init():void {
     if (!this.app) throw new Error('app is not founded');
-    this.app.innerHTML = 'application';
+    this.app.innerHTML = '<h1 class="h1-title">Match match game</h1>';
+    const header = new Header('header', ['header']);
+    this.app.append(header.node);
   }
 }
