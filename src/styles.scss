@@ -12,6 +12,10 @@ a {
   padding: 0;
 }
 
+#app {
+  height: 100vh;
+}
+
 .h1-title {
   position: absolute;
   clip: rect(1px, 1px, 1px, 1px);
@@ -21,4 +25,11 @@ a {
   width: 1px;
   padding: 0;
   border: 0;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+  max-width: 1800px;
+  padding: 0 14rem;
 }

@@ -1,0 +1,14 @@
+.about-game {
+  position: relative;
+  height: calc(100% - 4rem - 20px);
+  padding: 60px 0 80px;
+  counter-reset: count;
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0.15px;
+    color: rgba(0, 0, 0, 0.87);
+    mix-blend-mode: normal;
+  }
+}

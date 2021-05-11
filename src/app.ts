@@ -1,5 +1,6 @@
 import './styles.scss';
 import Header from './components/Header/Header';
+import AboutGame from './components/AboutGame/AboutGame';
 
 export interface IApplication {
   app: HTMLElement | null;
@@ -15,5 +16,7 @@ export class App {
     this.app.innerHTML = '<h1 class="h1-title">Match match game</h1>';
     const header = new Header('header', ['header']);
     this.app.append(header.node);
+    const aboutGame = new AboutGame('main', ['about-game']);
+    this.app.append(aboutGame.node);
   }
 }

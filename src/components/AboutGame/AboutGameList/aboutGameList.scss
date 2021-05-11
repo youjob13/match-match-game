@@ -1,0 +1,8 @@
+.about-game {
+  &__list {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
