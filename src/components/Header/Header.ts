@@ -4,15 +4,19 @@ import Logo from './Logo/Logo';
 import Navigation from './Navigation/Navigation';
 
 class Header extends BaseControl {
-  constructor(tagName: string, classes: string[]) {
-    super(tagName, classes);
+  constructor(props: { tagName: string, classes: string[] }) {
+    super(props);
     this.init();
   }
 
-  private init():void {
-    const logotype = new Logo('div', ['header__logo', 'logo']);
+  init():void {
+    this.render();
+  }
+
+  private render():void {
+    const logotype = new Logo({ tagName: 'div', classes: ['header__logo', 'logo'] });
     this.node.append(logotype.node);
-    const nav = new Navigation('ul', ['header__navigation', 'navigation']);
+    const nav = new Navigation({ tagName: 'ul', classes: ['header__navigation', 'navigation'] });
     this.node.append(nav.node);
   }
 }

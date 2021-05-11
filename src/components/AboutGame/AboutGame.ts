@@ -4,15 +4,19 @@ import AboutGameList from './AboutGameList/AboutGameList';
 import ContainerWrapper from '../HOF/Container';
 
 class AboutGame extends BaseControl {
-  constructor(tagName: string, classes: string[]) {
-    super(tagName, classes);
+  constructor(props: { tagName: string, classes: string[] }) {
+    super(props);
     this.init();
   }
 
-  private init() {
+  init():void {
+    this.render();
+  }
+
+  private render():void {
     const wrapper = ContainerWrapper(this.node);
-    const title = new BaseControl('h2', ['about-game__title'], 'How to play?');
-    const aboutGameList = new AboutGameList('ul', ['about-game__list']);
+    const title = new BaseControl({ tagName: 'h2', classes: ['about-game__title'], text: 'How to play?' });
+    const aboutGameList = new AboutGameList({ tagName: 'ul', classes: ['about-game__list'] });
     wrapper.append(title.node, aboutGameList.node);
   }
 }

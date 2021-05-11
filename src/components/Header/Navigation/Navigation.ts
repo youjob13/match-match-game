@@ -7,15 +7,34 @@ import BaseControl from '../../BaseControl/BaseControl';
 import NavigationItem from './NavigationItem/NavigationItem';
 
 class Navigation extends BaseControl {
-  constructor(tagName: string, classes: string[]) {
-    super(tagName, classes);
-    this.create();
+  constructor(props: { tagName: string, classes: string[] }) {
+    super(props);
+    this.init();
   }
 
-  create(): void {
-    const aboutGame = new NavigationItem('li', ['navigation__item'], 'About Game', questionImg);
-    const bestScore = new NavigationItem('li', ['navigation__item'], 'Best Score', starImg);
-    const gameSettings = new NavigationItem('li', ['navigation__item'], 'Game Settings', gearImg);
+  init():void {
+    this.render();
+  }
+
+  render(): void {
+    const aboutGame = new NavigationItem({
+      tagName: 'li',
+      classes: ['navigation__item'],
+      text: 'About Game',
+      iconUrl: questionImg,
+    });
+    const bestScore = new NavigationItem({
+      tagName: 'li',
+      classes: ['navigation__item'],
+      text: 'Best Score',
+      iconUrl: starImg,
+    });
+    const gameSettings = new NavigationItem({
+      tagName: 'li',
+      classes: ['navigation__item'],
+      text: 'Game Settings',
+      iconUrl: gearImg,
+    });
     this.node.append(aboutGame.node, bestScore.node, gameSettings.node);
   }
 }

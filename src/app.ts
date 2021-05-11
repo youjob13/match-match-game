@@ -14,9 +14,13 @@ export class App {
   init():void {
     if (!this.app) throw new Error('app is not founded');
     this.app.innerHTML = '<h1 class="h1-title">Match match game</h1>';
-    const header = new Header('header', ['header']);
+    const header = new Header({ tagName: 'header', classes: ['header'] });
     this.app.append(header.node);
-    const aboutGame = new AboutGame('main', ['about-game']);
+    document.addEventListener('click', () => {
+      console.log(window.location.hash);
+    });
+
+    const aboutGame = new AboutGame({ tagName: 'main', classes: ['about-game'] });
     this.app.append(aboutGame.node);
   }
 }
