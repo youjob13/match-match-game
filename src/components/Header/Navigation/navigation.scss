@@ -24,6 +24,11 @@
         z-index: -1;
       }
     }
+    &.active {
+      &::after {
+        background-color: #1e88e5;
+      }
+    }
     &:hover .navigation__text {
       color: rgba(255, 255, 255, 0.8);
     }
