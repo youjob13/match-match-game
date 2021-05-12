@@ -2,6 +2,7 @@ import './styles.scss';
 import Header from './components/Header/Header';
 import AboutGame from './components/AboutGame/AboutGame';
 import BaseControl from './components/BaseControl/BaseControl';
+import Game from './components/Game/Game';
 
 interface IApplication {
   app: HTMLElement | null;
@@ -20,8 +21,8 @@ interface Route {
 
 class App implements IApplication {
   routes: Array<Route>;
-  // TODO: find info
 
+  // TODO: find info
   currentPage: AboutGame | BaseControl | null;
 
   constructor(readonly app: HTMLElement | null) {
@@ -64,11 +65,14 @@ class App implements IApplication {
     const header = new Header({ tagName: 'header', classes: ['header'] });
     this.app.append(header.node);
 
-    const getHash = ():string => hash.slice(1);
-    const defineCurrentPage = () => this.routes.forEach((route) => route.path === getHash()
-        && this.app?.append(route.component()));
+    const game = new Game({ tagName: 'main', classes: ['game'] });
+    this.app.append(game.node);
 
-    defineCurrentPage();
+    // const getHash = ():string => hash.slice(1);
+    // const defineCurrentPage = () => this.routes.forEach((route) => route.path === getHash()
+    //     && this.app?.append(route.component()));
+
+    // defineCurrentPage();
   }
 
   private eventListeners():void {

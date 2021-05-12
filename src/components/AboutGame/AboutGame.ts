@@ -1,7 +1,7 @@
 import './aboutGame.scss';
 import BaseControl from '../BaseControl/BaseControl';
 import AboutGameList from './AboutGameList/AboutGameList';
-import ContainerWrapper from '../HOF/Container';
+import ContainerWrapper from '../HOC/Container';
 
 class AboutGame extends BaseControl {
   constructor(props: { tagName: string, classes: string[] }) {
