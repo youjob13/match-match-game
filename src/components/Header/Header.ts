@@ -14,7 +14,8 @@ class Header extends BaseControl {
   }
 
   private render():void {
-    const logotype = new Logo({ tagName: 'div', classes: ['header__logo', 'logo'] });
+    const logotype = new Logo({ tagName: 'a', classes: ['header__logo', 'logo'] });
+    logotype.node.setAttribute('href', '#');
     this.node.append(logotype.node);
     const nav = new Navigation({ tagName: 'ul', classes: ['header__navigation', 'navigation'] });
     this.node.append(nav.node);

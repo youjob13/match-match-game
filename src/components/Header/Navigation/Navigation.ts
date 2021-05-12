@@ -22,18 +22,21 @@ class Navigation extends BaseControl {
       classes: ['navigation__item'],
       text: 'About Game',
       iconUrl: questionImg,
+      path: 'about-game',
     });
     const bestScore = new NavigationItem({
       tagName: 'li',
       classes: ['navigation__item'],
       text: 'Best Score',
       iconUrl: starImg,
+      path: 'best-score',
     });
     const gameSettings = new NavigationItem({
       tagName: 'li',
       classes: ['navigation__item'],
       text: 'Game Settings',
       iconUrl: gearImg,
+      path: 'game-settings',
     });
     this.node.append(aboutGame.node, bestScore.node, gameSettings.node);
   }

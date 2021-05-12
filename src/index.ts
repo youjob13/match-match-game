@@ -1,5 +1,5 @@
 import './normalize.css';
-import { App, IApplication } from './app';
+import App from './app';
 
-const app: IApplication = new App(document.getElementById('app'));
+const app = new App(document.getElementById('app'));
 app.init();

@@ -5,15 +5,19 @@ class NavigationItem extends BaseControl {
 
   protected text:string;
 
+  protected path:string;
+
   constructor(props: {
     tagName:string,
     classes:string[],
     text:string,
     iconUrl:string,
+    path: string,
   }) {
     super({ tagName: props.tagName, classes: props.classes });
     this.icon = props.iconUrl;
     this.text = props.text;
+    this.path = props.path;
     this.init();
   }
 
@@ -26,7 +30,7 @@ class NavigationItem extends BaseControl {
       tagName: 'a',
       classes: ['navigation__link'],
     });
-    navPath.node.setAttribute('href', '##');
+    navPath.node.setAttribute('href', `#${this.path}`);
     this.node.append(navPath.node);
 
     const icon = new BaseControl({
