@@ -1,0 +1,39 @@
+[
+  {
+    "category": "animal",
+    "cards": [
+      {
+        "name": "deers",
+        "src": "deers.jpg"
+      },
+      {
+        "name": "dog",
+        "src": "dog.jpg"
+      },
+      {
+        "name": "husky",
+        "src": "husky.jpg"
+      },
+      {
+        "name": "lion_2",
+        "src": "lion_2.jpg"
+      },
+      {
+        "name": "lion",
+        "src": "lion.jpg"
+      },
+      {
+        "name": "parrot",
+        "src": "parrot.jpg"
+      },
+      {
+        "name": "rabbit",
+        "src": "rabbit.jpg"
+      },
+      {
+        "name": "seal",
+        "src": "seal.jpg"
+      }
+    ]
+  }
+]

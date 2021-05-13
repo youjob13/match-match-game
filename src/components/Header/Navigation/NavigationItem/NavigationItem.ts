@@ -1,18 +1,18 @@
 import BaseControl from '../../../BaseControl/BaseControl';
 
 class NavigationItem extends BaseControl {
-  protected icon:string;
+  protected icon: string;
 
-  protected text:string;
+  protected text: string;
 
-  protected path:string;
+  protected path: string;
 
   constructor(props: {
-    tagName:string,
-    classes:string[],
-    text:string,
-    iconUrl:string,
-    path: string,
+    tagName: string;
+    classes: string[];
+    text: string;
+    iconUrl: string;
+    path: string;
   }) {
     super({ tagName: props.tagName, classes: props.classes });
     this.icon = props.iconUrl;
@@ -21,11 +21,11 @@ class NavigationItem extends BaseControl {
     this.init();
   }
 
-  init():void {
+  init(): void {
     this.render();
   }
 
-  render():void {
+  render(): void {
     const navPath = new BaseControl({
       tagName: 'a',
       classes: ['navigation__link'],

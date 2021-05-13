@@ -2,23 +2,63 @@ import './header.scss';
 import BaseControl from '../BaseControl/BaseControl';
 import Logo from './Logo/Logo';
 import Navigation from './Navigation/Navigation';
+import StartGameBtn from './StartGameBtn/StartGameBtn';
 
 class Header extends BaseControl {
-  constructor(props: { tagName: string, classes: string[] }) {
+  isStartedGame: boolean;
+
+  startGame: () => void;
+
+  constructor(
+    props: { tagName: string; classes: string[] },
+    startGame: () => void,
+    isStartedGame: boolean
+  ) {
     super(props);
+    this.isStartedGame = isStartedGame;
+    this.startGame = startGame;
     this.init();
   }
 
-  init():void {
+  private init(): void {
     this.render();
   }
 
-  private render():void {
-    const logotype = new Logo({ tagName: 'a', classes: ['header__logo', 'logo'] });
+  // onStartGameBtnClick = (): void => {
+  //   this.startGame();
+  // }
+
+  private render(): void {
+    const left = new BaseControl({ tagName: 'div', classes: ['header__left'] });
+    const right = new BaseControl({
+      tagName: 'div',
+      classes: ['header__right'],
+    });
+
+    const logotype = new Logo({
+      tagName: 'a',
+      classes: ['header__logo', 'logo'],
+    });
     logotype.node.setAttribute('href', '#');
-    this.node.append(logotype.node);
-    const nav = new Navigation({ tagName: 'ul', classes: ['header__navigation', 'navigation'] });
-    this.node.append(nav.node);
+
+    const nav = new Navigation({
+      tagName: 'ul',
+      classes: ['header__navigation', 'navigation'],
+    });
+
+    const startGameBtn = new StartGameBtn(
+      {
+        tagName: 'button',
+        classes: ['header__button', 'button'],
+        text: !this.isStartedGame ? 'Start Game' : 'Stop Game',
+      },
+      this.startGame
+    );
+
+    left.node.append(logotype.node, nav.node);
+    right.node.append(startGameBtn.node);
+
+    this.node.append(left.node, right.node);
   }
 }
 

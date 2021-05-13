@@ -7,12 +7,12 @@ import BaseControl from '../../BaseControl/BaseControl';
 import NavigationItem from './NavigationItem/NavigationItem';
 
 class Navigation extends BaseControl {
-  constructor(props: { tagName: string, classes: string[] }) {
+  constructor(props: { tagName: string; classes: string[] }) {
     super(props);
     this.init();
   }
 
-  init():void {
+  init(): void {
     this.render();
   }
 

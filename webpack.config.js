@@ -23,10 +23,12 @@ const esLintPlugin = (isDev) =>
 module.exports = ({ develop }) => ({
   mode: develop ? 'development' : 'production',
   devtool: develop ? 'inline-source-map' : false,
-  entry: './src/index.ts',
+  entry: {
+    main: './src/index.ts',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     assetModuleFilename: 'assets/[hash][ext]',
   },
   module: {

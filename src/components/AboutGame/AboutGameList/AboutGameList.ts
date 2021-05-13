@@ -8,16 +8,16 @@ import BaseControl from '../../BaseControl/BaseControl';
 import AboutGameItem from './AboutGameItem/AboutGameItem';
 
 class AboutGameList extends BaseControl {
-  constructor(props: { tagName: string, classes: string[] }) {
+  constructor(props: { tagName: string; classes: string[] }) {
     super(props);
     this.init();
   }
 
-  init():void {
+  init(): void {
     this.render();
   }
 
-  render():void {
+  render(): void {
     const itemOne = new AboutGameItem({
       tagName: 'li',
       classes: ['about-game__item'],
