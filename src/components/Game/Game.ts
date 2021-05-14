@@ -12,18 +12,26 @@ class Game extends BaseControl {
 
   constructor(props: { tagName: string; classes: string[] }) {
     super(props);
-    this.gameField = new GameField({
-      tagName: 'section',
-      classes: ['game-field'],
-    });
+    this.gameField = new GameField(
+      {
+        tagName: 'section',
+        classes: ['game-field'],
+      },
+      this.stopGame
+    );
 
     this.timer = new Timer({
       tagName: 'section',
       classes: ['game__timer', 'timer'],
     });
 
-    this.init();
+    this.startGame();
   }
+
+  stopGame = (): number => {
+    this.timer.stop();
+    return this.timer.counter;
+  };
 
   async getCards(): Promise<void> {
     const res = await fetch('./cards.json');
@@ -33,7 +41,7 @@ class Game extends BaseControl {
     this.gameField?.setCards(cards[0].cards);
   }
 
-  async init(): Promise<void> {
+  async startGame(): Promise<void> {
     this.render();
     this.getCards();
     this.timer.start();

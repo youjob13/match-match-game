@@ -16,11 +16,17 @@ class GameField extends BaseControl {
 
   private isCompared: boolean;
 
-  constructor(props: { tagName: string; classes: string[] }) {
+  private stopGame: () => number;
+
+  constructor(
+    props: { tagName: string; classes: string[] },
+    stopGame: () => number
+  ) {
     super(props);
     this.cards = [];
     this.openCard = null;
     this.gameCards = [];
+    this.stopGame = stopGame;
     this.isCompared = false;
   }
 
@@ -42,7 +48,8 @@ class GameField extends BaseControl {
           );
           this.isCompared = false;
           if (!this.gameCards.length) {
-            const winPopup = new WinPopup();
+            const finishTime: number = this.stopGame();
+            const winPopup = new WinPopup(finishTime);
           }
         }
       });

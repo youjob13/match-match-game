@@ -29,16 +29,6 @@ class Timer extends BaseControl {
 
   init(): void {
     this.render(START_TIMER_VALUE);
-    // this.start();
-    // document.addEventListener('click', (e: any) => {
-    //   if (e.target.classList.contains('timer')) {
-    //     if (!this.isStarted) {
-    //       this.isStarted = true;
-    //       this.start();
-    //     }
-    //   } else
-    //   this.stop();
-    // })
   }
 
   start(): void {
@@ -47,15 +37,17 @@ class Timer extends BaseControl {
       const time = timerValidator(this.counter);
       this.render(time);
       console.log(this.counter);
-
       this.start();
     }, 1000);
   }
 
-  stop(): void {
-    window.clearTimeout(this.timerId || undefined);
+  clearTimer(): void {
     this.counter = 0;
     this.render(START_TIMER_VALUE);
+  }
+
+  stop(): void {
+    window.clearTimeout(this.timerId || undefined);
     this.isStarted = false;
   }
 

@@ -69,39 +69,21 @@ class App implements IApplication {
     this.isStartedGame = false;
   }
 
-  startGame = (): void => {
-    this.isStartedGame = true;
-    const { hash } = window.location;
-
-    if (hash.slice(1) === 'game') {
-      this.render(hash);
-    } else {
-      window.location.hash = 'game';
-    }
-  };
-
-  stopGame = (): void => {
-    this.isStartedGame = false;
-    if (this.currentPage && this.currentPage instanceof Game) {
-      this.currentPage.timer.stop();
-    }
-  };
-
   init(): void {
     this.render(window.location.hash);
     this.eventListeners();
   }
 
   private render(hash: string): void {
-    if (hash.slice(1) !== 'game') this.stopGame(); // TODO: change
+    if (hash.slice(1) !== 'game') {
+      if (this.currentPage && this.currentPage instanceof Game) {
+        this.currentPage.timer.stop();
+      }
+    } // TODO: think about
     if (!this.app) throw new Error('app is not founded');
 
     this.app.innerHTML = '<h1 class="h1-title">Match match game</h1>';
-    const header = new Header(
-      { tagName: 'header', classes: ['header'] },
-      this.startGame,
-      this.isStartedGame
-    );
+    const header = new Header({ tagName: 'header', classes: ['header'] });
     this.app.append(header.node);
 
     const getHash = (): string => hash.slice(1);
