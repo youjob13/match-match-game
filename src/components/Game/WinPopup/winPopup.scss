@@ -1,0 +1,13 @@
+.win-popup {
+  padding: 20px 16px;
+  background-color: #fff;
+  max-width: 360px;
+  &__content {
+    margin-bottom: 8px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}

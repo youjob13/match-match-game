@@ -1,11 +1,16 @@
 import './gameField.scss';
 
-import { ICard } from '../../card-model/card-model';
+import { ICardFromJSON } from '../../card-model/card-model-json';
 import BaseControl from '../../BaseControl/BaseControl';
-import Card from '../../Card/Card';
+import Card, { ICard } from '../../Card/Card';
+import WinPopup from '../WinPopup/WinPopup';
+
+const TIME_TO_FLIP = 2000;
 
 class GameField extends BaseControl {
-  private cards: Array<ICard>;
+  private cards: Array<ICardFromJSON>;
+
+  private gameCards: Array<ICard>;
 
   private openCard: ICard | null;
 
@@ -15,34 +20,56 @@ class GameField extends BaseControl {
     super(props);
     this.cards = [];
     this.openCard = null;
+    this.gameCards = [];
     this.isCompared = false;
-    // this.init();
   }
 
   private sort() {
     this.cards = this.cards.sort(() => Math.random() - 0.5);
-    this.render(); // TODO: change location
+    this.render();
   }
 
-  private compareCards(prevCard: any, currentCard: any): void {
+  private compareCards(prevCard: ICard, currentCard: ICard): void {
     this.isCompared = true;
+
     if (prevCard.card.name === currentCard.card.name) {
-      prevCard.node.classList.add('matched');
-      currentCard.node.classList.add('matched');
-      this.isCompared = false;
+      currentCard.node.addEventListener('transitionend', () => {
+        if (prevCard.node.classList.contains('flipped')) {
+          prevCard.node.classList.add('matched');
+          currentCard.node.classList.add('matched');
+          this.gameCards = this.gameCards.filter(
+            (card) => card.card.name !== prevCard.card.name
+          );
+          this.isCompared = false;
+          if (!this.gameCards.length) {
+            const winPopup = new WinPopup();
+          }
+        }
+      });
+    } else {
+      currentCard.node.addEventListener('transitionend', () => {
+        if (
+          prevCard.node.classList.contains('flipped') &&
+          !currentCard.node.classList.contains('matched') &&
+          !prevCard.node.classList.contains('matched')
+        ) {
+          prevCard.node.classList.add('no-matched');
+          currentCard.node.classList.add('no-matched');
+        }
+      });
+
+      setTimeout(() => {
+        // TODO: read about Promise
+        prevCard.node.classList.remove('flipped', 'no-matched');
+        currentCard.node.classList.remove('flipped', 'no-matched');
+        this.isCompared = false;
+      }, TIME_TO_FLIP);
     }
-    setTimeout(() => {
-      prevCard.node.classList.remove('flipped');
-      currentCard.node.classList.remove('flipped');
-    }, 2000);
-    setTimeout(() => {
-      // TODO: change
-      this.isCompared = false;
-      this.openCard = null;
-    }, 2500);
+
+    this.openCard = null;
   }
 
-  protected selectCard = (card: any): void => {
+  protected selectCard = (card: ICard): void => {
     if (this.isCompared) return;
 
     const currentCard = card;
@@ -55,23 +82,28 @@ class GameField extends BaseControl {
     }
   };
 
-  setCards(cards: Array<ICard>): void {
+  setCards(cards: Array<ICardFromJSON>): void {
     this.cards = cards;
     this.cards = [...this.cards, ...this.cards];
     this.sort();
   }
 
-  // private init(): void {}
-
   private render(): void {
     this.cards.forEach((card) => {
       const cardElem = new Card(
-        { tagName: 'div', classes: ['card'] },
+        { tagName: 'div', classes: ['card', 'flipped'] },
         card,
         this.selectCard
       );
+      this.gameCards.push(cardElem);
       this.node.append(cardElem.node);
     });
+
+    setTimeout(
+      () =>
+        this.gameCards.forEach((card) => card.node.classList.remove('flipped')),
+      5000
+    );
   }
 }
 

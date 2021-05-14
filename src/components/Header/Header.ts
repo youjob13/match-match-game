@@ -5,9 +5,9 @@ import Navigation from './Navigation/Navigation';
 import StartGameBtn from './StartGameBtn/StartGameBtn';
 
 class Header extends BaseControl {
-  isStartedGame: boolean;
+  private isStartedGame: boolean;
 
-  startGame: () => void;
+  private startGame: () => void;
 
   constructor(
     props: { tagName: string; classes: string[] },
@@ -24,9 +24,9 @@ class Header extends BaseControl {
     this.render();
   }
 
-  // onStartGameBtnClick = (): void => {
-  //   this.startGame();
-  // }
+  private onStartGameBtnClick = (): void => {
+    this.startGame();
+  };
 
   private render(): void {
     const left = new BaseControl({ tagName: 'div', classes: ['header__left'] });
@@ -52,7 +52,7 @@ class Header extends BaseControl {
         classes: ['header__button', 'button'],
         text: !this.isStartedGame ? 'Start Game' : 'Stop Game',
       },
-      this.startGame
+      this.onStartGameBtnClick
     );
 
     left.node.append(logotype.node, nav.node);

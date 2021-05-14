@@ -21,7 +21,7 @@ class App implements IApplication {
   isStartedGame: boolean;
 
   // TODO: find info about many types
-  currentPage: AboutGame | BaseControl | null;
+  currentPage: AboutGame | BaseControl | Game | null;
 
   constructor(readonly app: HTMLElement | null) {
     this.app = app;
@@ -82,6 +82,9 @@ class App implements IApplication {
 
   stopGame = (): void => {
     this.isStartedGame = false;
+    if (this.currentPage && this.currentPage instanceof Game) {
+      this.currentPage.timer.stop();
+    }
   };
 
   init(): void {
@@ -90,7 +93,7 @@ class App implements IApplication {
   }
 
   private render(hash: string): void {
-    if (hash.slice(1) !== 'game') this.isStartedGame = false; // TODO: change
+    if (hash.slice(1) !== 'game') this.stopGame(); // TODO: change
     if (!this.app) throw new Error('app is not founded');
 
     this.app.innerHTML = '<h1 class="h1-title">Match match game</h1>';

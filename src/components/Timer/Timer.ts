@@ -46,6 +46,8 @@ class Timer extends BaseControl {
       ++this.counter;
       const time = timerValidator(this.counter);
       this.render(time);
+      console.log(this.counter);
+
       this.start();
     }, 1000);
   }

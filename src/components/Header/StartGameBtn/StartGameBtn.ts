@@ -2,7 +2,7 @@ import BaseControl from '../../BaseControl/BaseControl';
 import './start-game-btn.scss';
 
 class StartGameBtn extends BaseControl {
-  startGame: () => void;
+  private startGame: () => void;
 
   constructor(
     props: { tagName: string; classes: string[]; text: string },
@@ -13,7 +13,7 @@ class StartGameBtn extends BaseControl {
     this.init();
   }
 
-  start(): void {
+  private start(): void {
     this.startGame();
   }
 

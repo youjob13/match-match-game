@@ -1,4 +1,4 @@
-export interface ICard {
+export interface ICardFromJSON {
   name: string;
   src: string;
 }
