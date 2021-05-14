@@ -3,6 +3,7 @@ import Header from './components/Header/Header';
 import AboutGame from './components/AboutGame/AboutGame';
 import BaseControl from './components/BaseControl/BaseControl';
 import Game from './components/Game/Game';
+import BestScore from './components/BestScore/BestScore';
 
 interface IApplication {
   app: HTMLElement | null;
@@ -21,7 +22,7 @@ class App implements IApplication {
   isStartedGame: boolean;
 
   // TODO: find info about many types
-  currentPage: AboutGame | BaseControl | Game | null;
+  currentPage: AboutGame | BaseControl | Game | BestScore | null;
 
   constructor(readonly app: HTMLElement | null) {
     this.app = app;
@@ -50,10 +51,9 @@ class App implements IApplication {
       {
         path: 'best-score',
         component: (): HTMLElement => {
-          this.currentPage = new BaseControl({
+          this.currentPage = new BestScore({
             tagName: 'main',
-            classes: ['about-game'],
-            text: '404',
+            classes: ['best-score'],
           });
           return this.currentPage?.node;
         },

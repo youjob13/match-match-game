@@ -22,15 +22,18 @@ class WinPopup extends Popup {
         this.finishTime
       )} minutes.`, // TODO: minutes/seconds
     });
+
     const popupButton = new BaseControl({
-      tagName: 'button',
+      tagName: 'a',
       classes: ['popup__button'],
       text: 'Ok',
     });
 
+    popupButton.node.setAttribute('href', '#best-score');
+
     this.popupInner.node.classList.add('win-popup');
     this.popupInner.node.append(popupContent.node, popupButton.node);
-    document.body.append(this.node);
+    document.getElementById('app')?.append(this.node); // TODO: remove getElementById
   }
 }
 

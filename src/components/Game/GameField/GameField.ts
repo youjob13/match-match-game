@@ -39,17 +39,20 @@ class GameField extends BaseControl {
     this.isCompared = true;
 
     if (prevCard.card.name === currentCard.card.name) {
-      currentCard.node.addEventListener('transitionend', () => {
-        if (prevCard.node.classList.contains('flipped')) {
-          prevCard.node.classList.add('matched');
-          currentCard.node.classList.add('matched');
-          this.gameCards = this.gameCards.filter(
-            (card) => card.card.name !== prevCard.card.name
-          );
-          this.isCompared = false;
-          if (!this.gameCards.length) {
-            const finishTime: number = this.stopGame();
-            const winPopup = new WinPopup(finishTime);
+      currentCard.node.addEventListener('transitionend', (e: any) => {
+        // TODO: doing two times
+        if (e.propertyName === 'transform') {
+          if (prevCard.node.classList.contains('flipped')) {
+            prevCard.node.classList.add('matched');
+            currentCard.node.classList.add('matched');
+            this.gameCards = this.gameCards.filter(
+              (card) => card.card.name !== prevCard.card.name
+            );
+            this.isCompared = false;
+            if (!this.gameCards.length) {
+              const finishTime: number = this.stopGame();
+              const winPopup = new WinPopup(finishTime);
+            }
           }
         }
       });
