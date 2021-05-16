@@ -1,5 +1,4 @@
 import './card.scss';
-
 import { ICardFromJSON } from '../shared/interfaces/card-model/card-model-json';
 import BaseControl from '../shared/BaseControl/BaseControl';
 
@@ -54,8 +53,9 @@ class Card extends BaseControl {
     front.node.append(image.node);
 
     const back = new BaseControl({ tagName: 'div', classes: ['card__back'] });
-    this.node.append(cardInner.node);
+
     cardInner.node.append(front.node, back.node);
+    this.node.append(cardInner.node);
   }
 }
 

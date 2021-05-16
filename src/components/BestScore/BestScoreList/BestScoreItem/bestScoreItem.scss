@@ -2,4 +2,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  &:not(:last-child) {
+    margin-bottom: 22px;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(33, 33, 33, 0.08);
+    mix-blend-mode: normal;
+  }
+  &-user {
+    display: flex;
+    align-items: center;
+  }
+  &-avatar {
+    position: relative;
+    border-radius: 50%;
+  }
+  &-text-content {
+    margin-left: 12px;
+  }
+  &-name,
+  &-mail {
+    color: #333333;
+  }
+  &-name {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: 0.1px;
+  }
+  &-mail {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0.4px;
+  }
+  &-points {
+    width: 80px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    color: rgba(0, 0, 0, 0.87);
+  }
+  &-score {
+    color: #2196f3;
+  }
 }

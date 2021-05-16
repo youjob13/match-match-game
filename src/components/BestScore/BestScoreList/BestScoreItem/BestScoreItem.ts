@@ -1,17 +1,13 @@
-import { IUserModel } from '../../../shared/interfaces/user-model/user-model';
 import './bestScoreItem.scss';
-
+import { IUserModel } from '../../../shared/interfaces/user-model/user-model';
 import BaseControl from '../../../shared/BaseControl/BaseControl';
 
 class BestScoreItem extends BaseControl {
-  user: IUserModel;
-
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    user: IUserModel
+    private user: IUserModel
   ) {
     super(propsToBaseControl);
-    this.user = user;
     this.init();
   }
 
@@ -24,6 +20,7 @@ class BestScoreItem extends BaseControl {
       tagName: 'figure',
       classes: ['best-score__item-user'],
     });
+
     const avatar = new BaseControl({
       tagName: 'img',
       classes: ['best-score__item-avatar'],
@@ -34,11 +31,13 @@ class BestScoreItem extends BaseControl {
       tagName: 'figcaption',
       classes: ['best-score__item-text-content'],
     });
+
     const name = new BaseControl({
       tagName: 'p',
       classes: ['best-score__item-name'],
       text: `${this.user.name}`,
     });
+
     const mail = new BaseControl({
       tagName: 'p',
       classes: ['best-score__item-mail'],
@@ -50,6 +49,7 @@ class BestScoreItem extends BaseControl {
       classes: ['best-score__item-points'],
       text: 'Score: ',
     });
+
     const score = new BaseControl({
       tagName: 'output',
       classes: ['best-score__item-score'],
@@ -57,8 +57,8 @@ class BestScoreItem extends BaseControl {
     });
 
     userElemTextContent.node.append(name.node, mail.node);
-    points.node.append(score.node);
     userElem.node.append(avatar.node, userElemTextContent.node);
+    points.node.append(score.node);
     this.node.append(userElem.node, points.node);
   }
 }

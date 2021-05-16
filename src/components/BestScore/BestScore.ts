@@ -14,14 +14,14 @@ class BestScore extends BaseControl {
     this.init();
   }
 
-  private init(): void {
-    this.getUsersData();
+  async init(): Promise<void> {
+    await this.getUsersData();
+    await this.render();
   }
 
   async getUsersData(): Promise<void> {
     const response = await fetch('./users.json');
     this.usersData = await response.json();
-    this.render();
   }
 
   private render(): void {
