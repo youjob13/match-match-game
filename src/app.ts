@@ -10,10 +10,17 @@ import { ICardsJSON } from './components/shared/interfaces/card-model-json';
 
 export type Page = AboutGame | GameSettings | Game | BestScore | null;
 
+interface ISetting {
+  category: string;
+  difficulty: string;
+}
+
 class App {
   readonly routes: Array<IRoute>;
 
   currentPage: Page;
+
+  currentSettings: any; // TODO: remove any
 
   constructor(readonly app: HTMLElement | null) {
     this.currentPage = null;
@@ -53,7 +60,8 @@ class App {
         component: (): HTMLElement => {
           this.currentPage = new Game(
             { tagName: 'main', classes: ['game'] },
-            this.getData
+            this.getData,
+            this.currentSettings
           );
           return this.currentPage?.node;
         },
@@ -61,22 +69,34 @@ class App {
       {
         path: 'settings',
         component: (): HTMLElement => {
-          this.currentPage = new GameSettings({
-            tagName: 'main',
-            classes: ['game-settings'],
-          });
+          this.currentPage = new GameSettings(
+            {
+              tagName: 'main',
+              classes: ['game-settings'],
+            },
+            this.getData,
+            this.changeGameSetting
+          );
           return this.currentPage?.node;
         },
       },
     ];
+    this.currentSettings = {
+      category: 'animal',
+      difficulty: '4 * 4',
+    };
   }
+
+  private changeGameSetting = (typeSetting: string, settings: string): void => {
+    this.currentSettings[typeSetting] = settings;
+  };
 
   init(): void {
     this.render();
     this.eventListeners();
   }
 
-  getData = async (): Promise<Array<ICardsJSON>> => {
+  private getData = async (): Promise<Array<ICardsJSON>> => {
     const data = await getCards();
     return data;
   };
@@ -98,7 +118,7 @@ class App {
     this.routeToPage();
   }
 
-  private routeToPage() {
+  private routeToPage(): void {
     const { hash } = window.location;
     const getHash = (): string => hash.slice(1);
     const defineCurrentPage = () =>

@@ -13,7 +13,8 @@ class Game extends BaseControl {
 
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    private getData: () => Promise<Array<ICardsJSON>>
+    private getData: () => Promise<Array<ICardsJSON>>,
+    private gameSettings: any
   ) {
     super(propsToBaseControl);
     this.gameField = new GameField(
@@ -21,7 +22,8 @@ class Game extends BaseControl {
         tagName: 'section',
         classes: ['game-field'],
       },
-      this.stopGame
+      this.stopGame,
+      this.gameSettings
     );
 
     this.timer = new Timer({
@@ -39,7 +41,11 @@ class Game extends BaseControl {
 
   async getCards(): Promise<void> {
     const gameData: Array<ICardsJSON> = await this.getData();
-    this.gameField?.setCards(gameData);
+    gameData.forEach((data) => {
+      if (data.category === this.gameSettings.category) {
+        this.gameField?.setCards(data);
+      }
+    });
   }
 
   private eventListeners(): void {

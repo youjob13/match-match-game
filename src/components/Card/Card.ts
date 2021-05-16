@@ -5,7 +5,7 @@ import BaseControl from '../shared/BaseControl/BaseControl';
 export interface ICard {
   readonly node: HTMLElement;
   card: ICardFromJSON;
-  category: string;
+  category: any;
   selectCard: (card: ICard) => void;
 }
 
@@ -13,8 +13,8 @@ class Card extends BaseControl {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     public card: ICardFromJSON,
-    public category: string,
-    public selectCard: (card: ICard) => void
+    public selectCard: (card: ICard) => void,
+    public category: any
   ) {
     super(propsToBaseControl);
     this.init();
@@ -38,6 +38,7 @@ class Card extends BaseControl {
       tagName: 'div',
       classes: ['card__inner'],
     });
+    console.log(this.category);
 
     const front = new BaseControl({ tagName: 'div', classes: ['card__front'] });
     const image = new BaseControl({

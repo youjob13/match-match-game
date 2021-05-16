@@ -1,14 +1,15 @@
 import './gameField.scss';
 
 import {
-  ICardFromJSON,
   ICardsJSON,
+  ICardFromJSON,
 } from '../../shared/interfaces/card-model-json';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import Card, { ICard } from '../../Card/Card';
 import WinPopup from '../WinPopup/WinPopup';
 
-const TIME_TO_FLIP = 2000;
+const TIME_TO_FLIP = 2;
+const COUNTDOWN_TO_STAT_GAME = 15;
 
 class GameField extends BaseControl {
   private cards: Array<ICardFromJSON>;
@@ -19,17 +20,18 @@ class GameField extends BaseControl {
 
   private isCompared: boolean;
 
-  private category: string;
+  // private category: string;
 
   private stopGame: () => number;
 
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    stopGame: () => number
+    stopGame: () => number,
+    private gameSettings: any
   ) {
     super(propsToBaseControl);
     this.cards = [];
-    this.category = 'animal';
+    // this.category = 'animal';
     this.openCard = null;
     this.gameCards = [];
     this.stopGame = stopGame;
@@ -37,7 +39,7 @@ class GameField extends BaseControl {
   }
 
   private sort() {
-    this.cards = this.cards.sort(() => Math.random() - 0.5); // TODO: think about sort method
+    this.cards = [...this.cards, ...this.cards].sort(() => Math.random() - 0.5); // TODO: think about sort method
     this.render();
   }
 
@@ -79,7 +81,7 @@ class GameField extends BaseControl {
         prevCard.node.classList.remove('flipped', 'no-matched');
         currentCard.node.classList.remove('flipped', 'no-matched');
         this.isCompared = false;
-      }, TIME_TO_FLIP);
+      }, TIME_TO_FLIP * 1000);
     }
 
     this.openCard = null;
@@ -98,21 +100,19 @@ class GameField extends BaseControl {
     }
   };
 
-  setCards(gameData: Array<ICardsJSON>): void {
-    const { cards } = gameData[0];
-    this.category = gameData[0].category;
-    this.cards = cards;
-    this.cards = [...this.cards, ...this.cards];
+  setCards(gameData: ICardsJSON): void {
+    this.cards = gameData.cards;
     this.sort();
   }
 
   private render(): void {
+    console.log(this.gameSettings);
     this.cards.forEach((card) => {
       const cardElem = new Card(
         { tagName: 'div', classes: ['card', 'flipped'] },
         card,
-        this.category,
-        this.selectCard
+        this.selectCard,
+        this.gameSettings.category
       );
       this.gameCards.push(cardElem);
       this.node.append(cardElem.node);
@@ -121,7 +121,7 @@ class GameField extends BaseControl {
     setTimeout(
       () =>
         this.gameCards.forEach((card) => card.node.classList.remove('flipped')),
-      5000 // TODO: change time
+      5000 // COUNTDOWN_TO_STAT_GAME * 1000
     );
   }
 }
