@@ -1,7 +1,7 @@
 import './gameField.scss';
 
-import { ICardFromJSON } from '../../card-model/card-model-json';
-import BaseControl from '../../BaseControl/BaseControl';
+import { ICardFromJSON } from '../../shared/interfaces/card-model/card-model-json';
+import BaseControl from '../../shared/BaseControl/BaseControl';
 import Card, { ICard } from '../../Card/Card';
 import WinPopup from '../WinPopup/WinPopup';
 
@@ -19,10 +19,10 @@ class GameField extends BaseControl {
   private stopGame: () => number;
 
   constructor(
-    props: { tagName: string; classes: string[] },
+    propsToBaseControl: { tagName: string; classes: string[] },
     stopGame: () => number
   ) {
-    super(props);
+    super(propsToBaseControl);
     this.cards = [];
     this.openCard = null;
     this.gameCards = [];

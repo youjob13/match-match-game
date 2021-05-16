@@ -1,13 +1,17 @@
 import './logo.scss';
-import BaseControl from '../../BaseControl/BaseControl';
+import BaseControl, { IAttr } from '../../shared/BaseControl/BaseControl';
 
 class Logo extends BaseControl {
-  constructor(props: { tagName: string; classes: string[] }) {
-    super(props);
+  constructor(propsToBaseControl: {
+    tagName: string;
+    classes: string[];
+    attributes: IAttr;
+  }) {
+    super(propsToBaseControl);
     this.init();
   }
 
-  init(): void {
+  private init(): void {
     this.render();
   }
 
@@ -17,11 +21,13 @@ class Logo extends BaseControl {
       classes: ['logo__up'],
       text: 'Match',
     });
+
     const spanDown = new BaseControl({
       tagName: 'span',
       classes: ['logo__down'],
       text: 'Match',
     });
+
     this.node.append(spanUp.node, spanDown.node);
   }
 }

@@ -1,31 +1,19 @@
 import './styles.scss';
 import Header from './components/Header/Header';
 import AboutGame from './components/AboutGame/AboutGame';
-import BaseControl from './components/BaseControl/BaseControl';
+import BaseControl from './components/shared/BaseControl/BaseControl';
 import Game from './components/Game/Game';
 import BestScore from './components/BestScore/BestScore';
+import { IRoute } from './components/shared/interfaces/route-model/route-model';
 
-interface IApplication {
-  app: HTMLElement | null;
-  routes: Array<Route>;
-  currentPage: AboutGame | BaseControl | null;
-}
+export type Page = AboutGame | BaseControl | Game | BestScore | null;
 
-interface Route {
-  path: string;
-  component: () => HTMLElement;
-}
+class App {
+  readonly routes: Array<IRoute>;
 
-class App implements IApplication {
-  routes: Array<Route>;
-
-  isStartedGame: boolean;
-
-  // TODO: find info about many types
-  currentPage: AboutGame | BaseControl | Game | BestScore | null;
+  currentPage: Page;
 
   constructor(readonly app: HTMLElement | null) {
-    this.app = app;
     this.currentPage = null;
     this.routes = [
       {
@@ -66,26 +54,32 @@ class App implements IApplication {
         },
       },
     ];
-    this.isStartedGame = false;
   }
 
   init(): void {
-    this.render(window.location.hash);
+    this.render();
     this.eventListeners();
   }
 
-  private render(hash: string): void {
+  private render(): void {
+    const { hash } = window.location;
     if (hash.slice(1) !== 'game') {
       if (this.currentPage && this.currentPage instanceof Game) {
         this.currentPage.timer.stop();
-      }
-    } // TODO: think about
+      } // TODO: think about (game should stopped in other component?)
+    }
+
     if (!this.app) throw new Error('app is not founded');
 
     this.app.innerHTML = '<h1 class="h1-title">Match match game</h1>';
     const header = new Header({ tagName: 'header', classes: ['header'] });
     this.app.append(header.node);
 
+    this.routeToPage();
+  }
+
+  private routeToPage() {
+    const { hash } = window.location;
     const getHash = (): string => hash.slice(1);
     const defineCurrentPage = () =>
       this.routes.forEach(
@@ -97,7 +91,7 @@ class App implements IApplication {
   }
 
   private eventListeners(): void {
-    window.onpopstate = () => this.render(window.location.hash);
+    window.onpopstate = () => this.render();
   }
 }
 

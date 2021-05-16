@@ -1,51 +1,55 @@
-import BaseControl from '../../../BaseControl/BaseControl';
+import BaseControl from '../../../shared/BaseControl/BaseControl';
 
 class NavigationItem extends BaseControl {
-  protected icon: string;
+  private icon: string;
 
-  protected text: string;
+  private text: string;
 
-  protected path: string;
+  private path: string;
 
-  constructor(props: {
-    tagName: string;
-    classes: string[];
-    text: string;
-    iconUrl: string;
-    path: string;
-  }) {
-    super({ tagName: props.tagName, classes: props.classes });
-    this.icon = props.iconUrl;
-    this.text = props.text;
-    this.path = props.path;
+  constructor(
+    propsToBaseControl: {
+      tagName: string;
+      classes: string[];
+      text: string;
+    },
+    settings: { iconUrl: string; path: string }
+  ) {
+    super({
+      tagName: propsToBaseControl.tagName,
+      classes: propsToBaseControl.classes,
+    });
+    this.text = propsToBaseControl.text;
+    this.icon = settings.iconUrl;
+    this.path = settings.path;
     this.init();
   }
 
-  init(): void {
+  private init(): void {
     this.render();
   }
 
-  render(): void {
+  private render(): void {
     const navPath = new BaseControl({
       tagName: 'a',
       classes: ['navigation__link'],
+      attributes: { href: `#${this.path}` }, // TODO: check on
     });
-    navPath.node.setAttribute('href', `#${this.path}`);
-    this.node.append(navPath.node);
 
     const icon = new BaseControl({
       tagName: 'img',
       classes: ['navigation__icon'],
+      attributes: { src: this.icon },
     });
-    icon.node.setAttribute('src', this.icon);
-    navPath.node.append(icon.node);
 
     const navText = new BaseControl({
       tagName: 'p',
       classes: ['navigation__text'],
       text: this.text,
     });
-    navPath.node.append(navText.node);
+
+    navPath.node.append(icon.node, navText.node);
+    this.node.append(navPath.node);
   }
 }
 

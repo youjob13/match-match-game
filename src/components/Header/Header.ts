@@ -1,12 +1,12 @@
 import './header.scss';
-import BaseControl from '../BaseControl/BaseControl';
+import BaseControl from '../shared/BaseControl/BaseControl';
 import Logo from './Logo/Logo';
 import Navigation from './Navigation/Navigation';
-import StartGameBtn from './StartGameBtn/StartGameBtn';
+// import StartGameBtn from './StartGameBtn/StartGameBtn';
 
 class Header extends BaseControl {
-  constructor(props: { tagName: string; classes: string[] }) {
-    super(props);
+  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+    super(propsToBaseControl);
     this.init();
   }
 
@@ -15,8 +15,11 @@ class Header extends BaseControl {
   }
 
   private render(): void {
-    const left = new BaseControl({ tagName: 'div', classes: ['header__left'] });
-    const right = new BaseControl({
+    const leftPartHeader = new BaseControl({
+      tagName: 'div',
+      classes: ['header__left'],
+    });
+    const rightPartHeader = new BaseControl({
       tagName: 'div',
       classes: ['header__right'],
     });
@@ -24,24 +27,25 @@ class Header extends BaseControl {
     const logotype = new Logo({
       tagName: 'a',
       classes: ['header__logo', 'logo'],
+      attributes: { href: '#' },
     });
-    logotype.node.setAttribute('href', '#');
 
     const nav = new Navigation({
       tagName: 'ul',
       classes: ['header__navigation', 'navigation'],
     });
 
-    const startGameBtn = new StartGameBtn({
+    const startGameBtn = new BaseControl({
       tagName: 'a',
       classes: ['header__button', 'button'],
       text: window.location.hash !== '#game' ? 'Start Game' : 'Stop Game', // TODO: think about
+      attributes: { href: '#game' },
     });
 
-    left.node.append(logotype.node, nav.node);
-    right.node.append(startGameBtn.node);
+    leftPartHeader.node.append(logotype.node, nav.node);
+    rightPartHeader.node.append(startGameBtn.node);
 
-    this.node.append(left.node, right.node);
+    this.node.append(leftPartHeader.node, rightPartHeader.node);
   }
 }
 

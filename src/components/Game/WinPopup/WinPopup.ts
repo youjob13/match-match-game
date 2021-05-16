@@ -1,15 +1,15 @@
 import './winPopup.scss';
 
-import Popup from '../../common/Popup/Popup';
-import BaseControl from '../../BaseControl/BaseControl';
+import Popup from '../../shared/Popup/Popup';
+import BaseControl from '../../shared/BaseControl/BaseControl';
 import timerValidator from '../../functions/timerValidator';
 
 class WinPopup extends Popup {
   finishTime: number;
 
   constructor(finishTime: number) {
-    const props = { tagName: 'div', classes: ['popup'] };
-    super(props);
+    const propsToBaseControl = { tagName: 'div', classes: ['popup'] };
+    super(propsToBaseControl);
     this.finishTime = finishTime;
     this.render();
   }
@@ -27,9 +27,8 @@ class WinPopup extends Popup {
       tagName: 'a',
       classes: ['popup__button'],
       text: 'Ok',
+      attributes: { href: '#best-score' },
     });
-
-    popupButton.node.setAttribute('href', '#best-score');
 
     this.popupInner.node.classList.add('win-popup');
     this.popupInner.node.append(popupContent.node, popupButton.node);

@@ -1,17 +1,17 @@
 import './game.scss';
 
-import BaseControl from '../BaseControl/BaseControl';
+import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import GameField from './GameField/GameField';
-import Timer from '../Timer/Timer';
+import Timer from '../shared/Timer/Timer';
 
 class Game extends BaseControl {
   private gameField: GameField;
 
   timer: Timer;
 
-  constructor(props: { tagName: string; classes: string[] }) {
-    super(props);
+  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+    super(propsToBaseControl);
     this.gameField = new GameField(
       {
         tagName: 'section',
@@ -42,9 +42,9 @@ class Game extends BaseControl {
   }
 
   async startGame(): Promise<void> {
-    this.render();
     this.getCards();
     this.timer.start();
+    this.render();
   }
 
   private render(): void {

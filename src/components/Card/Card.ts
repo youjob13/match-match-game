@@ -1,7 +1,7 @@
 import './card.scss';
 
-import { ICardFromJSON } from '../card-model/card-model-json';
-import BaseControl from '../BaseControl/BaseControl';
+import { ICardFromJSON } from '../shared/interfaces/card-model/card-model-json';
+import BaseControl from '../shared/BaseControl/BaseControl';
 
 export interface ICard {
   readonly node: HTMLElement;
@@ -15,11 +15,11 @@ class Card extends BaseControl {
   selectCard: (card: ICard) => void;
 
   constructor(
-    props: { tagName: string; classes: string[] },
+    propsToBaseControl: { tagName: string; classes: string[] },
     card: ICardFromJSON,
     selectCard: (card: ICard) => void
   ) {
-    super(props);
+    super(propsToBaseControl);
     this.card = card;
     this.selectCard = selectCard;
     this.init();
@@ -46,8 +46,11 @@ class Card extends BaseControl {
     // console.log(this.card);
 
     const front = new BaseControl({ tagName: 'div', classes: ['card__front'] });
-    const image = new BaseControl({ tagName: 'img', classes: ['card__image'] });
-    image.node.setAttribute('src', `images/${this.card.src}`); // TODO: change path
+    const image = new BaseControl({
+      tagName: 'img',
+      classes: ['card__image'],
+      attributes: { src: `images/${this.card.src}` },
+    });
     front.node.append(image.node);
 
     const back = new BaseControl({ tagName: 'div', classes: ['card__back'] });

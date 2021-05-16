@@ -1,6 +1,6 @@
 import './timer.scss';
 
-import timerValidator from '../functions/timerValidator';
+import timerValidator from '../../functions/timerValidator';
 import BaseControl from '../BaseControl/BaseControl';
 
 const START_TIMER_VALUE = '00:00';
@@ -14,8 +14,8 @@ class Timer extends BaseControl {
 
   isStarted: boolean;
 
-  constructor(props: { tagName: string; classes: string[] }) {
-    super(props);
+  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+    super(propsToBaseControl);
     this.output = new BaseControl({
       tagName: 'output',
       classes: ['timer__output'],
@@ -36,7 +36,6 @@ class Timer extends BaseControl {
       ++this.counter;
       const time = timerValidator(this.counter);
       this.render(time);
-      console.log(this.counter);
       this.start();
     }, 1000);
   }
