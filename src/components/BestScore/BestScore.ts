@@ -3,7 +3,7 @@ import './bestScore.scss';
 import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import BestScoreList from './BestScoreList/BestScoreList';
-import { IUserModel } from '../shared/interfaces/user-model/user-model';
+import { IUserModel } from '../shared/interfaces/user-model';
 
 class BestScore extends BaseControl {
   usersData: Array<IUserModel>;

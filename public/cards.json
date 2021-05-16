@@ -35,5 +35,18 @@
         "src": "seal.jpg"
       }
     ]
+  },
+  {
+    "category": "resident-evil",
+    "cards": [
+      {
+        "name": "werewolf",
+        "src": "werewolf.jpg"
+      },
+      {
+        "name": "gerzoc",
+        "src": "gerzoc.jpg"
+      }
+    ]
   }
 ]

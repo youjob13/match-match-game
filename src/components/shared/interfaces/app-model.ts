@@ -1,5 +1,5 @@
-import { Page } from '../../../../app';
-import { IRoute } from '../route-model/route-model';
+import { Page } from '../../../app';
+import { IRoute } from './route-model';
 
 export interface IApplication {
   app: HTMLElement | null;

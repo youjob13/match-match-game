@@ -41,7 +41,7 @@ class Navigation extends BaseControl {
         classes: ['navigation__item'],
         text: 'Game Settings',
       },
-      { iconUrl: gearImg, path: 'game-settings' }
+      { iconUrl: gearImg, path: 'settings' }
     );
 
     this.node.append(aboutGame.node, bestScore.node, gameSettings.node);

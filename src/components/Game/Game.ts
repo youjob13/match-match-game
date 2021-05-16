@@ -4,13 +4,17 @@ import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import GameField from './GameField/GameField';
 import Timer from '../shared/Timer/Timer';
+import { ICardsJSON } from '../shared/interfaces/card-model-json';
 
 class Game extends BaseControl {
   private gameField: GameField;
 
   timer: Timer;
 
-  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+  constructor(
+    propsToBaseControl: { tagName: string; classes: string[] },
+    private getData: () => Promise<Array<ICardsJSON>>
+  ) {
     super(propsToBaseControl);
     this.gameField = new GameField(
       {
@@ -34,14 +38,16 @@ class Game extends BaseControl {
   };
 
   async getCards(): Promise<void> {
-    const res = await fetch('./cards.json');
-    const cards = await res.json();
-    console.log(cards[0].cards); // TODO: realize to select categories
-
-    this.gameField?.setCards(cards[0].cards);
+    const gameData: Array<ICardsJSON> = await this.getData();
+    this.gameField?.setCards(gameData);
   }
 
-  async startGame(): Promise<void> {
+  private eventListeners(): void {
+    this.node.onload = () => this.getCards();
+  }
+
+  startGame(): void {
+    this.eventListeners();
     this.getCards();
     this.timer.start();
     this.render();

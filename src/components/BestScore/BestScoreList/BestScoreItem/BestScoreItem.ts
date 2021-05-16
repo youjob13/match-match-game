@@ -1,5 +1,5 @@
 import './bestScoreItem.scss';
-import { IUserModel } from '../../../shared/interfaces/user-model/user-model';
+import { IUserModel } from '../../../shared/interfaces/user-model';
 import BaseControl from '../../../shared/BaseControl/BaseControl';
 
 class BestScoreItem extends BaseControl {

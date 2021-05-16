@@ -1,5 +1,5 @@
 import './bestScoreList.scss';
-import { IUserModel } from '../../shared/interfaces/user-model/user-model';
+import { IUserModel } from '../../shared/interfaces/user-model';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import BestScoreItem from './BestScoreItem/BestScoreItem';
 

@@ -1,6 +1,9 @@
 import './gameField.scss';
 
-import { ICardFromJSON } from '../../shared/interfaces/card-model/card-model-json';
+import {
+  ICardFromJSON,
+  ICardsJSON,
+} from '../../shared/interfaces/card-model-json';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import Card, { ICard } from '../../Card/Card';
 import WinPopup from '../WinPopup/WinPopup';
@@ -16,6 +19,8 @@ class GameField extends BaseControl {
 
   private isCompared: boolean;
 
+  private category: string;
+
   private stopGame: () => number;
 
   constructor(
@@ -24,6 +29,7 @@ class GameField extends BaseControl {
   ) {
     super(propsToBaseControl);
     this.cards = [];
+    this.category = 'animal';
     this.openCard = null;
     this.gameCards = [];
     this.stopGame = stopGame;
@@ -31,7 +37,7 @@ class GameField extends BaseControl {
   }
 
   private sort() {
-    this.cards = this.cards.sort(() => Math.random() - 0.5);
+    this.cards = this.cards.sort(() => Math.random() - 0.5); // TODO: think about sort method
     this.render();
   }
 
@@ -92,7 +98,9 @@ class GameField extends BaseControl {
     }
   };
 
-  setCards(cards: Array<ICardFromJSON>): void {
+  setCards(gameData: Array<ICardsJSON>): void {
+    const { cards } = gameData[0];
+    this.category = gameData[0].category;
     this.cards = cards;
     this.cards = [...this.cards, ...this.cards];
     this.sort();
@@ -103,6 +111,7 @@ class GameField extends BaseControl {
       const cardElem = new Card(
         { tagName: 'div', classes: ['card', 'flipped'] },
         card,
+        this.category,
         this.selectCard
       );
       this.gameCards.push(cardElem);
@@ -112,7 +121,7 @@ class GameField extends BaseControl {
     setTimeout(
       () =>
         this.gameCards.forEach((card) => card.node.classList.remove('flipped')),
-      5000
+      5000 // TODO: change time
     );
   }
 }

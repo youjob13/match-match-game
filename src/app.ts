@@ -1,12 +1,14 @@
 import './styles.scss';
 import Header from './components/Header/Header';
 import AboutGame from './components/AboutGame/AboutGame';
-import BaseControl from './components/shared/BaseControl/BaseControl';
 import Game from './components/Game/Game';
 import BestScore from './components/BestScore/BestScore';
-import { IRoute } from './components/shared/interfaces/route-model/route-model';
+import GameSettings from './components/GameSettings/GameSettings';
+import { IRoute } from './components/shared/interfaces/route-model';
+import getCards from './components/api/CardsApi';
+import { ICardsJSON } from './components/shared/interfaces/card-model-json';
 
-export type Page = AboutGame | BaseControl | Game | BestScore | null;
+export type Page = AboutGame | GameSettings | Game | BestScore | null;
 
 class App {
   readonly routes: Array<IRoute>;
@@ -49,7 +51,20 @@ class App {
       {
         path: 'game',
         component: (): HTMLElement => {
-          this.currentPage = new Game({ tagName: 'main', classes: ['game'] });
+          this.currentPage = new Game(
+            { tagName: 'main', classes: ['game'] },
+            this.getData
+          );
+          return this.currentPage?.node;
+        },
+      },
+      {
+        path: 'settings',
+        component: (): HTMLElement => {
+          this.currentPage = new GameSettings({
+            tagName: 'main',
+            classes: ['game-settings'],
+          });
           return this.currentPage?.node;
         },
       },
@@ -60,6 +75,11 @@ class App {
     this.render();
     this.eventListeners();
   }
+
+  getData = async (): Promise<Array<ICardsJSON>> => {
+    const data = await getCards();
+    return data;
+  };
 
   private render(): void {
     const { hash } = window.location;
