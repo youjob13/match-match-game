@@ -4,7 +4,9 @@ import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import GameField from './GameField/GameField';
 import Timer from '../shared/Timer/Timer';
+import { IGameService } from '../services/GameService';
 import { ICardsJSON } from '../shared/interfaces/card-model-json';
+// import { ICardsJSON } from '../shared/interfaces/card-model-json';
 
 class Game extends BaseControl {
   gameField: GameField;
@@ -13,9 +15,8 @@ class Game extends BaseControl {
 
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    private getData: () => Promise<Array<ICardsJSON>>,
-    private gameSettings: any, // TODO: remove any,
-    private changeCurrentPage: (path: string) => void
+    private changeCurrentPage: (path: string) => void,
+    private gameService: IGameService
   ) {
     super(propsToBaseControl);
     this.gameField = new GameField(
@@ -23,8 +24,8 @@ class Game extends BaseControl {
         tagName: 'section',
         classes: ['game-field'],
       },
+      this.gameService,
       this.stopGame,
-      this.gameSettings,
       this.changeCurrentPage
     );
 
@@ -33,7 +34,7 @@ class Game extends BaseControl {
       classes: ['game__timer', 'timer'],
     });
 
-    this.startGame();
+    this.init();
   }
 
   stopGame = (): number => {
@@ -41,27 +42,22 @@ class Game extends BaseControl {
     return this.timer.counter;
   };
 
-  async getCards(): Promise<void> {
-    const gameData: Array<ICardsJSON> = await this.getData();
-    gameData.forEach((data) => {
-      if (data.category === this.gameSettings.category) {
+  getCards(): void {
+    this.gameService.gameData.forEach((data: ICardsJSON) => {
+      if (data.category === this.gameService.settings.category) {
         this.gameField?.setCards(data);
       }
     });
   }
 
-  private eventListeners(): void {
-    this.node.onload = () => this.getCards();
-  }
-
-  startGame(): void {
-    this.eventListeners();
-    this.getCards();
-    this.timer.start();
+  private async init(): Promise<void> {
+    await this.gameService.getData();
+    await this.getCards();
     this.render();
   }
 
   private render(): void {
+    this.timer.start();
     const wrapper = ContainerWrapper(this.node);
     wrapper.append(this.timer.node, this.gameField.node);
   }

@@ -1,3 +1,4 @@
+import { IGameService } from './components/services/GameService';
 import './styles.scss';
 import Header from './components/Header/Header';
 import AboutGame from './components/AboutGame/AboutGame';
@@ -23,7 +24,8 @@ class App {
 
   constructor(
     readonly app: HTMLElement | null,
-    private registrationService: IRegistrationService
+    private registrationService: IRegistrationService,
+    private gameService: IGameService
   ) {
     this.currentPage = null;
     this.routes = [
@@ -62,9 +64,8 @@ class App {
         component: (): HTMLElement => {
           this.currentPage = new Game(
             { tagName: 'main', classes: ['game'] },
-            this.getData,
-            this.currentSettings,
-            this.changeCurrentPage
+            this.changeCurrentPage,
+            this.gameService
           );
           return this.currentPage?.node;
         },
@@ -77,8 +78,7 @@ class App {
               tagName: 'main',
               classes: ['game-settings'],
             },
-            this.getData,
-            this.changeGameSetting
+            this.gameService
           );
           return this.currentPage?.node;
         },
@@ -95,20 +95,16 @@ class App {
     this.router.changePath(path);
   };
 
-  private changeGameSetting = (typeSetting: string, settings: string): void => {
-    this.currentSettings[typeSetting] = settings;
-  };
-
   init(): void {
     this.render();
     this.eventListeners();
   }
 
-  private getData = async (): Promise<Array<ICardsJSON>> => {
-    // TODO: remove
-    const data = await getCards();
-    return data;
-  };
+  // private getData = async (): Promise<Array<ICardsJSON>> => {
+  //   // TODO: remove
+  //   const data = await getCards();
+  //   return data;
+  // };
 
   private render(): void {
     const { hash } = window.location;

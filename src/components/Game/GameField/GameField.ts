@@ -7,6 +7,7 @@ import {
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import Card, { ICard } from '../../Card/Card';
 import WinPopup from '../WinPopup/WinPopup';
+import { IGameService } from '../../services/GameService';
 
 const TIME_TO_FLIP = 2;
 const COUNTDOWN_TO_STAT_GAME = 15;
@@ -20,19 +21,16 @@ class GameField extends BaseControl {
 
   private isCompared: boolean;
 
-  // private category: string;
-
   private stopGame: () => number;
 
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
+    private gameService: IGameService,
     stopGame: () => number,
-    private gameSettings: any,
     private changeCurrentPage: (path: string) => void
   ) {
     super(propsToBaseControl);
     this.cards = [];
-    // this.category = 'animal';
     this.openCard = null;
     this.gameCards = [];
     this.stopGame = stopGame;
@@ -40,7 +38,7 @@ class GameField extends BaseControl {
   }
 
   private defineDifficulty(): number {
-    return +this.gameSettings.difficulty.match(/\d/).join('');
+    return +this.gameService.settings.difficulty.match(/\d/).join('');
   }
 
   private sort() {
@@ -113,13 +111,12 @@ class GameField extends BaseControl {
   }
 
   private render(): void {
-    console.log(this.gameSettings);
     this.cards.forEach((card) => {
       const cardElem = new Card(
         { tagName: 'div', classes: ['card', 'flipped'] },
         card,
         this.selectCard,
-        this.gameSettings.category
+        this.gameService.settings.category
       );
       cardElem.node.style.flex = `${100 / this.defineDifficulty()}%`;
       this.gameCards.push(cardElem);

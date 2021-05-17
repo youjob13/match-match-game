@@ -1,18 +1,16 @@
 import './gameSettings.scss';
 import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
-// import Setting from './settings/Setting';
 import { ISetting } from '../shared/interfaces/setting-model';
-import { ICardsJSON } from '../shared/interfaces/card-model-json';
 import GameSettingItem from './GameSettingsItem/GameSettingItem';
+import { IGameService } from '../services/GameService';
 
 class GameSettings extends BaseControl {
   settings: Array<ISetting>;
 
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    private getData: () => Promise<Array<ICardsJSON>>,
-    private changeGameSettings: (typeSetting: string, settings: string) => void
+    private gameService: IGameService
   ) {
     super(propsToBaseControl);
     this.settings = [
@@ -30,21 +28,21 @@ class GameSettings extends BaseControl {
     this.init();
   }
 
-  async getCategories(): Promise<void> {
-    const cards: Array<ICardsJSON> = await this.getData();
-    await this.setCategory(cards);
-  }
+  private changeGameSetting = (typeSetting: string, setting: string): void => {
+    this.gameService.changeSettings(typeSetting, setting);
+  };
 
-  setCategory(cards: Array<ICardsJSON>): void {
+  private setCategory(): void {
     this.settings[0].options.push('select game cards type');
-    cards.forEach((cardInfo) => {
-      this.settings[0].options.push(cardInfo.category);
+    this.gameService.categories.forEach((category) => {
+      this.settings[0].options.push(category);
     });
   }
 
-  async init(): Promise<void> {
-    await this.getCategories();
-    await this.render();
+  private async init(): Promise<void> {
+    await this.gameService.getData();
+    this.setCategory();
+    this.render();
   }
 
   private render(): void {
@@ -61,7 +59,7 @@ class GameSettings extends BaseControl {
           title: settingItem.title,
           options: settingItem.options,
         },
-        this.changeGameSettings
+        this.changeGameSetting
       );
       wrapper.append(newSetting.node);
     });
