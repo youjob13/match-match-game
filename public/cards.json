@@ -3,6 +3,46 @@
     "category": "animal",
     "cards": [
       {
+        "name": "animals",
+        "src": "animals.jpg"
+      },
+      {
+        "name": "fox",
+        "src": "fox.jpg"
+      },
+      {
+        "name": "giraffe",
+        "src": "giraffe.jpg"
+      },
+      {
+        "name": "leopard",
+        "src": "leopard.jpg"
+      },
+      {
+        "name": "monkey",
+        "src": "monkey.jpg"
+      },
+      {
+        "name": "rino",
+        "src": "rino.jpg"
+      },
+      {
+        "name": "squirrel",
+        "src": "squirrel.jpg"
+      },
+      {
+        "name": "tiger",
+        "src": "tiger.jpg"
+      },
+      {
+        "name": "tigers",
+        "src": "tigers.jpg"
+      },
+      {
+        "name": "white_tiger",
+        "src": "white_tiger.jpg"
+      },
+      {
         "name": "deers",
         "src": "deers.jpg"
       },
@@ -46,6 +86,70 @@
       {
         "name": "gerzoc",
         "src": "gerzoc.jpg"
+      },
+      {
+        "name": "grandfather",
+        "src": "grandfather.jpg"
+      },
+      {
+        "name": "key",
+        "src": "key.jpg"
+      },
+      {
+        "name": "ledi",
+        "src": "ledi.jpg"
+      },
+      {
+        "name": "castle",
+        "src": "castle.jpeg"
+      },
+      {
+        "name": "geizenberg",
+        "src": "geizenberg.jpg"
+      },
+      {
+        "name": "geizenberg_2",
+        "src": "geizenberg_2.jpg"
+      },
+      {
+        "name": "vampire",
+        "src": "vampire.jpg"
+      },
+      {
+        "name": "evil",
+        "src": "evil.jpg"
+      },
+      {
+        "name": "grandmother",
+        "src": "grandmother.jpg"
+      },
+      {
+        "name": "kris_baby",
+        "src": "kris_baby.png"
+      },
+      {
+        "name": "kris",
+        "src": "kris.jpg"
+      },
+      {
+        "name": "puppeteer",
+        "src": "puppeteer.jpg"
+      },
+      {
+        "name": "miranda",
+        "src": "miranda.jpeg"
+      },
+      {
+        "name": "miya",
+        "src": "miya.jpg"
+      },
+      {
+        "name": "scare",
+        "src": "scare.jpg"
+      },
+      {
+        "name": "village",
+        "src": "village.jpg"
       }
     ]
   }

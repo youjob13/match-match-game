@@ -38,7 +38,13 @@ class GameField extends BaseControl {
     this.isCompared = false;
   }
 
+  private defineDifficulty(): number {
+    return +this.gameSettings.difficulty.match(/\d/).join('');
+  }
+
   private sort() {
+    this.cards.sort(() => Math.random() - 0.5).length =
+      this.defineDifficulty() ** 2 / 2;
     this.cards = [...this.cards, ...this.cards].sort(() => Math.random() - 0.5); // TODO: think about sort method
     this.render();
   }
@@ -114,6 +120,7 @@ class GameField extends BaseControl {
         this.selectCard,
         this.gameSettings.category
       );
+      cardElem.node.style.flex = `${100 / this.defineDifficulty()}%`;
       this.gameCards.push(cardElem);
       this.node.append(cardElem.node);
     });

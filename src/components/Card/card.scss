@@ -1,7 +1,7 @@
 .card {
   position: relative;
-  flex: 1 0 22%;
-  max-width: 168px;
+  // flex: 1 0 22%;
+  // max-width: 168px;
   height: 168px;
   transition: 0.5s;
   perspective: 25rem;
@@ -36,7 +36,7 @@
   &__back {
     background-image: url(../../assets/game/card_back.png);
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
   }
   &__image {
     width: 100%;

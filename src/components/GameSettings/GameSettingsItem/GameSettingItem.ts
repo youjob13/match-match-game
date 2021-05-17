@@ -1,7 +1,7 @@
 import BaseControl from '../../shared/BaseControl/BaseControl';
 // TODO: refactor code
 class GameSettingItem extends BaseControl {
-  select: BaseControl;
+  select: any; // TODO: remove any
 
   title: string;
 

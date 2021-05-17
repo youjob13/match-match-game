@@ -5,8 +5,12 @@ export interface IAttr {
   alt?: string;
 }
 
+export interface IBaseControl {
+  readonly node: HTMLInputElement | HTMLElement;
+}
+
 class BaseControl {
-  readonly node: HTMLElement;
+  readonly node: HTMLInputElement | HTMLElement;
 
   constructor(controlSettings: {
     tagName: string;
