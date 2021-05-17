@@ -3,6 +3,9 @@ export interface IAttr {
   href?: string;
   src?: unknown;
   alt?: string;
+  placeholder?: string;
+  type?: string;
+  name?: string;
 }
 
 export interface IBaseControl {

@@ -1,4 +1,5 @@
 import BaseControl from '../../../shared/BaseControl/BaseControl';
+import Button from '../../../shared/Button/Button';
 
 class NavigationItem extends BaseControl {
   private icon: string;
@@ -8,33 +9,37 @@ class NavigationItem extends BaseControl {
   private path: string;
 
   constructor(
-    propsToBaseControl: {
+    props: {
       tagName: string;
       classes: string[];
       text: string;
+      iconUrl: string;
+      path: string;
     },
-    settings: { iconUrl: string; path: string }
+    private readonly goToPage: (path: string) => void
   ) {
     super({
-      tagName: propsToBaseControl.tagName,
-      classes: propsToBaseControl.classes,
+      tagName: props.tagName,
+      classes: props.classes,
     });
-    this.text = propsToBaseControl.text;
-    this.icon = settings.iconUrl;
-    this.path = settings.path;
-    this.init();
-  }
-
-  private init(): void {
+    this.text = props.text;
+    this.icon = props.iconUrl;
+    this.path = props.path;
     this.render();
   }
 
+  private handleClick = (): void => {
+    this.goToPage(this.path);
+  };
+
   private render(): void {
-    const navPath = new BaseControl({
-      tagName: 'a',
-      classes: ['navigation__link'],
-      attributes: { href: `#${this.path}` }, // TODO: check on
-    });
+    const navPath = new Button(
+      {
+        tagName: 'a',
+        classes: ['navigation__link'],
+      },
+      this.handleClick
+    );
 
     const icon = new BaseControl({
       tagName: 'img',

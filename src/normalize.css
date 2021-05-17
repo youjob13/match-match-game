@@ -95,6 +95,16 @@ figcaption {
   padding: 0;
 }
 
+input,
+button {
+  border: none;
+}
+
+input:focus,
+button:focus {
+  outline: none;
+}
+
 li {
   list-style: none;
 }

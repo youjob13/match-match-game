@@ -1,6 +1,4 @@
 .button {
-  border: none;
-  width: 125px;
   background: #f2f9fe;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2), 0px 1px 18px rgba(0, 0, 0, 0.12),
     0px 6px 10px rgba(0, 0, 0, 0.14);
@@ -19,7 +17,11 @@
   &:active {
     transform: scale(0.98);
   }
-  &:focus {
-    outline: none;
+  &__filled {
+    background-color: #2196f3;
+    color: #fff;
+    &:hover {
+      background-color: #2588ce;
+    }
   }
 }

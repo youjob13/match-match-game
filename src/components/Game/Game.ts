@@ -7,14 +7,15 @@ import Timer from '../shared/Timer/Timer';
 import { ICardsJSON } from '../shared/interfaces/card-model-json';
 
 class Game extends BaseControl {
-  private gameField: GameField;
+  gameField: GameField;
 
   timer: Timer;
 
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private getData: () => Promise<Array<ICardsJSON>>,
-    private gameSettings: any
+    private gameSettings: any, // TODO: remove any,
+    private changeCurrentPage: (path: string) => void
   ) {
     super(propsToBaseControl);
     this.gameField = new GameField(
@@ -23,7 +24,8 @@ class Game extends BaseControl {
         classes: ['game-field'],
       },
       this.stopGame,
-      this.gameSettings
+      this.gameSettings,
+      this.changeCurrentPage
     );
 
     this.timer = new Timer({

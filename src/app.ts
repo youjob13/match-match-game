@@ -8,6 +8,7 @@ import { IRoute } from './components/shared/interfaces/route-model';
 import getCards from './components/api/CardsApi';
 import { ICardsJSON } from './components/shared/interfaces/card-model-json';
 import Router from './components/shared/Router/Router';
+import { IRegistrationService } from './components/shared/interfaces/registration-service-model';
 
 export type Page = AboutGame | GameSettings | Game | BestScore | null;
 
@@ -20,7 +21,10 @@ class App {
 
   currentSettings: any; // TODO: remove any
 
-  constructor(readonly app: HTMLElement | null) {
+  constructor(
+    readonly app: HTMLElement | null,
+    private registrationService: IRegistrationService
+  ) {
     this.currentPage = null;
     this.routes = [
       {
@@ -59,7 +63,8 @@ class App {
           this.currentPage = new Game(
             { tagName: 'main', classes: ['game'] },
             this.getData,
-            this.currentSettings
+            this.currentSettings,
+            this.changeCurrentPage
           );
           return this.currentPage?.node;
         },
@@ -86,6 +91,10 @@ class App {
     };
   }
 
+  private changeCurrentPage = (path: string): void => {
+    this.router.changePath(path);
+  };
+
   private changeGameSetting = (typeSetting: string, settings: string): void => {
     this.currentSettings[typeSetting] = settings;
   };
@@ -96,6 +105,7 @@ class App {
   }
 
   private getData = async (): Promise<Array<ICardsJSON>> => {
+    // TODO: remove
     const data = await getCards();
     return data;
   };
@@ -111,7 +121,11 @@ class App {
     if (!this.app) throw new Error('app is not founded');
 
     this.app.innerHTML = '<h1 class="h1-title">Match match game</h1>';
-    const header = new Header({ tagName: 'header', classes: ['header'] });
+    const header = new Header(
+      { tagName: 'header', classes: ['header'] },
+      this.registrationService,
+      this.changeCurrentPage
+    );
     this.app.append(header.node);
 
     this.router.routeToPage(this.app);

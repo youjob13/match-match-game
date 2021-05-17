@@ -3,6 +3,10 @@ import { IRoute } from '../interfaces/route-model';
 class Router {
   constructor(private routes: Array<IRoute>) {}
 
+  protected changePath = (path: string): void => {
+    window.location.hash = path;
+  };
+
   protected routeToPage(parentNode: any): void {
     const { hash } = window.location;
     const getHash = (): string => hash.slice(1);

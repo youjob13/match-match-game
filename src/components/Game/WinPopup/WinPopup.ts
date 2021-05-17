@@ -3,16 +3,24 @@ import './winPopup.scss';
 import Popup from '../../shared/Popup/Popup';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import timerValidator from '../../functions/timerValidator';
+import Button from '../../shared/Button/Button';
 
 class WinPopup extends Popup {
   finishTime: number;
 
-  constructor(finishTime: number) {
-    const propsToBaseControl = { tagName: 'div', classes: ['popup'] };
-    super(propsToBaseControl);
+  constructor(
+    finishTime: number,
+    private changeCurrentPage: (path: string) => void
+  ) {
+    super({ tagName: 'div', classes: ['popup'] });
     this.finishTime = finishTime;
     this.render();
   }
+
+  protected closePopup = (): void => {
+    this.changeCurrentPage('best-score');
+    this.node.remove();
+  };
 
   private render(): void {
     const popupContent = new BaseControl({
@@ -23,16 +31,19 @@ class WinPopup extends Popup {
       )} minutes.`, // TODO: minutes/seconds
     });
 
-    const popupButton = new BaseControl({
-      tagName: 'a',
-      classes: ['popup__button'],
-      text: 'Ok',
-      attributes: { href: '#best-score' },
-    });
+    const popupButton = new Button(
+      {
+        tagName: 'a',
+        classes: ['popup__button'],
+        text: 'Ok',
+        // attributes: { href: '#best-score' },
+      },
+      this.closePopup
+    );
 
     this.popupInner.node.classList.add('win-popup');
     this.popupInner.node.append(popupContent.node, popupButton.node);
-    document.getElementById('app')?.append(this.node); // TODO: remove getElementById
+    document.body.append(this.node);
   }
 }
 

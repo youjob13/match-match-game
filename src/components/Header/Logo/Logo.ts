@@ -1,19 +1,22 @@
 import './logo.scss';
-import BaseControl, { IAttr } from '../../shared/BaseControl/BaseControl';
+import BaseControl from '../../shared/BaseControl/BaseControl';
 
 class Logo extends BaseControl {
-  constructor(propsToBaseControl: {
-    tagName: string;
-    classes: string[];
-    attributes: IAttr;
-  }) {
+  constructor(
+    propsToBaseControl: {
+      tagName: string;
+      classes: string[];
+    },
+    private changeCurrentPage: (path: string) => void
+  ) {
     super(propsToBaseControl);
-    this.init();
-  }
-
-  private init(): void {
+    this.node.addEventListener('click', this.handleClick.bind(this));
     this.render();
   }
+
+  private handleClick = (): void => {
+    this.changeCurrentPage('');
+  };
 
   private render(): void {
     const spanUp = new BaseControl({

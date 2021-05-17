@@ -27,7 +27,8 @@ class GameField extends BaseControl {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     stopGame: () => number,
-    private gameSettings: any
+    private gameSettings: any,
+    private changeCurrentPage: (path: string) => void
   ) {
     super(propsToBaseControl);
     this.cards = [];
@@ -65,7 +66,7 @@ class GameField extends BaseControl {
             this.isCompared = false;
             if (!this.gameCards.length) {
               const finishTime: number = this.stopGame();
-              const winPopup = new WinPopup(finishTime);
+              const winPopup = new WinPopup(finishTime, this.changeCurrentPage);
             }
           }
         }
@@ -128,7 +129,7 @@ class GameField extends BaseControl {
     setTimeout(
       () =>
         this.gameCards.forEach((card) => card.node.classList.remove('flipped')),
-      5000 // COUNTDOWN_TO_STAT_GAME * 1000
+      COUNTDOWN_TO_STAT_GAME * 1000
     );
   }
 }
