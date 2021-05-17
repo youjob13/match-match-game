@@ -7,16 +7,14 @@ import GameSettings from './components/GameSettings/GameSettings';
 import { IRoute } from './components/shared/interfaces/route-model';
 import getCards from './components/api/CardsApi';
 import { ICardsJSON } from './components/shared/interfaces/card-model-json';
+import Router from './components/shared/Router/Router';
 
 export type Page = AboutGame | GameSettings | Game | BestScore | null;
 
-interface ISetting {
-  category: string;
-  difficulty: string;
-}
-
 class App {
   readonly routes: Array<IRoute>;
+
+  router: any;
 
   currentPage: Page;
 
@@ -81,6 +79,7 @@ class App {
         },
       },
     ];
+    this.router = new Router(this.routes);
     this.currentSettings = {
       category: 'animal',
       difficulty: '4 * 4',
@@ -115,19 +114,7 @@ class App {
     const header = new Header({ tagName: 'header', classes: ['header'] });
     this.app.append(header.node);
 
-    this.routeToPage();
-  }
-
-  private routeToPage(): void {
-    const { hash } = window.location;
-    const getHash = (): string => hash.slice(1);
-    const defineCurrentPage = () =>
-      this.routes.forEach(
-        (route) =>
-          route.path === getHash() && this.app?.append(route.component())
-      );
-
-    defineCurrentPage();
+    this.router.routeToPage(this.app);
   }
 
   private eventListeners(): void {
