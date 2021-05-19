@@ -1,8 +1,9 @@
-import getCards from '../api/CardsApi';
+import getCardsAPI from '../api/CardsApi';
 import {
   ICardFromJSON,
   ICardsJSON,
 } from '../shared/interfaces/card-model-json';
+// import { ISettings } from '../shared/interfaces/setting-model';
 
 export interface IGameService {
   settings: any; // TODO: remove any
@@ -50,10 +51,9 @@ class GameService {
   }
 
   getData = async (): Promise<void> => {
-    this.gameData = await getCards();
+    this.gameData = await getCardsAPI();
     this.setCategory();
     this.setCards();
-    console.log(this.gameData);
   };
 }
 

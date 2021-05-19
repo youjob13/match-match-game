@@ -6,8 +6,7 @@ import GameField from './GameField/GameField';
 import Timer from '../shared/Timer/Timer';
 import { IGameService } from '../services/GameService';
 import { ICardsJSON } from '../shared/interfaces/card-model-json';
-// import { ICardsJSON } from '../shared/interfaces/card-model-json';
-
+// TODO: refactor: business logic & rendering
 class Game extends BaseControl {
   gameField: GameField;
 

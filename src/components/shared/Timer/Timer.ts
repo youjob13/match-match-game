@@ -1,5 +1,4 @@
 import './timer.scss';
-
 import timerValidator from '../../functions/timerValidator';
 import BaseControl from '../BaseControl/BaseControl';
 
@@ -20,14 +19,9 @@ class Timer extends BaseControl {
       tagName: 'output',
       classes: ['timer__output'],
     });
-    this.node.append(this.output.node);
     this.counter = 0;
     this.timerId = null;
     this.isStarted = false;
-    this.init();
-  }
-
-  init(): void {
     this.render(START_TIMER_VALUE);
   }
 
@@ -52,6 +46,7 @@ class Timer extends BaseControl {
 
   private render(time: string): void {
     this.output.node.textContent = `${time}`;
+    this.node.append(this.output.node);
   }
 }
 

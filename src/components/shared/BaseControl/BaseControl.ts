@@ -8,10 +8,6 @@ export interface IAttr {
   name?: string;
 }
 
-export interface IBaseControl {
-  readonly node: HTMLInputElement | HTMLElement;
-}
-
 class BaseControl {
   readonly node: HTMLInputElement | HTMLElement;
 

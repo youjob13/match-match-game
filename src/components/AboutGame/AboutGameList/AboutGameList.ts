@@ -10,10 +10,6 @@ import AboutGameItem from './AboutGameItem/AboutGameItem';
 class AboutGameList extends BaseControl {
   constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
     super(propsToBaseControl);
-    this.init();
-  }
-
-  private init(): void {
     this.render();
   }
 

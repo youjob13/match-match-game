@@ -11,7 +11,7 @@ import { IGameService } from '../../services/GameService';
 
 const TIME_TO_FLIP = 2;
 const COUNTDOWN_TO_STAT_GAME = 15;
-
+// TODO: refactor: business logic & rendering
 class GameField extends BaseControl {
   private cards: Array<ICardFromJSON>;
 

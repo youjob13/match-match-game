@@ -1,7 +1,6 @@
 import './popup.scss';
-
 import BaseControl from '../BaseControl/BaseControl';
-
+// TODO: recast to HOC
 class Popup extends BaseControl {
   popupInner: BaseControl;
 

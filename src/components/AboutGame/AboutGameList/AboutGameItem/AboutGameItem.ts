@@ -20,10 +20,6 @@ class AboutGameItem extends BaseControl {
     });
     this.image = props.image;
     this.text = props.text;
-    this.init();
-  }
-
-  init(): void {
     this.render();
   }
 
@@ -32,8 +28,6 @@ class AboutGameItem extends BaseControl {
       tagName: 'figure',
       classes: ['about-game__item-inner'],
     });
-
-    this.node.append(figure.node);
 
     const img = new BaseControl({
       tagName: 'img',
@@ -48,6 +42,7 @@ class AboutGameItem extends BaseControl {
     });
 
     figure.node.append(text.node, img.node);
+    this.node.append(figure.node);
   }
 }
 

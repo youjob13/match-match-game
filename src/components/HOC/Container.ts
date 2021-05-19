@@ -1,5 +1,4 @@
 import './container.scss';
-
 import BaseControl from '../shared/BaseControl/BaseControl';
 
 const ContainerWrapper = (node: HTMLElement): HTMLElement => {

@@ -20,7 +20,7 @@ class BestScore extends BaseControl {
   }
 
   async getUsersData(): Promise<void> {
-    const response = await fetch('./users.json');
+    const response = await fetch('./users.json'); // TODO: remove
     this.usersData = await response.json();
   }
 

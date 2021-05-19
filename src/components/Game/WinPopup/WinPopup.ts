@@ -36,7 +36,6 @@ class WinPopup extends Popup {
         tagName: 'a',
         classes: ['popup__button'],
         text: 'Ok',
-        // attributes: { href: '#best-score' },
       },
       this.closePopup
     );

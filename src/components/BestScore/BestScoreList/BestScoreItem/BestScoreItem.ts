@@ -8,10 +8,6 @@ class BestScoreItem extends BaseControl {
     private user: IUserModel
   ) {
     super(propsToBaseControl);
-    this.init();
-  }
-
-  private init(): void {
     this.render();
   }
 

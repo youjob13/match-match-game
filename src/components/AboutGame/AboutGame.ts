@@ -6,10 +6,6 @@ import ContainerWrapper from '../HOC/Container';
 class AboutGame extends BaseControl {
   constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
     super(propsToBaseControl);
-    this.init();
-  }
-
-  private init(): void {
     this.render();
   }
 

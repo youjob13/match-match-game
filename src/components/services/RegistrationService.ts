@@ -19,7 +19,7 @@ class RegistrationService implements IRegistrationService {
   }
 
   changeValue = (value: string, name: string): void => {
-    // TODO: change on switch
+    // TODO: change on switch (trouble with this[prop])
     if (name === 'firstName') {
       this.dataRegistration.firstName = value;
     } else if (name === 'lastName') {
@@ -33,11 +33,12 @@ class RegistrationService implements IRegistrationService {
 
   sendData = (): void => {
     alert(
-      `firstName: ${this.dataRegistration.firstName}lastName: ${this.dataRegistration.lastName}email: ${this.dataRegistration.email}`
+      `firstName: ${this.dataRegistration.firstName}
+      lastName: ${this.dataRegistration.lastName}
+      email: ${this.dataRegistration.email}`
     );
 
     this.isAuthorization = true;
-    console.log(this.isAuthorization);
   };
 }
 

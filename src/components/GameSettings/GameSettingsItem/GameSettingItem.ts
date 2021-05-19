@@ -1,7 +1,7 @@
 import BaseControl from '../../shared/BaseControl/BaseControl';
 // TODO: refactor code
 class GameSettingItem extends BaseControl {
-  select: any; // TODO: remove any
+  select: BaseControl; // TODO: read about such interface
 
   title: string;
 

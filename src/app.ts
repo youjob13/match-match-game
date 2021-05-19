@@ -6,8 +6,6 @@ import Game from './components/Game/Game';
 import BestScore from './components/BestScore/BestScore';
 import GameSettings from './components/GameSettings/GameSettings';
 import { IRoute } from './components/shared/interfaces/route-model';
-import getCards from './components/api/CardsApi';
-import { ICardsJSON } from './components/shared/interfaces/card-model-json';
 import Router from './components/shared/Router/Router';
 import { IRegistrationService } from './components/shared/interfaces/registration-service-model';
 
@@ -16,11 +14,9 @@ export type Page = AboutGame | GameSettings | Game | BestScore | null;
 class App {
   readonly routes: Array<IRoute>;
 
-  router: any;
+  router: Router; // TODO: read about such interface
 
   currentPage: Page;
-
-  currentSettings: any; // TODO: remove any
 
   constructor(
     readonly app: HTMLElement | null,
@@ -85,10 +81,6 @@ class App {
       },
     ];
     this.router = new Router(this.routes);
-    this.currentSettings = {
-      category: 'animal',
-      difficulty: '4 * 4',
-    };
   }
 
   private changeCurrentPage = (path: string): void => {
@@ -99,12 +91,6 @@ class App {
     this.render();
     this.eventListeners();
   }
-
-  // private getData = async (): Promise<Array<ICardsJSON>> => {
-  //   // TODO: remove
-  //   const data = await getCards();
-  //   return data;
-  // };
 
   private render(): void {
     const { hash } = window.location;
