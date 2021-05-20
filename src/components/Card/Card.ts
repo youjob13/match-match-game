@@ -4,15 +4,15 @@ import BaseControl from '../shared/BaseControl/BaseControl';
 
 export interface ICard {
   readonly node: HTMLElement;
-  card: ICardFromJSON;
+  cardInfo: ICardFromJSON;
   category: string;
-  selectCard: (card: ICard) => void;
+  selectCard: (cardInfo: ICard) => void;
 }
 
 class Card extends BaseControl {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    public card: ICardFromJSON,
+    public cardInfo: ICardFromJSON,
     public selectCard: (card: ICard) => void,
     public category: string
   ) {
@@ -35,7 +35,7 @@ class Card extends BaseControl {
     const image = new BaseControl({
       tagName: 'img',
       classes: ['card__image'],
-      attributes: { src: `images/${this.category}/${this.card.src}` },
+      attributes: { src: `images/${this.category}/${this.cardInfo.src}` },
     });
     front.node.append(image.node);
 

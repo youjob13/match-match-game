@@ -3,6 +3,9 @@ import App from './app';
 import { IApplication } from './components/shared/interfaces/app-model';
 import RegistrationService from './components/services/RegistrationService';
 import GameService from './components/services/GameService';
+// import IndexedDB from './components/api/IndexedDB';
+
+// const db = new IndexedDB();
 
 const registrationService = new RegistrationService();
 const gameService = new GameService();

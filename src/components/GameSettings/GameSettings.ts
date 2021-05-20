@@ -40,7 +40,7 @@ class GameSettings extends BaseControl {
   }
 
   private async init(): Promise<void> {
-    await this.gameService.getData();
+    await this.gameService.startGame();
     this.setCategory();
     this.render();
   }

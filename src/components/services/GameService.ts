@@ -1,4 +1,5 @@
 import getCardsAPI from '../api/CardsApi';
+import { ICard } from '../Card/Card';
 import {
   ICardFromJSON,
   ICardsJSON,
@@ -10,9 +11,10 @@ export interface IGameService {
   categories: string[];
   gameData: Array<ICardsJSON>;
   cards: Array<ICardFromJSON> | [];
-  getData: () => void;
-  startGame: () => void;
+  score: number;
   changeSettings: (typeSetting: string, setting: string) => void;
+  startGame: () => void;
+  stopGame: () => void;
 }
 
 class GameService {
@@ -22,6 +24,10 @@ class GameService {
 
   cards: Array<ICardFromJSON> | [];
 
+  sortedCards: Array<ICard> | [];
+
+  score: number;
+
   gameData: Array<ICardsJSON>;
 
   constructor() {
@@ -29,31 +35,45 @@ class GameService {
       category: 'animal',
       difficulty: '4 * 4',
     };
+    this.score = 0;
     this.gameData = [];
-    this.categories = this.gameData.map((data) => data.category);
+    this.categories = [];
     this.cards = [];
+    this.sortedCards = [];
   }
 
-  private setCategory(): void {
+  async startGame(): Promise<void> {
+    await this.getData();
+    await this.setCategoriesToSettings();
+    this.setCardsOnCurrentGame(this.settings.category);
+  }
+
+  stopGame(): void {
+    alert(this.score);
+  }
+
+  private setCategoriesToSettings(): void {
     this.categories = this.gameData.map((data) => data.category);
-  }
-
-  private setCards(): void {
-    this.cards = this.gameData[0].cards;
   }
 
   changeSettings(typeSetting: string, setting: string): void {
     this.settings[typeSetting] = setting;
+
+    if (typeSetting === 'category') {
+      this.setCardsOnCurrentGame(setting);
+    }
   }
 
-  async startGame(): Promise<void> {
-    this.getData();
+  private setCardsOnCurrentGame(category: string): void {
+    this.gameData.forEach((data: ICardsJSON) => {
+      if (data.category === category) {
+        this.cards = data.cards;
+      }
+    });
   }
 
-  getData = async (): Promise<void> => {
+  private getData = async (): Promise<void> => {
     this.gameData = await getCardsAPI();
-    this.setCategory();
-    this.setCards();
   };
 }
 

@@ -17,11 +17,19 @@ class Header extends BaseControl {
   }
 
   private onRegistrationBtnClick = (): void => {
-    const registrationPopup = new RegistrationPopup(this.registrationService);
+    const registrationPopup = new RegistrationPopup(
+      this.registrationService,
+      this.render
+    );
     document.body.append(registrationPopup.node);
   };
 
-  private render(): void {
+  private onStartBtnClick = (): void => {
+    this.changeCurrentPage('game');
+  };
+
+  private render = (): void => {
+    this.node.innerHTML = '';
     const leftPartHeader = new BaseControl({
       tagName: 'div',
       classes: ['header__left'],
@@ -48,19 +56,21 @@ class Header extends BaseControl {
     );
 
     if (this.registrationService.isAuthorization) {
-      const startGameBtn = new BaseControl({
-        tagName: 'a',
-        classes: ['header__button', 'button'],
-        text: window.location.hash !== '#game' ? 'Start Game' : 'Stop Game', // TODO: think about
-        attributes: { href: '#game' }, // TODO: callback to GameService
-      });
+      const startGameBtn = new Button(
+        {
+          tagName: 'a',
+          classes: ['header__button', 'button'],
+          text: window.location.hash !== '#game' ? 'Start Game' : 'Stop Game', // TODO: think about
+        },
+        this.onStartBtnClick
+      );
       rightPartHeader.node.append(startGameBtn.node);
     } else {
       const registrationBtn = new Button(
         {
           tagName: 'a',
           classes: ['header__button', 'button'],
-          text: 'register new player', // TODO: флаг авторезирован ли пользователь
+          text: 'register new player',
         },
         this.onRegistrationBtnClick
       );
@@ -70,7 +80,7 @@ class Header extends BaseControl {
     leftPartHeader.node.append(logotype.node, nav.node);
 
     this.node.append(leftPartHeader.node, rightPartHeader.node);
-  }
+  };
 }
 
 export default Header;

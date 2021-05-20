@@ -6,10 +6,11 @@ export interface IAttr {
   placeholder?: string;
   type?: string;
   name?: string;
+  value?: string;
 }
 
 class BaseControl {
-  readonly node: HTMLInputElement | HTMLElement;
+  readonly node: any | HTMLElement | HTMLInputElement;
 
   constructor(controlSettings: {
     tagName: string;

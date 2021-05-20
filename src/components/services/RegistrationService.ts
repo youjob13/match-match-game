@@ -19,7 +19,8 @@ class RegistrationService implements IRegistrationService {
   }
 
   changeValue = (value: string, name: string): void => {
-    // TODO: change on switch (trouble with this[prop])
+    // TODO: (trouble with this[prop])
+    // this.dataRegistration[name] = value;
     if (name === 'firstName') {
       this.dataRegistration.firstName = value;
     } else if (name === 'lastName') {
@@ -39,6 +40,47 @@ class RegistrationService implements IRegistrationService {
     );
 
     this.isAuthorization = true;
+
+    const openRequest = indexedDB.open('youjob13', 1);
+    let db;
+
+    openRequest.onupgradeneeded = () => {
+      db = openRequest.result;
+
+      if (!db.objectStoreNames.contains('users')) {
+        db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+      }
+    };
+
+    openRequest.onerror = () => {
+      console.error('Error', openRequest.error);
+    };
+
+    openRequest.onsuccess = () => {
+      db = openRequest.result;
+
+      const transaction = db.transaction('users', 'readwrite');
+
+      const cards = transaction.objectStore('users');
+
+      const request = cards.put({
+        firstName: this.dataRegistration.firstName,
+        lastName: this.dataRegistration.lastName,
+        email: this.dataRegistration.email,
+      });
+
+      request.onsuccess = () => {
+        console.log('Регистрация успешна', request.result);
+      };
+
+      request.onerror = () => {
+        console.log('Ошибка', request.error);
+      };
+
+      transaction.oncomplete = () => {
+        console.log('Транзакция выполнена');
+      };
+    };
   };
 }
 

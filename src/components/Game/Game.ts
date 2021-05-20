@@ -1,12 +1,10 @@
 import './game.scss';
-
 import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import GameField from './GameField/GameField';
 import Timer from '../shared/Timer/Timer';
 import { IGameService } from '../services/GameService';
-import { ICardsJSON } from '../shared/interfaces/card-model-json';
-// TODO: refactor: business logic & rendering
+
 class Game extends BaseControl {
   gameField: GameField;
 
@@ -24,7 +22,7 @@ class Game extends BaseControl {
         classes: ['game-field'],
       },
       this.gameService,
-      this.stopGame,
+      this.stopTimer,
       this.changeCurrentPage
     );
 
@@ -33,27 +31,13 @@ class Game extends BaseControl {
       classes: ['game__timer', 'timer'],
     });
 
-    this.init();
+    this.render();
   }
 
-  stopGame = (): number => {
+  private stopTimer = (): number => {
     this.timer.stop();
     return this.timer.counter;
   };
-
-  getCards(): void {
-    this.gameService.gameData.forEach((data: ICardsJSON) => {
-      if (data.category === this.gameService.settings.category) {
-        this.gameField?.setCards(data);
-      }
-    });
-  }
-
-  private async init(): Promise<void> {
-    await this.gameService.getData();
-    await this.getCards();
-    this.render();
-  }
 
   private render(): void {
     this.timer.start();

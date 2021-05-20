@@ -1,9 +1,4 @@
 import './gameField.scss';
-
-import {
-  ICardsJSON,
-  ICardFromJSON,
-} from '../../shared/interfaces/card-model-json';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import Card, { ICard } from '../../Card/Card';
 import WinPopup from '../WinPopup/WinPopup';
@@ -11,59 +6,62 @@ import { IGameService } from '../../services/GameService';
 
 const TIME_TO_FLIP = 2;
 const COUNTDOWN_TO_STAT_GAME = 15;
-// TODO: refactor: business logic & rendering
-class GameField extends BaseControl {
-  private cards: Array<ICardFromJSON>;
 
-  private gameCards: Array<ICard>;
+class GameField extends BaseControl {
+  private cardsOnField: Array<ICard>;
 
   private openCard: ICard | null;
 
   private isCompared: boolean;
 
-  private stopGame: () => number;
-
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private gameService: IGameService,
-    stopGame: () => number,
+    private readonly stopTimer: () => number,
     private changeCurrentPage: (path: string) => void
   ) {
     super(propsToBaseControl);
-    this.cards = [];
     this.openCard = null;
-    this.gameCards = [];
-    this.stopGame = stopGame;
+    this.cardsOnField = [];
     this.isCompared = false;
+    this.init();
   }
 
   private defineDifficulty(): number {
     return +this.gameService.settings.difficulty.match(/\d/).join('');
   }
 
-  private sort() {
-    this.cards.sort(() => Math.random() - 0.5).length =
+  private sort(): void {
+    this.gameService.cards.sort(() => Math.random() - 0.5).length =
       this.defineDifficulty() ** 2 / 2;
-    this.cards = [...this.cards, ...this.cards].sort(() => Math.random() - 0.5); // TODO: think about sort method
-    this.render();
+    this.gameService.cards = [
+      ...this.gameService.cards,
+      ...this.gameService.cards,
+    ].sort(() => Math.random() - 0.5); // TODO: think about sort method
   }
 
   private compareCards(prevCard: ICard, currentCard: ICard): void {
     this.isCompared = true;
 
-    if (prevCard.card.name === currentCard.card.name) {
+    if (prevCard.cardInfo.name === currentCard.cardInfo.name) {
       currentCard.node.addEventListener('transitionend', (e: any) => {
         // TODO: doing two times
         if (e.propertyName === 'transform') {
           if (prevCard.node.classList.contains('flipped')) {
             prevCard.node.classList.add('matched');
             currentCard.node.classList.add('matched');
-            this.gameCards = this.gameCards.filter(
-              (card) => card.card.name !== prevCard.card.name
+            this.gameService.score++;
+
+            this.gameService.cards = this.gameService.cards.filter(
+              // TODO: remove from this place
+              (card) => card.name !== prevCard.cardInfo.name
             );
+
             this.isCompared = false;
-            if (!this.gameCards.length) {
-              const finishTime: number = this.stopGame();
+
+            if (!this.gameService.cards.length) {
+              const finishTime: number = this.stopTimer();
+              this.gameService.stopGame();
               const winPopup = new WinPopup(finishTime, this.changeCurrentPage);
             }
           }
@@ -82,7 +80,6 @@ class GameField extends BaseControl {
       });
 
       setTimeout(() => {
-        // TODO: read about Promise
         prevCard.node.classList.remove('flipped', 'no-matched');
         currentCard.node.classList.remove('flipped', 'no-matched');
         this.isCompared = false;
@@ -92,26 +89,27 @@ class GameField extends BaseControl {
     this.openCard = null;
   }
 
-  protected selectCard = (card: ICard): void => {
+  protected selectCard = (cardElem: ICard): void => {
     if (this.isCompared) return;
 
-    const currentCard = card;
-    currentCard.node.classList.toggle('flipped');
+    const selectedCard = cardElem;
+    selectedCard.node.classList.toggle('flipped');
 
     if (this.openCard) {
-      this.compareCards(this.openCard, currentCard);
+      this.compareCards(this.openCard, selectedCard);
     } else {
-      this.openCard = card;
+      this.openCard = cardElem;
     }
   };
 
-  setCards(gameData: ICardsJSON): void {
-    this.cards = gameData.cards;
-    this.sort();
+  private async init(): Promise<void> {
+    await this.gameService.startGame();
+    await this.sort();
+    this.render();
   }
 
   private render(): void {
-    this.cards.forEach((card) => {
+    this.gameService.cards.forEach((card) => {
       const cardElem = new Card(
         { tagName: 'div', classes: ['card', 'flipped'] },
         card,
@@ -119,13 +117,15 @@ class GameField extends BaseControl {
         this.gameService.settings.category
       );
       cardElem.node.style.flex = `${100 / this.defineDifficulty()}%`;
-      this.gameCards.push(cardElem);
+      this.cardsOnField.push(cardElem);
       this.node.append(cardElem.node);
     });
 
     setTimeout(
       () =>
-        this.gameCards.forEach((card) => card.node.classList.remove('flipped')),
+        this.cardsOnField.forEach((card) =>
+          card.node.classList.remove('flipped')
+        ),
       COUNTDOWN_TO_STAT_GAME * 1000
     );
   }

@@ -6,7 +6,10 @@ import Button from '../shared/Button/Button';
 import { IRegistrationService } from '../shared/interfaces/registration-service-model';
 
 class RegistrationPopup extends Popup {
-  constructor(private registrationService: IRegistrationService) {
+  constructor(
+    private registrationService: IRegistrationService,
+    private rerender: () => void
+  ) {
     super({ tagName: 'div', classes: ['popup'] });
     this.render();
   }
@@ -17,7 +20,13 @@ class RegistrationPopup extends Popup {
 
   private onAddUserBtnClick = (): void => {
     this.registrationService.sendData();
+    this.closePopup();
+    this.rerender(); // TODO: think about
   };
+
+  private closePopup() {
+    this.node.remove();
+  }
 
   // private loadImage = (): void => {
   //   let f = inputImage.files[0];
@@ -71,6 +80,7 @@ class RegistrationPopup extends Popup {
           type: 'text',
           placeholder: 'Your first name',
           name: 'firstName',
+          value: '',
         },
       },
       this.handleInput.bind(this)
@@ -89,6 +99,7 @@ class RegistrationPopup extends Popup {
           type: 'text',
           placeholder: 'Your last name',
           name: 'lastName',
+          value: '',
         },
       },
       this.handleInput.bind(this)
@@ -107,6 +118,7 @@ class RegistrationPopup extends Popup {
           type: 'email',
           placeholder: 'Your e-mail',
           name: 'email',
+          value: '',
         },
       },
       this.handleInput.bind(this)
@@ -131,9 +143,7 @@ class RegistrationPopup extends Popup {
         classes: ['popup-registr__button', 'button'],
         text: 'Cancel',
       },
-      () => {
-        this.node.remove();
-      }
+      this.closePopup.bind(this)
     );
 
     labelFirstName.node.append(inputFirstName.node);
