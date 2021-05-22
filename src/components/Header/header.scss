@@ -1,14 +1,23 @@
+@import "../shared/variables.scss";
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 5rem;
   padding: 10px 24px;
-  background-color: #2196f3;
+  background-color: $main-app-color;
   box-shadow: 0px 4px 8px 0px rgba(42, 47, 50, 0.2);
   &__left,
   &__right {
     display: flex;
     align-items: center;
+  }
+  &__user-avatar {
+    background-color: $main-app-light-color;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 30px;
   }
 }

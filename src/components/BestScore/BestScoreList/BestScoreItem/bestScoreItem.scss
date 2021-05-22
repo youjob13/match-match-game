@@ -1,3 +1,5 @@
+@import "../../../shared/variables.scss";
+
 .best-score__item {
   display: flex;
   align-items: center;
@@ -29,7 +31,7 @@
   }
   &-name,
   &-mail {
-    color: #333333;
+    color: #333;
   }
   &-name {
     font-weight: 500;
@@ -52,6 +54,6 @@
     color: rgba(0, 0, 0, 0.87);
   }
   &-score {
-    color: #2196f3;
+    color: $main-app-color;
   }
 }

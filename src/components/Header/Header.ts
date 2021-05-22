@@ -6,6 +6,8 @@ import RegistrationPopup from '../RegistrationPopup/RegistrationPopup';
 import Button from '../shared/Button/Button';
 import { IRegistrationService } from '../shared/interfaces/registration-service-model';
 
+import defaultUserAvatar from '../../assets/user_image_default.png';
+
 class Header extends BaseControl {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
@@ -62,11 +64,17 @@ class Header extends BaseControl {
         {
           tagName: 'a',
           classes: ['header__button', 'button'],
-          text: window.location.hash !== '#game' ? 'Start Game' : 'Stop Game', // TODO: think about
+          text: this.hash !== 'game' ? 'Start Game' : 'Stop Game',
         },
         this.onStartBtnClick
       );
-      rightPartHeader.node.append(startGameBtn.node);
+
+      const userAvatar = new BaseControl({
+        tagName: 'img',
+        classes: ['header__user-avatar'],
+        attributes: { src: defaultUserAvatar, alt: '' },
+      });
+      rightPartHeader.node.append(startGameBtn.node, userAvatar.node);
     } else {
       const registrationBtn = new Button(
         {

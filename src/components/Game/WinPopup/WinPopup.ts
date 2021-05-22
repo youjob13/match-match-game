@@ -34,7 +34,7 @@ class WinPopup extends Popup {
     const popupButton = new Button(
       {
         tagName: 'a',
-        classes: ['popup__button'],
+        classes: ['popup__button', 'button', 'button__filled'],
         text: 'Ok',
       },
       this.closePopup

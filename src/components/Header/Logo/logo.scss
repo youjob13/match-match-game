@@ -1,4 +1,4 @@
-// @import url(../../styles.scss);
+@import "../../shared/variables.scss";
 
 .logo {
   display: flex;
@@ -17,19 +17,19 @@
     transition: 0.2s;
   }
   &__up {
-    color: #fff;
+    color: $main-app-light-color;
     &:hover {
-      background-color: #fff;
-      color: #2196f3;
+      background-color: $main-app-light-color;
+      color: $main-app-color;
       & ~ .logo__down {
         background-color: inherit;
-        color: #fff;
+        color: $main-app-light-color;
       }
     }
   }
   &__down {
-    background-color: #fff;
-    color: #2196f3;
+    background-color: $main-app-light-color;
+    color: $main-app-color;
   }
 
   &:active {

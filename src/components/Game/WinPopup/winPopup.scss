@@ -1,6 +1,8 @@
+@import "../../shared/variables.scss";
+
 .win-popup {
   padding: 20px 16px;
-  background-color: #fff;
+  background-color: $main-app-light-color;
   max-width: 360px;
   &__content {
     margin-bottom: 8px;

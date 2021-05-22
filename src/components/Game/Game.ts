@@ -1,4 +1,3 @@
-import './game.scss';
 import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import GameField from './GameField/GameField';

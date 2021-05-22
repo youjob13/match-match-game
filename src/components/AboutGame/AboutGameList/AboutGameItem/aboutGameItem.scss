@@ -1,3 +1,5 @@
+@import '../../../shared/variables.scss';
+
 .about-game__item {
   position: relative;
   margin: 0 0 3em 3em;
@@ -17,7 +19,7 @@
     border-radius: 50%;
     width: 0.7em;
     height: 0.7em;
-    background-color: #2196f3;
+    background-color: $main-app-color;
     font-weight: 400;
     font-size: 24px;
     line-height: 21px;

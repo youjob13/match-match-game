@@ -1,5 +1,10 @@
-import BaseControl, { IAttr } from '../BaseControl/BaseControl';
 import './input.scss';
+import BaseControl, { IAttr } from '../BaseControl/BaseControl';
+
+interface IRegExp {
+  exp: string;
+  flags?: string;
+}
 
 class Input extends BaseControl {
   constructor(
@@ -14,7 +19,26 @@ class Input extends BaseControl {
     this.node.addEventListener('input', this.handleInput.bind(this));
   }
 
+  private validate(value: string, regExp: IRegExp, mode = false): void {
+    if (!mode)
+      this.node.value =
+        value.replace(new RegExp(regExp.exp, regExp.flags), '') || '';
+    console.log(value.match(new RegExp(regExp.exp, regExp.flags))?.join(''));
+
+    this.node.value =
+      value.match(new RegExp(regExp.exp, regExp.flags))?.join('') || '';
+    console.log(this.node.value.length);
+
+    if (this.node.value.length) {
+      this.node.classList.add('valid');
+    } else {
+      this.node.classList.remove('valid');
+    }
+    // this.node.value.length ? this.node.classList.add('valid') : this.node.classList.remove('valid');
+  }
+
   private handleInput(): void {
+    this.validate(this.node.value, { exp: '[a-zA-Z\\s]+' }, true);
     this.inputCallback(
       this.node.value,
       this.propsToBaseControl.attributes.name || 'undefined'

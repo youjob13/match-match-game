@@ -75,7 +75,7 @@ class RegistrationPopup extends Popup {
     const inputFirstName = new Input(
       {
         tagName: 'input',
-        classes: ['popup-registr__input'],
+        classes: ['input'],
         attributes: {
           type: 'text',
           placeholder: 'Your first name',
@@ -94,7 +94,7 @@ class RegistrationPopup extends Popup {
     const inputLastName = new Input(
       {
         tagName: 'input',
-        classes: ['popup-registr__input'],
+        classes: ['input'],
         attributes: {
           type: 'text',
           placeholder: 'Your last name',
@@ -113,7 +113,7 @@ class RegistrationPopup extends Popup {
     const inputEmail = new Input(
       {
         tagName: 'input',
-        classes: ['popup-registr__input'],
+        classes: ['input'],
         attributes: {
           type: 'email',
           placeholder: 'Your e-mail',
