@@ -10,7 +10,8 @@ class Header extends BaseControl {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private registrationService: IRegistrationService,
-    private changeCurrentPage: (path: string) => void
+    private changeCurrentPage: (path: string) => void,
+    private hash: string
   ) {
     super(propsToBaseControl);
     this.render();
@@ -52,7 +53,8 @@ class Header extends BaseControl {
         tagName: 'ul',
         classes: ['header__navigation', 'navigation'],
       },
-      this.changeCurrentPage
+      this.changeCurrentPage,
+      this.hash
     );
 
     if (this.registrationService.isAuthorization) {

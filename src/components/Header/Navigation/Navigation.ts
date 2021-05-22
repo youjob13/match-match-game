@@ -9,7 +9,8 @@ import NavigationItem from './NavigationItem/NavigationItem';
 class Navigation extends BaseControl {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    private changeCurrentPage: (path: string) => void
+    private changeCurrentPage: (path: string) => void,
+    private hash: string
   ) {
     super(propsToBaseControl);
     this.render();
@@ -20,10 +21,15 @@ class Navigation extends BaseControl {
   };
 
   render(): void {
+    console.log(this.hash);
+
     const aboutGame = new NavigationItem(
       {
         tagName: 'li',
-        classes: ['navigation__item'],
+        classes: [
+          'navigation__item',
+          this.hash === 'about-game' || this.hash === '' ? 'active' : 'null',
+        ],
         text: 'About Game',
         iconUrl: questionImg,
         path: 'about-game',
@@ -34,7 +40,10 @@ class Navigation extends BaseControl {
     const bestScore = new NavigationItem(
       {
         tagName: 'li',
-        classes: ['navigation__item'],
+        classes: [
+          'navigation__item',
+          this.hash === 'best-score' ? 'active' : 'null',
+        ],
         text: 'Best Score',
         iconUrl: starImg,
         path: 'best-score',
@@ -45,7 +54,10 @@ class Navigation extends BaseControl {
     const gameSettings = new NavigationItem(
       {
         tagName: 'li',
-        classes: ['navigation__item'],
+        classes: [
+          'navigation__item',
+          this.hash === 'settings' ? 'active' : 'null',
+        ],
         text: 'Game Settings',
         iconUrl: gearImg,
         path: 'settings',

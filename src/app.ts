@@ -1,12 +1,12 @@
-import { IGameService } from './components/services/GameService';
 import './styles.scss';
+import Router from './components/shared/Router/Router';
 import Header from './components/Header/Header';
 import AboutGame from './components/AboutGame/AboutGame';
-import Game from './components/Game/Game';
 import BestScore from './components/BestScore/BestScore';
 import GameSettings from './components/GameSettings/GameSettings';
+import Game from './components/Game/Game';
 import { IRoute } from './components/shared/interfaces/route-model';
-import Router from './components/shared/Router/Router';
+import { IGameService } from './components/services/GameService';
 import { IRegistrationService } from './components/shared/interfaces/registration-service-model';
 
 export type Page = AboutGame | GameSettings | Game | BestScore | null;
@@ -93,8 +93,8 @@ class App {
   }
 
   private render(): void {
-    const { hash } = window.location;
-    if (hash.slice(1) !== 'game') {
+    const hash = window.location.hash.slice(1);
+    if (hash !== 'game') {
       if (this.currentPage && this.currentPage instanceof Game) {
         this.currentPage.timer.stop();
       } // TODO: think about (game should stopped in other component?)
@@ -106,7 +106,8 @@ class App {
     const header = new Header(
       { tagName: 'header', classes: ['header'] },
       this.registrationService,
-      this.changeCurrentPage
+      this.changeCurrentPage,
+      hash
     );
     this.app.append(header.node);
 

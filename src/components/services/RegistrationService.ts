@@ -67,6 +67,7 @@ class RegistrationService implements IRegistrationService {
         firstName: this.dataRegistration.firstName,
         lastName: this.dataRegistration.lastName,
         email: this.dataRegistration.email,
+        score: 0,
       });
 
       request.onsuccess = () => {

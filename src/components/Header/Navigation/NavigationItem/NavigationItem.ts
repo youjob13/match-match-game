@@ -29,6 +29,7 @@ class NavigationItem extends BaseControl {
   }
 
   private handleClick = (): void => {
+    this.node.classList.add('active');
     this.goToPage(this.path);
   };
 
