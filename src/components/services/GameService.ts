@@ -7,6 +7,8 @@ import {
 // import { ISettings } from '../shared/interfaces/setting-model';
 
 export interface IGameService {
+  incrementNumberOfComparisons: () => void;
+  incrementNumberOfFalseComparisons: () => void;
   settings: any; // TODO: remove any
   categories: string[];
   gameData: Array<ICardsJSON>;
@@ -14,7 +16,7 @@ export interface IGameService {
   score: number;
   changeSettings: (typeSetting: string, setting: string) => void;
   startGame: () => void;
-  stopGame: () => void;
+  stopGame: (finishTime: number) => void;
 }
 
 class GameService {
@@ -30,6 +32,10 @@ class GameService {
 
   gameData: Array<ICardsJSON>;
 
+  private numberOfComparisons: number;
+
+  private numberOfFalseComparisons: number;
+
   constructor() {
     this.settings = {
       category: 'animal',
@@ -40,6 +46,16 @@ class GameService {
     this.categories = [];
     this.cards = [];
     this.sortedCards = [];
+    this.numberOfComparisons = 0;
+    this.numberOfFalseComparisons = 0;
+  }
+
+  incrementNumberOfComparisons() {
+    this.numberOfComparisons++;
+  }
+
+  incrementNumberOfFalseComparisons() {
+    this.numberOfFalseComparisons++;
   }
 
   async startGame(): Promise<void> {
@@ -48,8 +64,21 @@ class GameService {
     this.setCardsOnCurrentGame(this.settings.category);
   }
 
-  stopGame(): void {
-    alert(this.score);
+  private calculatePoints(finishTime: number): void {
+    this.score =
+      (this.numberOfComparisons - this.numberOfFalseComparisons) * 100 -
+      finishTime * 10;
+  }
+
+  stopGame(finishTime: number): void {
+    this.calculatePoints(finishTime);
+    alert(`
+    ${this.score},
+    ${this.numberOfComparisons},
+    ${this.numberOfFalseComparisons},
+    ${finishTime}`);
+    // getCurrentUserFromIndexedDB
+    // add this.score to current user
   }
 
   private setCategoriesToSettings(): void {

@@ -42,6 +42,7 @@ class GameField extends BaseControl {
 
   private compareCards(prevCard: ICard, currentCard: ICard): void {
     this.isCompared = true;
+    this.gameService.incrementNumberOfComparisons();
 
     if (prevCard.cardInfo.name === currentCard.cardInfo.name) {
       currentCard.node.addEventListener('transitionend', (e: any) => {
@@ -50,7 +51,6 @@ class GameField extends BaseControl {
           if (prevCard.node.classList.contains('flipped')) {
             prevCard.node.classList.add('matched');
             currentCard.node.classList.add('matched');
-            this.gameService.score++;
 
             this.gameService.cards = this.gameService.cards.filter(
               // TODO: remove from this place
@@ -61,21 +61,24 @@ class GameField extends BaseControl {
 
             if (!this.gameService.cards.length) {
               const finishTime: number = this.stopTimer();
-              this.gameService.stopGame();
+              this.gameService.stopGame(finishTime);
               const winPopup = new WinPopup(finishTime, this.changeCurrentPage);
             }
           }
         }
       });
     } else {
-      currentCard.node.addEventListener('transitionend', () => {
-        if (
-          prevCard.node.classList.contains('flipped') &&
-          !currentCard.node.classList.contains('matched') &&
-          !prevCard.node.classList.contains('matched')
-        ) {
-          prevCard.node.classList.add('no-matched');
-          currentCard.node.classList.add('no-matched');
+      currentCard.node.addEventListener('transitionend', (e: any) => {
+        if (e.propertyName === 'transform') {
+          if (
+            prevCard.node.classList.contains('flipped') &&
+            !currentCard.node.classList.contains('matched') &&
+            !prevCard.node.classList.contains('matched')
+          ) {
+            prevCard.node.classList.add('no-matched');
+            currentCard.node.classList.add('no-matched');
+            this.gameService.incrementNumberOfFalseComparisons();
+          }
         }
       });
 
