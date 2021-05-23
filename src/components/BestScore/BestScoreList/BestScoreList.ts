@@ -1,32 +1,34 @@
+import { IBestScoreService } from '../../shared/interfaces/best-score-service-model';
 import './bestScoreList.scss';
-import { IUserModel } from '../../shared/interfaces/user-model';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import BestScoreItem from './BestScoreItem/BestScoreItem';
+import { IScoreItem } from '../../shared/interfaces/indexed-db-data-model';
 
 class BestScoreList extends BaseControl {
-  users: Array<IUserModel>;
-
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    usersData: Array<IUserModel>
+    private bestScoreService: IBestScoreService
   ) {
     super(propsToBaseControl);
-    this.users = usersData;
     this.init();
   }
 
-  private init(): void {
-    this.render();
+  private async init(): Promise<void> {
+    await this.render();
   }
 
   private render(): void {
-    this.users.forEach((user) => {
-      const userItem = new BestScoreItem(
-        { tagName: 'li', classes: ['best-score__item'] },
-        user
-      );
-      this.node.append(userItem.node);
-    });
+    setTimeout(() => {
+      this.bestScoreService.scoreList
+        .sort((a, b) => b.points - a.points)
+        .forEach((scoreItem: IScoreItem) => {
+          const userItem = new BestScoreItem(
+            { tagName: 'li', classes: ['best-score__item'] },
+            scoreItem
+          );
+          this.node.append(userItem.node);
+        });
+    }, 2000);
   }
 }
 

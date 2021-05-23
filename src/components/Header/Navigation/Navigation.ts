@@ -21,8 +21,6 @@ class Navigation extends BaseControl {
   };
 
   render(): void {
-    console.log(this.hash);
-
     const aboutGame = new NavigationItem(
       {
         tagName: 'li',

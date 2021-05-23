@@ -4,12 +4,12 @@ import {
   ICardFromJSON,
   ICardsJSON,
 } from '../shared/interfaces/card-model-json';
-// import { ISettings } from '../shared/interfaces/setting-model';
+import IndexedDB from './IndexedDB';
 
 export interface IGameService {
   incrementNumberOfComparisons: () => void;
   incrementNumberOfFalseComparisons: () => void;
-  settings: any; // TODO: remove any
+  settings: IGameSettings;
   categories: string[];
   gameData: Array<ICardsJSON>;
   cards: Array<ICardFromJSON> | [];
@@ -19,8 +19,13 @@ export interface IGameService {
   stopGame: (finishTime: number) => void;
 }
 
+export interface IGameSettings {
+  category: string;
+  difficulty: string;
+}
+
 class GameService {
-  settings: any; // TODO: remove any
+  settings: any | IGameSettings;
 
   categories: string[];
 
@@ -70,58 +75,26 @@ class GameService {
       finishTime * 10;
   }
 
-  stopGame(finishTime: number): void {
-    this.calculatePoints(finishTime);
+  async updateScore(): Promise<void> {
+    const currentUser = JSON.parse(localStorage.user);
+    const db = await new IndexedDB('youjob13', 1);
+    await db.openReq([['score', { keyPath: 'id', autoIncrement: true }]]);
+    await db.add(
+      'score',
+      { points: this.score, user: currentUser },
+      'readwrite'
+    );
+  }
+
+  async stopGame(finishTime: number): Promise<void> {
+    await this.calculatePoints(finishTime);
     alert(`
     ${this.score},
     ${this.numberOfComparisons},
     ${this.numberOfFalseComparisons},
     ${finishTime}`);
-    // getCurrentUserFromIndexedDB
-    // add this.score to current user
 
-    const openRequest = indexedDB.open('youjob13', 1);
-    let db;
-
-    openRequest.onupgradeneeded = () => {
-      db = openRequest.result;
-
-      if (!db.objectStoreNames.contains('users')) {
-        db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
-      }
-    };
-
-    openRequest.onerror = () => {
-      console.error('Error', openRequest.error);
-    };
-
-    openRequest.onsuccess = () => {
-      db = openRequest.result;
-
-      const transaction = db.transaction('users', 'readwrite');
-
-      const cards = transaction.objectStore('users');
-
-      const request = cards.getAll();
-
-      // const request = cards.put({
-      //   firstName: this.dataRegistration.firstName,
-      //   lastName: this.dataRegistration.lastName,
-      //   email: this.dataRegistration.email,
-      // });
-
-      request.onsuccess = () => {
-        console.log('Список юзеров', request.result);
-      };
-
-      request.onerror = () => {
-        console.log('Ошибка', request.error);
-      };
-
-      transaction.oncomplete = () => {
-        console.log('Транзакция выполнена');
-      };
-    };
+    this.updateScore();
   }
 
   private setCategoriesToSettings(): void {
@@ -129,7 +102,7 @@ class GameService {
   }
 
   changeSettings(typeSetting: string, setting: string): void {
-    this.settings[typeSetting] = setting;
+    this.settings[typeSetting] = setting; // TODO: найти решение проблемы
 
     if (typeSetting === 'category') {
       this.setCardsOnCurrentGame(setting);

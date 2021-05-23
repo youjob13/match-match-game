@@ -13,7 +13,7 @@ class Input extends BaseControl {
       classes: string[];
       attributes: IAttr;
     },
-    private inputCallback: (value: string, type: string) => void
+    private inputCallback?: (value: string, type: string) => void
   ) {
     super(propsToBaseControl);
     this.node.addEventListener('input', this.handleInput.bind(this));
@@ -23,12 +23,9 @@ class Input extends BaseControl {
     if (!mode)
       this.node.value =
         value.replace(new RegExp(regExp.exp, regExp.flags), '') || '';
-    console.log(value.match(new RegExp(regExp.exp, regExp.flags))?.join(''));
 
     this.node.value =
       value.match(new RegExp(regExp.exp, regExp.flags))?.join('') || '';
-    console.log(this.node.value.length);
-
     if (this.node.value.length) {
       this.node.classList.add('valid');
     } else {
@@ -39,10 +36,12 @@ class Input extends BaseControl {
 
   private handleInput(): void {
     this.validate(this.node.value, { exp: '[a-zA-Z\\s]+' }, true);
-    this.inputCallback(
-      this.node.value,
-      this.propsToBaseControl.attributes.name || 'undefined'
-    ); // TODO: decide problem
+
+    if (this.inputCallback)
+      this.inputCallback(
+        this.node.value,
+        this.propsToBaseControl.attributes.name || 'undefined'
+      ); // TODO: decide problem
   }
 }
 

@@ -1,27 +1,21 @@
 import './bestScore.scss';
-
 import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import BestScoreList from './BestScoreList/BestScoreList';
-import { IUserModel } from '../shared/interfaces/user-model';
+import { IBestScoreService } from '../shared/interfaces/best-score-service-model';
 
 class BestScore extends BaseControl {
-  usersData: Array<IUserModel>;
-
-  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+  constructor(
+    propsToBaseControl: { tagName: string; classes: string[] },
+    private bestScoreService: IBestScoreService
+  ) {
     super(propsToBaseControl);
-    this.usersData = [];
     this.init();
   }
 
   async init(): Promise<void> {
-    await this.getUsersData();
+    await this.bestScoreService.getScoreData();
     await this.render();
-  }
-
-  async getUsersData(): Promise<void> {
-    const response = await fetch('./users.json'); // TODO: remove
-    this.usersData = await response.json();
   }
 
   private render(): void {
@@ -38,7 +32,7 @@ class BestScore extends BaseControl {
         tagName: 'ul',
         classes: ['best-score__list'],
       },
-      this.usersData
+      this.bestScoreService
     );
 
     wrapper.append(title.node, bestScoreList.node);

@@ -28,7 +28,10 @@ class GameField extends BaseControl {
   }
 
   private defineDifficulty(): number {
-    return +this.gameService.settings.difficulty.match(/\d/).join('');
+    return +this.gameService.settings.difficulty
+      .split('')
+      .splice(0, 1)
+      .join('');
   }
 
   private sort(): void {
@@ -45,42 +48,51 @@ class GameField extends BaseControl {
     this.gameService.incrementNumberOfComparisons();
 
     if (prevCard.cardInfo.name === currentCard.cardInfo.name) {
-      currentCard.node.addEventListener('transitionend', (e: any) => {
-        // TODO: doing two times
-        if (e.propertyName === 'transform') {
-          if (prevCard.node.classList.contains('flipped')) {
-            prevCard.node.classList.add('matched');
-            currentCard.node.classList.add('matched');
+      currentCard.node.addEventListener(
+        'transitionend',
+        (e: TransitionEvent) => {
+          // TODO: doing two times
+          if (e.propertyName === 'transform') {
+            if (prevCard.node.classList.contains('flipped')) {
+              prevCard.node.classList.add('matched');
+              currentCard.node.classList.add('matched');
 
-            this.gameService.cards = this.gameService.cards.filter(
-              // TODO: remove from this place
-              (card) => card.name !== prevCard.cardInfo.name
-            );
+              this.gameService.cards = this.gameService.cards.filter(
+                // TODO: remove from this place
+                (card) => card.name !== prevCard.cardInfo.name
+              );
 
-            this.isCompared = false;
+              this.isCompared = false;
 
-            if (!this.gameService.cards.length) {
-              const finishTime: number = this.stopTimer();
-              this.gameService.stopGame(finishTime);
-              const winPopup = new WinPopup(finishTime, this.changeCurrentPage);
+              if (!this.gameService.cards.length) {
+                const finishTime: number = this.stopTimer();
+                this.gameService.stopGame(finishTime);
+                const winPopup = new WinPopup(
+                  finishTime,
+                  this.changeCurrentPage
+                );
+              }
             }
           }
         }
-      });
+      );
     } else {
-      currentCard.node.addEventListener('transitionend', (e: any) => {
-        if (e.propertyName === 'transform') {
-          if (
-            prevCard.node.classList.contains('flipped') &&
-            !currentCard.node.classList.contains('matched') &&
-            !prevCard.node.classList.contains('matched')
-          ) {
-            prevCard.node.classList.add('no-matched');
-            currentCard.node.classList.add('no-matched');
-            this.gameService.incrementNumberOfFalseComparisons();
+      currentCard.node.addEventListener(
+        'transitionend',
+        (e: TransitionEvent) => {
+          if (e.propertyName === 'transform') {
+            if (
+              prevCard.node.classList.contains('flipped') &&
+              !currentCard.node.classList.contains('matched') &&
+              !prevCard.node.classList.contains('matched')
+            ) {
+              prevCard.node.classList.add('no-matched');
+              currentCard.node.classList.add('no-matched');
+              this.gameService.incrementNumberOfFalseComparisons();
+            }
           }
         }
-      });
+      );
 
       setTimeout(() => {
         prevCard.node.classList.remove('flipped', 'no-matched');

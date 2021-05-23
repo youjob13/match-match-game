@@ -31,6 +31,11 @@ class Header extends BaseControl {
     this.changeCurrentPage('game');
   };
 
+  private onLogOutBtnClick = (): void => {
+    this.registrationService.logOut();
+    this.render();
+  };
+
   private render = (): void => {
     this.node.innerHTML = '';
     const leftPartHeader = new BaseControl({
@@ -69,12 +74,25 @@ class Header extends BaseControl {
         this.onStartBtnClick
       );
 
+      const logOut = new Button(
+        {
+          tagName: 'a',
+          classes: ['header__button', 'button'],
+          text: 'Log out',
+        },
+        this.onLogOutBtnClick
+      );
+
       const userAvatar = new BaseControl({
         tagName: 'img',
         classes: ['header__user-avatar'],
         attributes: { src: defaultUserAvatar, alt: '' },
       });
-      rightPartHeader.node.append(startGameBtn.node, userAvatar.node);
+      rightPartHeader.node.append(
+        startGameBtn.node,
+        userAvatar.node,
+        logOut.node
+      );
     } else {
       const registrationBtn = new Button(
         {

@@ -1,8 +1,8 @@
-import { IBaseControl } from '../../shared/interfaces/base-control-model';
 import BaseControl from '../../shared/BaseControl/BaseControl';
-// TODO: refactor code
+import { IBaseControl } from '../../shared/interfaces/base-control-model';
+
 class GameSettingItem extends BaseControl {
-  select: any | IBaseControl; // TODO: remove any
+  select: IBaseControl | any;
 
   title: string;
 
@@ -21,6 +21,7 @@ class GameSettingItem extends BaseControl {
     this.select = new BaseControl({
       tagName: 'select',
       classes: ['game-settings__item-select'],
+      attributes: { type: 'text' },
     });
     this.options = props.options;
     this.title = props.title;
@@ -29,13 +30,18 @@ class GameSettingItem extends BaseControl {
     this.init();
   }
 
-  selectOnChange(): void {
+  private selectOnChange(): void {
     const selectedSetting: string = this.select.node.value;
     this.changeGameSettings(this.typeSetting, selectedSetting);
   }
 
   private init(): void {
+    this.eventListeners();
     this.render();
+  }
+
+  private eventListeners(): void {
+    this.select.node.addEventListener('change', this.selectOnChange.bind(this));
   }
 
   protected render(): void {
@@ -45,12 +51,11 @@ class GameSettingItem extends BaseControl {
       text: this.title,
     });
 
-    this.select.node.addEventListener('change', this.selectOnChange.bind(this));
-
     this.options.forEach((option) => {
       const newOption = new BaseControl({
         tagName: 'option',
         classes: ['game-settings__item-option'],
+        attributes: { value: option },
         text: option,
       });
       this.select.node.append(newOption.node);

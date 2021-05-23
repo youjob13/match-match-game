@@ -8,7 +8,7 @@ import { IRegistrationService } from '../shared/interfaces/registration-service-
 class RegistrationPopup extends Popup {
   constructor(
     private registrationService: IRegistrationService,
-    private rerender: () => void
+    private renderHeader: () => void
   ) {
     super({ tagName: 'div', classes: ['popup'] });
     this.render();
@@ -21,7 +21,7 @@ class RegistrationPopup extends Popup {
   private onAddUserBtnClick = (): void => {
     this.registrationService.sendData();
     this.closePopup();
-    this.rerender(); // TODO: think about
+    this.renderHeader(); // TODO: think about
   };
 
   private closePopup() {

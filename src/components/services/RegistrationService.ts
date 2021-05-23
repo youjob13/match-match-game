@@ -2,6 +2,7 @@ import {
   IDataRegistrationService,
   IRegistrationService,
 } from '../shared/interfaces/registration-service-model';
+import IndexedDB from './IndexedDB';
 
 class RegistrationService implements IRegistrationService {
   private dataRegistration: IDataRegistrationService;
@@ -15,6 +16,11 @@ class RegistrationService implements IRegistrationService {
       email: '',
       userImage: undefined,
     };
+    this.isAuthorization = false;
+  }
+
+  logOut(): void {
+    localStorage.removeItem('user');
     this.isAuthorization = false;
   }
 
@@ -32,56 +38,20 @@ class RegistrationService implements IRegistrationService {
     }
   };
 
-  sendData = (): void => {
-    alert(
-      `firstName: ${this.dataRegistration.firstName}
-      lastName: ${this.dataRegistration.lastName}
-      email: ${this.dataRegistration.email}`
-    );
+  sendData = async (): Promise<void> => {
+    const user = {
+      firstName: this.dataRegistration.firstName,
+      lastName: this.dataRegistration.lastName,
+      email: this.dataRegistration.email,
+      avatar: null,
+    };
+    localStorage.setItem('user', JSON.stringify(user));
 
     this.isAuthorization = true;
 
-    const openRequest = indexedDB.open('youjob13', 1);
-    let db;
-
-    openRequest.onupgradeneeded = () => {
-      db = openRequest.result;
-
-      if (!db.objectStoreNames.contains('users')) {
-        db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
-      }
-    };
-
-    openRequest.onerror = () => {
-      console.error('Error', openRequest.error);
-    };
-
-    openRequest.onsuccess = () => {
-      db = openRequest.result;
-
-      const transaction = db.transaction('users', 'readwrite');
-
-      const cards = transaction.objectStore('users');
-
-      const request = cards.put({
-        firstName: this.dataRegistration.firstName,
-        lastName: this.dataRegistration.lastName,
-        email: this.dataRegistration.email,
-        score: 0,
-      });
-
-      request.onsuccess = () => {
-        console.log('Регистрация успешна', request.result);
-      };
-
-      request.onerror = () => {
-        console.log('Ошибка', request.error);
-      };
-
-      transaction.oncomplete = () => {
-        console.log('Транзакция выполнена');
-      };
-    };
+    const db = await new IndexedDB('youjob13', 1);
+    await db.openReq([['users', { keyPath: 'id', autoIncrement: true }]]);
+    await db.put('users', user, 'readwrite');
   };
 }
 

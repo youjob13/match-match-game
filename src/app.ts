@@ -8,20 +8,23 @@ import Game from './components/Game/Game';
 import { IRoute } from './components/shared/interfaces/route-model';
 import { IGameService } from './components/services/GameService';
 import { IRegistrationService } from './components/shared/interfaces/registration-service-model';
+import { IBestScoreService } from './components/shared/interfaces/best-score-service-model';
+import IndexedDB from './components/services/IndexedDB';
 
 export type Page = AboutGame | GameSettings | Game | BestScore | null;
 
 class App {
   readonly routes: Array<IRoute>;
 
-  router: Router; // TODO: read about such interface
+  router: Router;
 
   currentPage: Page;
 
   constructor(
     readonly app: HTMLElement | null,
     private registrationService: IRegistrationService,
-    private gameService: IGameService
+    private gameService: IGameService,
+    private bestScoreService: IBestScoreService
   ) {
     this.currentPage = null;
     this.routes = [
@@ -48,10 +51,13 @@ class App {
       {
         path: 'best-score',
         component: (): HTMLElement => {
-          this.currentPage = new BestScore({
-            tagName: 'main',
-            classes: ['best-score'],
-          });
+          this.currentPage = new BestScore(
+            {
+              tagName: 'main',
+              classes: ['best-score'],
+            },
+            this.bestScoreService
+          );
           return this.currentPage?.node;
         },
       },
@@ -87,7 +93,16 @@ class App {
     this.router.changePath(path);
   };
 
+  private initIndexedDB = async () => {
+    const db = await new IndexedDB('youjob13', 1);
+    await db.openReq([
+      ['users', { keyPath: 'id', autoIncrement: true }],
+      ['score', { keyPath: 'id', autoIncrement: true }],
+    ]);
+  };
+
   init(): void {
+    this.initIndexedDB();
     this.render();
     this.eventListeners();
   }

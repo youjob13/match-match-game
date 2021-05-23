@@ -3,13 +3,18 @@ import App from './app';
 import { IApplication } from './components/shared/interfaces/app-model';
 import RegistrationService from './components/services/RegistrationService';
 import GameService from './components/services/GameService';
-// import IndexedDB from './components/api/IndexedDB';
-
-// const db = new IndexedDB();
+import BestScoreService from './components/services/BestScoreService';
 
 const registrationService = new RegistrationService();
 const gameService = new GameService();
+const bestScoreService = new BestScoreService();
+
 const rootElem: HTMLElement | null = document.getElementById('app');
 
-const app: IApplication = new App(rootElem, registrationService, gameService);
+const app: IApplication = new App(
+  rootElem,
+  registrationService,
+  gameService,
+  bestScoreService
+);
 app.init();
