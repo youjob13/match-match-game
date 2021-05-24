@@ -13,34 +13,42 @@ class Input extends BaseControl {
       classes: string[];
       attributes: IAttr;
     },
-    private inputCallback?: (value: string, type: string) => void
+    private inputCallback?: (
+      value: string,
+      type: string,
+      validationRes?: boolean
+    ) => void,
+    private regExp?: IRegExp
   ) {
     super(propsToBaseControl);
     this.node.addEventListener('input', this.handleInput.bind(this));
   }
 
-  private validate(value: string, regExp: IRegExp, mode = false): void {
-    if (!mode)
-      this.node.value =
-        value.replace(new RegExp(regExp.exp, regExp.flags), '') || '';
+  private validate(value: string, regExp: IRegExp): boolean {
+    const validationRes = new RegExp(regExp.exp, regExp.flags).test(value);
+    this.node.value = value.replace(/\s+/gi, '');
 
-    this.node.value =
-      value.match(new RegExp(regExp.exp, regExp.flags))?.join('') || '';
-    if (this.node.value.length) {
+    if (validationRes && this.node.value.length <= 30) {
+      this.node.classList.remove('no-valid');
       this.node.classList.add('valid');
     } else {
       this.node.classList.remove('valid');
+      this.node.classList.add('no-valid');
     }
-    // this.node.value.length ? this.node.classList.add('valid') : this.node.classList.remove('valid');
+
+    return validationRes;
   }
 
   private handleInput(): void {
-    this.validate(this.node.value, { exp: '[a-zA-Z\\s]+' }, true);
+    let validationRes;
+    if (this.regExp)
+      validationRes = this.validate(this.node.value, this.regExp);
 
     if (this.inputCallback)
       this.inputCallback(
         this.node.value,
-        this.propsToBaseControl.attributes.name || 'undefined'
+        this.propsToBaseControl.attributes.name || 'undefined',
+        validationRes
       ); // TODO: decide problem
   }
 }

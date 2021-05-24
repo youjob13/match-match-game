@@ -7,8 +7,10 @@
     color: rgba(0, 0, 0, 0.87);
     margin-bottom: 20px;
   }
+
   &__label {
     display: flex;
+    position: relative;
     flex-direction: column;
     padding: 8px 8px 8px 52px;
     &:not(:last-child) {
@@ -24,7 +26,7 @@
     letter-spacing: 0.4px;
     color: rgba(0, 0, 0, 0.38);
   }
-  &__form {
+  &__inputs {
     display: flex;
   }
 }

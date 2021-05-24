@@ -6,16 +6,41 @@ import Button from '../shared/Button/Button';
 import { IRegistrationService } from '../shared/interfaces/registration-service-model';
 
 class RegistrationPopup extends Popup {
+  private addUserBtn: Button;
+
   constructor(
     private registrationService: IRegistrationService,
     private renderHeader: () => void
   ) {
     super({ tagName: 'div', classes: ['popup'] });
+    this.addUserBtn = new Button(
+      {
+        tagName: 'button',
+        classes: ['popup-registr__button', 'button', 'button__filled'],
+        text: 'Add user',
+      },
+      this.onAddUserBtnClick
+    );
     this.render();
   }
 
-  private handleInput = (value: string, name: string): void => {
+  private handleInput = (
+    value: string,
+    name: string,
+    validationRes?: boolean
+  ): void => {
     this.registrationService.changeValue(value, name);
+    console.log(validationRes);
+
+    if (validationRes !== undefined) {
+      if (!validationRes) {
+        this.addUserBtn.node.setAttribute('disabled', true);
+        this.addUserBtn.node.style.backgroundColor = 'gray';
+      } else {
+        this.addUserBtn.node.removeAttribute('disabled', true);
+        this.addUserBtn.node.style.backgroundColor = '';
+      }
+    }
   };
 
   private onAddUserBtnClick = (): void => {
@@ -41,6 +66,11 @@ class RegistrationPopup extends Popup {
       tagName: 'h3',
       classes: ['popup-registr__title'],
       text: 'Registr new Player',
+    });
+
+    const inputsValue = new BaseControl({
+      tagName: 'div',
+      classes: ['popup-registr__inputs'],
     });
 
     const form = new BaseControl({
@@ -81,10 +111,16 @@ class RegistrationPopup extends Popup {
           placeholder: 'Your first name',
           name: 'firstName',
           value: '',
+          maxLength: 30,
         },
       },
-      this.handleInput.bind(this)
+      this.handleInput.bind(this),
+      { exp: '[a-zA-Z№]+' }
     );
+    const validateIndicatorFirstName = new BaseControl({
+      tagName: 'div',
+      classes: ['validate-indicator'],
+    });
 
     const labelLastName = new BaseControl({
       tagName: 'label',
@@ -100,10 +136,16 @@ class RegistrationPopup extends Popup {
           placeholder: 'Your last name',
           name: 'lastName',
           value: '',
+          maxLength: 30,
         },
       },
-      this.handleInput.bind(this)
+      this.handleInput.bind(this),
+      { exp: '[a-zA-Z№]+' }
     );
+    const validateIndicatorLastName = new BaseControl({
+      tagName: 'div',
+      classes: ['validate-indicator'],
+    });
 
     const labelEmail = new BaseControl({
       tagName: 'label',
@@ -119,24 +161,22 @@ class RegistrationPopup extends Popup {
           placeholder: 'Your e-mail',
           name: 'email',
           value: '',
+          maxLength: 30,
         },
       },
-      this.handleInput.bind(this)
+      this.handleInput.bind(this),
+      { exp: '^.+@[a-zA-z]+\\.[a-z]{2,3}' }
     );
+    const validateIndicatorEmail = new BaseControl({
+      tagName: 'div',
+      classes: ['validate-indicator'],
+    });
 
     const buttonsWrapper = new BaseControl({
       tagName: 'div',
       classes: ['popup-registr__buttons-wrapper'],
     });
 
-    const addUserBtn = new Button(
-      {
-        tagName: 'button',
-        classes: ['popup-registr__button', 'button', 'button__filled'],
-        text: 'Add user',
-      },
-      this.onAddUserBtnClick
-    );
     const cancelBtn = new Button(
       {
         tagName: 'button',
@@ -146,17 +186,24 @@ class RegistrationPopup extends Popup {
       this.closePopup.bind(this)
     );
 
-    labelFirstName.node.append(inputFirstName.node);
-    labelLastName.node.append(inputLastName.node);
-    labelEmail.node.append(inputEmail.node);
+    labelFirstName.node.append(
+      inputFirstName.node,
+      validateIndicatorFirstName.node
+    );
+    labelLastName.node.append(
+      inputLastName.node,
+      validateIndicatorLastName.node
+    );
+    labelEmail.node.append(inputEmail.node, validateIndicatorEmail.node);
     inputsWrapper.node.append(
       labelFirstName.node,
       labelLastName.node,
       labelEmail.node
     );
-    form.node.append(inputsWrapper.node, userImage.node);
-    buttonsWrapper.node.append(addUserBtn.node, cancelBtn.node);
-    this.popupInner.node.append(title.node, form.node, buttonsWrapper.node);
+    inputsValue.node.append(inputsWrapper.node, userImage.node);
+    buttonsWrapper.node.append(this.addUserBtn.node, cancelBtn.node);
+    form.node.append(inputsValue.node, buttonsWrapper.node);
+    this.popupInner.node.append(title.node, form.node);
   }
 }
 

@@ -1,9 +1,14 @@
+import BaseControl, { IAttr } from '../BaseControl/BaseControl';
 import './button.scss';
-import BaseControl from '../BaseControl/BaseControl';
 
 class Button extends BaseControl {
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[]; text?: string },
+    propsToBaseControl: {
+      tagName: string;
+      classes: string[];
+      text?: string;
+      attributes?: IAttr;
+    },
     private eventCallback: () => void
   ) {
     super(propsToBaseControl);

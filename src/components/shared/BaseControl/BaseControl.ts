@@ -7,6 +7,8 @@ export interface IAttr {
   type?: string;
   name?: string;
   value?: string;
+  required?: boolean;
+  maxLength?: number;
 }
 
 class BaseControl {

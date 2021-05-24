@@ -39,6 +39,15 @@ class RegistrationService implements IRegistrationService {
   };
 
   sendData = async (): Promise<void> => {
+    if (
+      !this.dataRegistration.firstName ||
+      !this.dataRegistration.lastName ||
+      !this.dataRegistration.email
+    ) {
+      alert('Заполните все поля');
+      return;
+    }
+
     const user = {
       firstName: this.dataRegistration.firstName,
       lastName: this.dataRegistration.lastName,
