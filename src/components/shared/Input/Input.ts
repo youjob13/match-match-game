@@ -6,7 +6,7 @@ interface IRegExp {
   flags?: string;
 }
 
-class Input extends BaseControl {
+class Input extends BaseControl<HTMLInputElement> {
   constructor(
     private propsToBaseControl: {
       tagName: string;

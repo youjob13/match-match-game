@@ -1,7 +1,7 @@
 import BaseControl from '../../../shared/BaseControl/BaseControl';
 import Button from '../../../shared/Button/Button';
 
-class NavigationItem extends BaseControl {
+class NavigationItem extends BaseControl<HTMLElement> {
   private icon: string;
 
   private text: string;
@@ -42,13 +42,13 @@ class NavigationItem extends BaseControl {
       this.handleClick
     );
 
-    const icon = new BaseControl({
+    const icon = new BaseControl<HTMLElement>({
       tagName: 'img',
       classes: ['navigation__icon'],
       attributes: { src: this.icon },
     });
 
-    const navText = new BaseControl({
+    const navText = new BaseControl<HTMLElement>({
       tagName: 'p',
       classes: ['navigation__text'],
       text: this.text,

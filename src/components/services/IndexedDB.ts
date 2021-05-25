@@ -1,29 +1,23 @@
-import { IScoreItem } from '../shared/interfaces/indexed-db-data-model';
+import {
+  IIndexedDB,
+  IOpenReq,
+  IScoreItem,
+} from '../shared/interfaces/indexed-db-data-model';
 
-interface IParamsReq {
-  keyPath?: string;
-  autoIncrement?: boolean;
-}
-
-type IOpenReq = [
-  string,
-  IParamsReq
-]; /* storageName: string, objectStoreSettings: {keyPath?: string, autoIncrement?: boolean} */
-
-class IndexedDB {
+class IndexedDB implements IIndexedDB {
   private db: IDBDatabase | null;
 
   private openRequest: IDBOpenDBRequest;
 
-  public gettingData: Array<IScoreItem> | [];
+  obtainedData: IScoreItem[] | [];
 
   constructor(private dbName: string, private versionReq: number) {
     this.openRequest = indexedDB.open(this.dbName, this.versionReq);
     this.db = null;
-    this.gettingData = [];
+    this.obtainedData = [];
   }
 
-  openReq(params: Array<IOpenReq>): void {
+  openReq(params: IOpenReq[]): void {
     this.openRequest.onupgradeneeded = () => {
       this.db = this.openRequest.result;
 
@@ -91,6 +85,7 @@ class IndexedDB {
     };
   }
 
+  // TODO: переделать, должен возвращать значение
   getAll(storageName: string, params?: IDBKeyRange | number): void {
     this.openRequest.onsuccess = () => {
       this.db = this.openRequest.result;
@@ -109,8 +104,8 @@ class IndexedDB {
       };
 
       transaction.oncomplete = () => {
-        this.gettingData = request.result;
-        this.gettingData.length = 10; // TODO: переделать
+        this.obtainedData = request.result;
+        this.obtainedData.length = 10; // TODO: переделать
         console.log('Транзакция выполнена');
       };
     };

@@ -1,41 +1,24 @@
 import getCardsAPI from '../api/CardsApi';
-import { ICard } from '../Card/Card';
 import {
   ICardFromJSON,
-  ICardsJSON,
+  ICardsDataFromJSON,
 } from '../shared/interfaces/card-model-json';
+import {
+  IGameService,
+  IGameSettings,
+} from '../shared/interfaces/game-service-model';
 import IndexedDB from './IndexedDB';
 
-export interface IGameService {
-  incrementNumberOfComparisons: () => void;
-  incrementNumberOfFalseComparisons: () => void;
+class GameService implements IGameService {
   settings: IGameSettings;
-  categories: string[];
-  gameData: Array<ICardsJSON>;
-  cards: Array<ICardFromJSON> | [];
-  score: number;
-  changeSettings: (typeSetting: string, setting: string) => void;
-  startGame: () => void;
-  stopGame: (finishTime: number) => void;
-}
-
-export interface IGameSettings {
-  category: string;
-  difficulty: string;
-}
-
-class GameService {
-  settings: any | IGameSettings;
 
   categories: string[];
 
-  cards: Array<ICardFromJSON> | [];
+  cards: ICardFromJSON[] | [];
 
-  sortedCards: Array<ICard> | [];
+  private gameData: ICardsDataFromJSON[];
 
-  score: number;
-
-  gameData: Array<ICardsJSON>;
+  private score: number;
 
   private numberOfComparisons: number;
 
@@ -50,29 +33,40 @@ class GameService {
     this.gameData = [];
     this.categories = [];
     this.cards = [];
-    this.sortedCards = [];
     this.numberOfComparisons = 0;
     this.numberOfFalseComparisons = 0;
-  }
-
-  incrementNumberOfComparisons() {
-    this.numberOfComparisons++;
-  }
-
-  incrementNumberOfFalseComparisons() {
-    this.numberOfFalseComparisons++;
-  }
-
-  async startGame(): Promise<void> {
-    await this.getData();
-    await this.setCategoriesToSettings();
-    this.setCardsOnCurrentGame(this.settings.category);
   }
 
   private calculatePoints(finishTime: number): void {
     this.score =
       (this.numberOfComparisons - this.numberOfFalseComparisons) * 100 -
       finishTime * 10;
+  }
+
+  private setCategoriesToSettings(): void {
+    this.categories = this.gameData.map((data) => data.category);
+  }
+
+  private setCardsOnCurrentGame(category: string): void {
+    this.gameData.forEach((data) => {
+      if (data.category === category) {
+        this.cards = data.cards;
+      }
+    });
+  }
+
+  private getData = async (): Promise<void> => {
+    this.gameData = await getCardsAPI();
+  };
+
+  async configureGameSettings(): Promise<void> {
+    await this.getData();
+    await this.setCategoriesToSettings();
+  }
+
+  async startGame(): Promise<void> {
+    await this.getData();
+    this.setCardsOnCurrentGame(this.settings.category);
   }
 
   async updateScore(): Promise<void> {
@@ -88,6 +82,7 @@ class GameService {
 
   async stopGame(finishTime: number): Promise<void> {
     await this.calculatePoints(finishTime);
+
     alert(`
     ${this.score},
     ${this.numberOfComparisons},
@@ -97,29 +92,21 @@ class GameService {
     this.updateScore();
   }
 
-  private setCategoriesToSettings(): void {
-    this.categories = this.gameData.map((data) => data.category);
+  incrementNumberOfComparisons(): void {
+    this.numberOfComparisons++;
+  }
+
+  incrementNumberOfFalseComparisons(): void {
+    this.numberOfFalseComparisons++;
   }
 
   changeSettings(typeSetting: string, setting: string): void {
-    this.settings[typeSetting] = setting; // TODO: найти решение проблемы
+    this.settings[typeSetting] = setting;
 
     if (typeSetting === 'category') {
       this.setCardsOnCurrentGame(setting);
     }
   }
-
-  private setCardsOnCurrentGame(category: string): void {
-    this.gameData.forEach((data: ICardsJSON) => {
-      if (data.category === category) {
-        this.cards = data.cards;
-      }
-    });
-  }
-
-  private getData = async (): Promise<void> => {
-    this.gameData = await getCardsAPI();
-  };
 }
 
 export default GameService;

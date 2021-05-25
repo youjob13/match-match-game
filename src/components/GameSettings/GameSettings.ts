@@ -1,12 +1,17 @@
 import './gameSettings.scss';
 import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
-import { ISetting } from '../shared/interfaces/setting-model';
 import GameSettingItem from './GameSettingsItem/GameSettingItem';
-import { IGameService } from '../services/GameService';
+import { IGameService } from '../shared/interfaces/game-service-model';
 
-class GameSettings extends BaseControl {
-  settings: Array<ISetting>;
+interface ISettings {
+  settingName: string;
+  options: string[];
+  title: string;
+}
+
+class GameSettings extends BaseControl<HTMLElement> {
+  private settings: ISettings[];
 
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
@@ -40,7 +45,7 @@ class GameSettings extends BaseControl {
   }
 
   private async init(): Promise<void> {
-    await this.gameService.startGame();
+    await this.gameService.configureGameSettings();
     this.setCategory();
     this.render();
   }
@@ -48,7 +53,7 @@ class GameSettings extends BaseControl {
   private render(): void {
     const wrapper = ContainerWrapper(this.node);
 
-    this.settings.forEach((settingItem: ISetting) => {
+    this.settings.forEach((settingItem) => {
       const newSetting = new GameSettingItem(
         {
           tagName: 'div',

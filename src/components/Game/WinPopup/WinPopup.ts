@@ -23,7 +23,7 @@ class WinPopup extends Popup {
   };
 
   private render(): void {
-    const popupContent = new BaseControl({
+    const popupContent = new BaseControl<HTMLElement>({
       tagName: 'p',
       classes: ['win-popup__content'],
       text: `Congratulations! You successfully found all matches on ${timerValidator(

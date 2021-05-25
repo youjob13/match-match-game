@@ -1,3 +1,5 @@
+import { IBaseControl } from '../interfaces/base-control-model';
+
 // TODO: recast
 export interface IAttr {
   href?: string;
@@ -11,8 +13,8 @@ export interface IAttr {
   maxLength?: number;
 }
 
-class BaseControl {
-  readonly node: any | HTMLElement | HTMLInputElement;
+class BaseControl<T extends HTMLElement> implements IBaseControl<T> {
+  readonly node: T;
 
   constructor(controlSettings: {
     tagName: string;
@@ -20,7 +22,7 @@ class BaseControl {
     text?: string;
     attributes?: IAttr;
   }) {
-    const elem = document.createElement(controlSettings.tagName);
+    const elem: T = <T>document.createElement(controlSettings.tagName);
     elem.classList.add(...controlSettings.classes);
     elem.textContent = controlSettings.text || '';
     const keys = Object.keys(controlSettings.attributes || []);

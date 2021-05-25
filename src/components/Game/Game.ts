@@ -2,11 +2,9 @@ import BaseControl from '../shared/BaseControl/BaseControl';
 import ContainerWrapper from '../HOC/Container';
 import GameField from './GameField/GameField';
 import Timer from '../shared/Timer/Timer';
-import { IGameService } from '../services/GameService';
+import { IGameService } from '../shared/interfaces/game-service-model';
 
-class Game extends BaseControl {
-  gameField: GameField;
-
+class Game extends BaseControl<HTMLElement> {
   timer: Timer;
 
   constructor(
@@ -15,33 +13,32 @@ class Game extends BaseControl {
     private gameService: IGameService
   ) {
     super(propsToBaseControl);
-    this.gameField = new GameField(
-      {
-        tagName: 'section',
-        classes: ['game-field'],
-      },
-      this.gameService,
-      this.stopTimer,
-      this.changeCurrentPage
-    );
 
     this.timer = new Timer({
       tagName: 'section',
       classes: ['game__timer', 'timer'],
     });
 
+    this.init();
+  }
+
+  private async init(): Promise<void> {
+    await this.gameService.startGame();
     this.render();
   }
 
-  private stopTimer = (): number => {
-    this.timer.stop();
-    return this.timer.counter;
-  };
-
   private render(): void {
-    this.timer.start();
     const wrapper = ContainerWrapper(this.node);
-    wrapper.append(this.timer.node, this.gameField.node);
+    const gameField = new GameField(
+      {
+        tagName: 'section',
+        classes: ['game-field'],
+      },
+      this.gameService,
+      this.changeCurrentPage,
+      this.timer
+    );
+    wrapper.append(this.timer.node, gameField.node);
   }
 }
 

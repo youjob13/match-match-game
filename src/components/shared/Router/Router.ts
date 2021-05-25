@@ -1,19 +1,19 @@
-import { IRoute } from '../interfaces/route-model';
+import { IRouter, IRoute } from '../interfaces/route-model';
 
-class Router {
-  constructor(private routes: Array<IRoute>) {}
+class Router implements IRouter {
+  constructor(private routes: IRoute[]) {}
 
   changePath = (path: string): void => {
     window.location.hash = path;
   };
 
+  getHash = (): string => window.location.hash.slice(1);
+
   routeToPage(parentNode: HTMLElement): void {
-    const { hash } = window.location;
-    const getHash = (): string => hash.slice(1);
     const defineCurrentPage = () =>
       this.routes.forEach(
         (route) =>
-          route.path === getHash() && parentNode?.append(route.component())
+          route.path === this.getHash() && parentNode?.append(route.component())
       );
 
     defineCurrentPage();

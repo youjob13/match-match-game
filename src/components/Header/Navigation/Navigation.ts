@@ -6,7 +6,7 @@ import questionImg from '../../../assets/header/question.svg';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import NavigationItem from './NavigationItem/NavigationItem';
 
-class Navigation extends BaseControl {
+class Navigation extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private changeCurrentPage: (path: string) => void,

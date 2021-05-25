@@ -1,3 +1,3 @@
-export interface IBaseControl {
-  readonly node: HTMLInputElement | HTMLElement;
+export interface IBaseControl<U> {
+  readonly node: U;
 }

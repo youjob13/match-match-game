@@ -30,14 +30,13 @@ class RegistrationPopup extends Popup {
     validationRes?: boolean
   ): void => {
     this.registrationService.changeValue(value, name);
-    console.log(validationRes);
 
     if (validationRes !== undefined) {
       if (!validationRes) {
-        this.addUserBtn.node.setAttribute('disabled', true);
+        this.addUserBtn.node.setAttribute('disabled', 'disabled');
         this.addUserBtn.node.style.backgroundColor = 'gray';
       } else {
-        this.addUserBtn.node.removeAttribute('disabled', true);
+        this.addUserBtn.node.removeAttribute('disabled');
         this.addUserBtn.node.style.backgroundColor = '';
       }
     }
@@ -62,23 +61,23 @@ class RegistrationPopup extends Popup {
   // }
 
   private render() {
-    const title = new BaseControl({
+    const title = new BaseControl<HTMLElement>({
       tagName: 'h3',
       classes: ['popup-registr__title'],
       text: 'Registr new Player',
     });
 
-    const inputsValue = new BaseControl({
+    const inputsValue = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['popup-registr__inputs'],
     });
 
-    const form = new BaseControl({
+    const form = new BaseControl<HTMLElement>({
       tagName: 'form',
       classes: ['popup-registr__form'],
     });
 
-    const userImage = new BaseControl({
+    const userImage = new BaseControl<HTMLElement>({
       tagName: 'img',
       classes: ['popup-registr__img'],
       attributes: { src: 'user_image_default.png', alt: '' },
@@ -92,12 +91,12 @@ class RegistrationPopup extends Popup {
     //   this.handleInput.bind(this)
     // );
 
-    const inputsWrapper = new BaseControl({
+    const inputsWrapper = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['popup-registr__inputs-wrapper'],
     });
 
-    const labelFirstName = new BaseControl({
+    const labelFirstName = new BaseControl<HTMLElement>({
       tagName: 'label',
       classes: ['popup-registr__label'],
       text: 'First Name',
@@ -117,12 +116,12 @@ class RegistrationPopup extends Popup {
       this.handleInput.bind(this),
       { exp: '[a-zA-Z№]+' }
     );
-    const validateIndicatorFirstName = new BaseControl({
+    const validateIndicatorFirstName = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['validate-indicator'],
     });
 
-    const labelLastName = new BaseControl({
+    const labelLastName = new BaseControl<HTMLElement>({
       tagName: 'label',
       classes: ['popup-registr__label'],
       text: 'Last Name',
@@ -142,12 +141,12 @@ class RegistrationPopup extends Popup {
       this.handleInput.bind(this),
       { exp: '[a-zA-Z№]+' }
     );
-    const validateIndicatorLastName = new BaseControl({
+    const validateIndicatorLastName = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['validate-indicator'],
     });
 
-    const labelEmail = new BaseControl({
+    const labelEmail = new BaseControl<HTMLElement>({
       tagName: 'label',
       classes: ['popup-registr__label'],
       text: 'E-mail',
@@ -167,12 +166,12 @@ class RegistrationPopup extends Popup {
       this.handleInput.bind(this),
       { exp: '^.+@[a-zA-z]+\\.[a-z]{2,3}' }
     );
-    const validateIndicatorEmail = new BaseControl({
+    const validateIndicatorEmail = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['validate-indicator'],
     });
 
-    const buttonsWrapper = new BaseControl({
+    const buttonsWrapper = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['popup-registr__buttons-wrapper'],
     });

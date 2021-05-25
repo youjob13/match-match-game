@@ -1,8 +1,5 @@
-export interface IDataRegistrationService {
-  firstName: string;
-  lastName: string;
-  email: string;
-  userImage?: string;
+export interface IRegistrationServiceData {
+  [key: string]: string;
 }
 
 export interface IRegistrationService {

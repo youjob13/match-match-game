@@ -7,6 +7,7 @@
   perspective: 25rem;
   cursor: pointer;
   border-radius: 4px;
+  margin-bottom: 1%;
   &__inner {
     width: 100%;
     height: 100%;
@@ -27,19 +28,17 @@
     backface-visibility: hidden;
     border-radius: inherit;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
   }
   &__front {
     transform: rotateY(-180deg);
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   &__back {
     background-image: url(../../assets/game/card_back.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  &__image {
-    width: 100%;
   }
   &.flipped {
     pointer-events: none;

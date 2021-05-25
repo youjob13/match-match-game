@@ -1,8 +1,8 @@
 import './popup.scss';
 import BaseControl from '../BaseControl/BaseControl';
-// TODO: recast to HOC
-class Popup extends BaseControl {
-  popupInner: BaseControl;
+
+class Popup extends BaseControl<HTMLElement> {
+  popupInner: BaseControl<HTMLElement>;
 
   constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
     super(propsToBaseControl);

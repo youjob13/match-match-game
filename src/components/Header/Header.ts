@@ -8,7 +8,7 @@ import { IRegistrationService } from '../shared/interfaces/registration-service-
 
 import defaultUserAvatar from '../../assets/user_image_default.png';
 
-class Header extends BaseControl {
+class Header extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private registrationService: IRegistrationService,
@@ -38,11 +38,11 @@ class Header extends BaseControl {
 
   private render = (): void => {
     this.node.innerHTML = '';
-    const leftPartHeader = new BaseControl({
+    const leftPartHeader = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['header__left'],
     });
-    const rightPartHeader = new BaseControl({
+    const rightPartHeader = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['header__right'],
     });
@@ -83,7 +83,7 @@ class Header extends BaseControl {
         this.onLogOutBtnClick
       );
 
-      const userAvatar = new BaseControl({
+      const userAvatar = new BaseControl<HTMLElement>({
         tagName: 'img',
         classes: ['header__user-avatar'],
         attributes: { src: defaultUserAvatar, alt: '' },

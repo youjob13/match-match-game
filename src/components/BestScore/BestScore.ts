@@ -4,7 +4,7 @@ import ContainerWrapper from '../HOC/Container';
 import BestScoreList from './BestScoreList/BestScoreList';
 import { IBestScoreService } from '../shared/interfaces/best-score-service-model';
 
-class BestScore extends BaseControl {
+class BestScore extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private bestScoreService: IBestScoreService
@@ -21,7 +21,7 @@ class BestScore extends BaseControl {
   private render(): void {
     const wrapper = ContainerWrapper(this.node);
 
-    const title = new BaseControl({
+    const title = new BaseControl<HTMLElement>({
       tagName: 'h2',
       classes: ['best-score__title'],
       text: 'Best players',

@@ -2,7 +2,7 @@ import './aboutGameItem.scss';
 
 import BaseControl from '../../../shared/BaseControl/BaseControl';
 
-class AboutGameItem extends BaseControl {
+class AboutGameItem extends BaseControl<HTMLElement> {
   image: string;
 
   text: string;
@@ -24,18 +24,18 @@ class AboutGameItem extends BaseControl {
   }
 
   render(): void {
-    const figure = new BaseControl({
+    const figure = new BaseControl<HTMLElement>({
       tagName: 'figure',
       classes: ['about-game__item-inner'],
     });
 
-    const img = new BaseControl({
+    const img = new BaseControl<HTMLElement>({
       tagName: 'img',
       classes: ['about-game__item-img'],
       attributes: { src: this.image, alt: '' },
     });
 
-    const text = new BaseControl({
+    const text = new BaseControl<HTMLElement>({
       tagName: 'figcaption',
       classes: ['about-game__item-text'],
       text: this.text,

@@ -1,7 +1,7 @@
 import './logo.scss';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 
-class Logo extends BaseControl {
+class Logo extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: {
       tagName: string;
@@ -19,13 +19,13 @@ class Logo extends BaseControl {
   };
 
   private render(): void {
-    const spanUp = new BaseControl({
+    const spanUp = new BaseControl<HTMLElement>({
       tagName: 'span',
       classes: ['logo__up'],
       text: 'Match',
     });
 
-    const spanDown = new BaseControl({
+    const spanDown = new BaseControl<HTMLElement>({
       tagName: 'span',
       classes: ['logo__down'],
       text: 'Match',

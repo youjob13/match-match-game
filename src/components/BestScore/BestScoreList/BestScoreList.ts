@@ -4,7 +4,7 @@ import BaseControl from '../../shared/BaseControl/BaseControl';
 import BestScoreItem from './BestScoreItem/BestScoreItem';
 import { IScoreItem } from '../../shared/interfaces/indexed-db-data-model';
 
-class BestScoreList extends BaseControl {
+class BestScoreList extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private bestScoreService: IBestScoreService

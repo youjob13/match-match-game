@@ -1,9 +1,9 @@
 import './normalize.css';
 import App from './app';
-import { IApplication } from './components/shared/interfaces/app-model';
 import RegistrationService from './components/services/RegistrationService';
 import GameService from './components/services/GameService';
 import BestScoreService from './components/services/BestScoreService';
+import { IApplication } from './components/shared/interfaces/app-model';
 
 const registrationService = new RegistrationService();
 const gameService = new GameService();

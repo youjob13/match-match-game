@@ -2,13 +2,14 @@ import './gameField.scss';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import Card, { ICard } from '../../Card/Card';
 import WinPopup from '../WinPopup/WinPopup';
-import { IGameService } from '../../services/GameService';
+import { ITimer } from '../../shared/interfaces/timer-model';
+import { IGameService } from '../../shared/interfaces/game-service-model';
 
 const TIME_TO_FLIP = 2;
 const COUNTDOWN_TO_STAT_GAME = 15;
 
-class GameField extends BaseControl {
-  private cardsOnField: Array<ICard>;
+class GameField extends BaseControl<HTMLElement> {
+  private cardsOnField: ICard[];
 
   private openCard: ICard | null;
 
@@ -17,8 +18,8 @@ class GameField extends BaseControl {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private gameService: IGameService,
-    private readonly stopTimer: () => number,
-    private changeCurrentPage: (path: string) => void
+    private changeCurrentPage: (path: string) => void,
+    private timer: ITimer
   ) {
     super(propsToBaseControl);
     this.openCard = null;
@@ -51,21 +52,20 @@ class GameField extends BaseControl {
       currentCard.node.addEventListener(
         'transitionend',
         (e: TransitionEvent) => {
-          // TODO: doing two times
           if (e.propertyName === 'transform') {
             if (prevCard.node.classList.contains('flipped')) {
               prevCard.node.classList.add('matched');
               currentCard.node.classList.add('matched');
 
               this.gameService.cards = this.gameService.cards.filter(
-                // TODO: remove from this place
                 (card) => card.name !== prevCard.cardInfo.name
               );
 
               this.isCompared = false;
 
               if (!this.gameService.cards.length) {
-                const finishTime: number = this.stopTimer();
+                this.timer.stop();
+                const finishTime: number = this.timer.getFinishTime();
                 this.gameService.stopGame(finishTime);
                 const winPopup = new WinPopup(
                   finishTime,
@@ -118,8 +118,8 @@ class GameField extends BaseControl {
   };
 
   private async init(): Promise<void> {
-    await this.gameService.startGame();
     await this.sort();
+    this.timer.start();
     this.render();
   }
 
@@ -131,7 +131,10 @@ class GameField extends BaseControl {
         this.selectCard,
         this.gameService.settings.category
       );
-      cardElem.node.style.flex = `${100 / this.defineDifficulty()}%`;
+      const gap = 1;
+      const cardWidth = 100 / this.defineDifficulty() - gap;
+      cardElem.node.style.flex = `${cardWidth}%`;
+      cardElem.node.style.maxWidth = `${cardWidth}%`;
       this.cardsOnField.push(cardElem);
       this.node.append(cardElem.node);
     });

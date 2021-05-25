@@ -1,7 +1,7 @@
 import BaseControl, { IAttr } from '../BaseControl/BaseControl';
 import './button.scss';
 
-class Button extends BaseControl {
+class Button extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: {
       tagName: string;
@@ -9,14 +9,14 @@ class Button extends BaseControl {
       text?: string;
       attributes?: IAttr;
     },
-    private eventCallback: () => void
+    private onBtnClick: () => void
   ) {
     super(propsToBaseControl);
-    this.node.addEventListener('click', this.handleEvent.bind(this));
+    this.node.addEventListener('click', this.handleClick.bind(this));
   }
 
-  private handleEvent(): void {
-    this.eventCallback();
+  private handleClick(): void {
+    this.onBtnClick();
   }
 }
 

@@ -1,6 +1,6 @@
-export interface ICardsJSON {
+export interface ICardsDataFromJSON {
   category: string;
-  cards: Array<ICardFromJSON>;
+  cards: ICardFromJSON[];
 }
 
 export interface ICardFromJSON {

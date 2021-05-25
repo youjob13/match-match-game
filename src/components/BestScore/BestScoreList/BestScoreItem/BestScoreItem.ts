@@ -3,7 +3,7 @@ import userAvatarDefault from '../../../../assets/user_image_default.png';
 import BaseControl from '../../../shared/BaseControl/BaseControl';
 import { IScoreItem } from '../../../shared/interfaces/indexed-db-data-model';
 
-class BestScoreItem extends BaseControl {
+class BestScoreItem extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     private scoreItem: IScoreItem
@@ -13,12 +13,12 @@ class BestScoreItem extends BaseControl {
   }
 
   private render(): void {
-    const userElem = new BaseControl({
+    const userElem = new BaseControl<HTMLElement>({
       tagName: 'figure',
       classes: ['best-score__item-user'],
     });
 
-    const avatar = new BaseControl({
+    const avatar = new BaseControl<HTMLElement>({
       tagName: 'img',
       classes: ['best-score__item-avatar'],
       attributes: {
@@ -28,30 +28,30 @@ class BestScoreItem extends BaseControl {
       },
     });
 
-    const userElemTextContent = new BaseControl({
+    const userElemTextContent = new BaseControl<HTMLElement>({
       tagName: 'figcaption',
       classes: ['best-score__item-text-content'],
     });
 
-    const name = new BaseControl({
+    const name = new BaseControl<HTMLElement>({
       tagName: 'p',
       classes: ['best-score__item-name'],
       text: `${this.scoreItem.user.firstName}`,
     });
 
-    const mail = new BaseControl({
+    const mail = new BaseControl<HTMLElement>({
       tagName: 'p',
       classes: ['best-score__item-mail'],
       text: `${this.scoreItem.user.email}`,
     });
 
-    const points = new BaseControl({
+    const points = new BaseControl<HTMLElement>({
       tagName: 'p',
       classes: ['best-score__item-points'],
       text: 'Score: ',
     });
 
-    const score = new BaseControl({
+    const score = new BaseControl<HTMLElement>({
       tagName: 'output',
       classes: ['best-score__item-score'],
       text: `${this.scoreItem.points}`,

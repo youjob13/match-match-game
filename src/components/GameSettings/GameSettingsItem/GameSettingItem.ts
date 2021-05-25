@@ -1,14 +1,12 @@
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import { IBaseControl } from '../../shared/interfaces/base-control-model';
 
-class GameSettingItem extends BaseControl {
-  select: IBaseControl | any;
+class GameSettingItem extends BaseControl<HTMLElement> {
+  private select: IBaseControl<HTMLInputElement>;
 
-  title: string;
+  private title: string;
 
-  options: string[];
-
-  type: string;
+  private options: string[];
 
   private typeSetting: string;
 
@@ -18,19 +16,18 @@ class GameSettingItem extends BaseControl {
     private changeGameSettings: (typeSetting: string, settings: string) => void
   ) {
     super(propsToBaseControl);
-    this.select = new BaseControl({
+    this.select = new BaseControl<HTMLInputElement>({
       tagName: 'select',
       classes: ['game-settings__item-select'],
       attributes: { type: 'text' },
     });
     this.options = props.options;
     this.title = props.title;
-    this.type = props.type;
     this.typeSetting = props.type;
     this.init();
   }
 
-  private selectOnChange(): void {
+  private handleChange(): void {
     const selectedSetting: string = this.select.node.value;
     this.changeGameSettings(this.typeSetting, selectedSetting);
   }
@@ -41,18 +38,18 @@ class GameSettingItem extends BaseControl {
   }
 
   private eventListeners(): void {
-    this.select.node.addEventListener('change', this.selectOnChange.bind(this));
+    this.select.node.addEventListener('change', this.handleChange.bind(this));
   }
 
-  protected render(): void {
-    const title = new BaseControl({
+  private render(): void {
+    const title = new BaseControl<HTMLElement>({
       tagName: 'h4',
       classes: ['game-settings__item-title'],
       text: this.title,
     });
 
     this.options.forEach((option) => {
-      const newOption = new BaseControl({
+      const newOption = new BaseControl<HTMLElement>({
         tagName: 'option',
         classes: ['game-settings__item-option'],
         attributes: { value: option },

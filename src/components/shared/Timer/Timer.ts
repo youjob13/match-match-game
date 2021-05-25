@@ -4,24 +4,21 @@ import BaseControl from '../BaseControl/BaseControl';
 
 const START_TIMER_VALUE = '00:00';
 
-class Timer extends BaseControl {
-  counter: number;
+class Timer extends BaseControl<HTMLElement> {
+  private counter: number;
 
-  output: BaseControl;
+  private output: BaseControl<HTMLElement>;
 
-  timerId: number | null;
-
-  isStarted: boolean;
+  private timerId: number | null;
 
   constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
     super(propsToBaseControl);
-    this.output = new BaseControl({
+    this.output = new BaseControl<HTMLElement>({
       tagName: 'output',
       classes: ['timer__output'],
     });
     this.counter = 0;
     this.timerId = null;
-    this.isStarted = false;
     this.render(START_TIMER_VALUE);
   }
 
@@ -39,9 +36,12 @@ class Timer extends BaseControl {
     this.render(START_TIMER_VALUE);
   }
 
+  getFinishTime(): number {
+    return this.counter;
+  }
+
   stop(): void {
     window.clearTimeout(this.timerId || undefined);
-    this.isStarted = false;
   }
 
   private render(time: string): void {
