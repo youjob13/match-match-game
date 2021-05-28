@@ -2,7 +2,7 @@ import {
   IRegistrationServiceData,
   IRegistrationService,
 } from '../shared/interfaces/registration-service-model';
-import IndexedDB from './IndexedDB';
+import db from './IndexedDB';
 
 class RegistrationService implements IRegistrationService {
   private dataRegistration: IRegistrationServiceData;
@@ -22,6 +22,10 @@ class RegistrationService implements IRegistrationService {
   logOut(): void {
     localStorage.removeItem('user');
     this.isAuthorization = false;
+  }
+
+  init(): void {
+    if (localStorage.user) this.isAuthorization = true;
   }
 
   changeValue = (value: string, name: string): void => {
@@ -44,13 +48,11 @@ class RegistrationService implements IRegistrationService {
       email: this.dataRegistration.email,
       avatar: null,
     };
-    localStorage.setItem('user', JSON.stringify(user));
 
+    localStorage.setItem('user', JSON.stringify(user));
     this.isAuthorization = true;
 
-    const db = await new IndexedDB('youjob13', 1);
-    await db.openReq([['users', { keyPath: 'id', autoIncrement: true }]]);
-    await db.put('users', user, 'readwrite');
+    await db.put('users', user);
   };
 }
 

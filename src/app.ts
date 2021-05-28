@@ -5,12 +5,11 @@ import AboutGame from './components/AboutGame/AboutGame';
 import BestScore from './components/BestScore/BestScore';
 import GameSettings from './components/GameSettings/GameSettings';
 import Game from './components/Game/Game';
-import IndexedDB from './components/services/IndexedDB';
 import { IRoute } from './components/shared/interfaces/route-model';
 import { IRegistrationService } from './components/shared/interfaces/registration-service-model';
 import { IBestScoreService } from './components/shared/interfaces/best-score-service-model';
 import { IGameService } from './components/shared/interfaces/game-service-model';
-import { IIndexedDB } from './components/shared/interfaces/indexed-db-data-model';
+import db from './components/services/IndexedDB';
 
 export type Page = AboutGame | GameSettings | Game | BestScore | null;
 
@@ -94,12 +93,9 @@ class App {
     this.router.changePath(path);
   };
 
-  private initIndexedDB = async () => {
-    const db: IIndexedDB = await new IndexedDB('youjob13', 1);
-    await db.openReq([
-      ['users', { keyPath: 'id', autoIncrement: true }],
-      ['score', { keyPath: 'id', autoIncrement: true }],
-    ]);
+  private initIndexedDB = async (): Promise<void> => {
+    this.registrationService.init();
+    await db.open('youjob13');
   };
 
   private render(): void {
@@ -123,8 +119,8 @@ class App {
     window.onpopstate = () => this.render();
   }
 
-  init(): void {
-    this.initIndexedDB();
+  async init(): Promise<void> {
+    await this.initIndexedDB();
     this.render();
     this.eventListeners();
   }

@@ -7,4 +7,5 @@ export interface IRegistrationService {
   isAuthorization: boolean;
   changeValue: (value: string, name: string) => void;
   sendData: () => void;
+  init: () => void;
 }

@@ -1,119 +1,111 @@
-import {
-  IIndexedDB,
-  IOpenReq,
-  IScoreItem,
-} from '../shared/interfaces/indexed-db-data-model';
+import { IScoreDBItem } from '../shared/interfaces/indexed-db-data-model';
 
-class IndexedDB implements IIndexedDB {
-  private db: IDBDatabase | null;
+interface IDataBase {
+  open: (dbName: string, version?: number) => Promise<void>;
+  getWithCursor: (
+    storageName: string,
+    cursorIndex: string
+  ) => Promise<IScoreDBItem[]>;
+  add: (storageName: string, data: unknown) => void;
+  put: (storageName: string, data: unknown) => Promise<unknown>;
+}
 
-  private openRequest: IDBOpenDBRequest;
+class IndexedDB implements IDataBase {
+  public db!: IDBDatabase;
 
-  obtainedData: IScoreItem[] | [];
+  open(dbName: string, version?: number): Promise<void> {
+    return new Promise((resolve) => {
+      const iDB = window.indexedDB;
+      const openRequest = iDB.open(dbName, version);
 
-  constructor(private dbName: string, private versionReq: number) {
-    this.openRequest = indexedDB.open(this.dbName, this.versionReq);
-    this.db = null;
-    this.obtainedData = [];
-  }
+      openRequest.onupgradeneeded = () => {
+        const database = openRequest.result;
 
-  openReq(params: IOpenReq[]): void {
-    this.openRequest.onupgradeneeded = () => {
-      this.db = this.openRequest.result;
-
-      params.forEach((storage) => {
-        if (!this.db?.objectStoreNames.contains(storage[0])) {
-          this.db?.createObjectStore(storage[0], storage[1]);
+        if (!database.objectStoreNames.contains('users')) {
+          const store = database.createObjectStore('users', {
+            keyPath: 'id',
+            autoIncrement: true,
+          });
+          store.createIndex('email', 'email', { unique: true });
         }
-      });
-    };
+
+        if (!database.objectStoreNames.contains('score')) {
+          const store = database.createObjectStore('score', {
+            keyPath: 'id',
+            autoIncrement: true,
+          });
+          store.createIndex('points', 'points');
+        }
+        this.db = database;
+      };
+
+      openRequest.onsuccess = () => {
+        this.db = openRequest.result;
+        resolve();
+      };
+
+      openRequest.onerror = () => {
+        throw new Error(`Ошибка: ${openRequest.error}`);
+      };
+    });
   }
 
-  put(storageName: string, data: unknown, mode: IDBTransactionMode): void {
-    this.openRequest.onsuccess = () => {
-      this.db = this.openRequest.result;
-
-      const transaction = this.db.transaction(storageName, mode);
-
-      const users = transaction.objectStore(storageName);
-
-      const request = users.put(data);
-
-      request.onsuccess = () => {
-        console.log('Регистрация успешна', request.result);
-      };
+  put(storageName: string, data: unknown): Promise<unknown> {
+    return new Promise((resolve) => {
+      const transaction = this.db.transaction(storageName, 'readwrite');
+      const storeUsers = transaction.objectStore(storageName);
+      const request = storeUsers.put(data);
 
       request.onerror = () => {
-        console.log('Ошибка', request.error);
+        throw new Error('Пользователь с таким email уже зарегистрирован');
       };
-
       transaction.oncomplete = () => {
-        console.log('Транзакция выполнена');
+        resolve(request.result);
       };
-    };
-
-    this.openRequest.onerror = () => {
-      console.error('Error', this.openRequest.error);
-    };
+    });
   }
 
-  add(storageName: string, data: unknown, mode?: IDBTransactionMode): void {
-    this.openRequest.onsuccess = () => {
-      this.db = this.openRequest.result;
+  add(storageName: string, data: unknown): void {
+    if (!this.db) return;
+    const transaction = this.db.transaction(storageName, 'readwrite');
+    const storeScore = transaction.objectStore(storageName);
+    const request = storeScore.add(data);
 
-      const transaction = this.db.transaction(storageName, mode || 'readonly');
-
-      const users = transaction.objectStore(storageName);
-
-      const request = users.add(data);
-
-      request.onsuccess = () => {
-        console.log('Регистрация успешна', request.result);
-      };
-
-      request.onerror = () => {
-        console.log('Ошибка', request.error);
-      };
-
-      transaction.oncomplete = () => {
-        console.log('Транзакция выполнена');
-      };
+    request.onerror = () => {
+      throw new Error(`Ошибка: ${request.error}`);
     };
-
-    this.openRequest.onerror = () => {
-      console.error('Error', this.openRequest.error);
-    };
+    transaction.oncomplete = () => {};
   }
 
-  // TODO: переделать, должен возвращать значение
-  getAll(storageName: string, params?: IDBKeyRange | number): void {
-    this.openRequest.onsuccess = () => {
-      this.db = this.openRequest.result;
+  getWithCursor(
+    storageName: string,
+    cursorIndex: string
+  ): Promise<IScoreDBItem[]> {
+    return new Promise((resolve) => {
+      if (!this.db) return;
+
       const transaction = this.db.transaction(storageName, 'readonly');
-
-      const users = transaction.objectStore(storageName);
-
-      const request = users.getAll();
+      const storeUsers = transaction.objectStore(storageName);
+      const request = storeUsers.index(cursorIndex).openCursor(null, 'prev');
+      const resData: IScoreDBItem[] = [];
 
       request.onsuccess = () => {
-        console.log('Регистрация успешна', request.result);
+        const cursor = request.result;
+        if (cursor && cursor!.primaryKey <= 10) {
+          resData.push(cursor.value);
+          cursor.continue();
+        }
       };
-
       request.onerror = () => {
-        console.log('Ошибка', request.error);
+        throw new Error(`Ошибка: ${request.error}`);
       };
-
       transaction.oncomplete = () => {
-        this.obtainedData = request.result;
-        this.obtainedData.length = 10; // TODO: переделать
-        console.log('Транзакция выполнена');
+        resolve(resData);
       };
-    };
-
-    this.openRequest.onerror = () => {
-      console.error('Error', this.openRequest.error);
-    };
+    });
   }
 }
 
-export default IndexedDB;
+// export default IndexedDB;
+const db = new IndexedDB();
+export default db;

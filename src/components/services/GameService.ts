@@ -7,35 +7,25 @@ import {
   IGameService,
   IGameSettings,
 } from '../shared/interfaces/game-service-model';
-import IndexedDB from './IndexedDB';
+import db from './IndexedDB';
 
 class GameService implements IGameService {
-  settings: IGameSettings;
+  settings: IGameSettings = {
+    category: 'animal',
+    difficulty: '4 * 4',
+  };
 
-  categories: string[];
+  categories: string[] = [];
 
-  cards: ICardFromJSON[] | [];
+  cards: ICardFromJSON[] = [];
 
-  private gameData: ICardsDataFromJSON[];
+  private gameData: ICardsDataFromJSON[] = [];
 
-  private score: number;
+  private score = 0;
 
-  private numberOfComparisons: number;
+  private numberOfComparisons = 0;
 
-  private numberOfFalseComparisons: number;
-
-  constructor() {
-    this.settings = {
-      category: 'animal',
-      difficulty: '4 * 4',
-    };
-    this.score = 0;
-    this.gameData = [];
-    this.categories = [];
-    this.cards = [];
-    this.numberOfComparisons = 0;
-    this.numberOfFalseComparisons = 0;
-  }
+  private numberOfFalseComparisons = 0;
 
   private calculatePoints(finishTime: number): void {
     this.score =
@@ -61,7 +51,7 @@ class GameService implements IGameService {
 
   async configureGameSettings(): Promise<void> {
     await this.getData();
-    await this.setCategoriesToSettings();
+    this.setCategoriesToSettings();
   }
 
   async startGame(): Promise<void> {
@@ -71,24 +61,11 @@ class GameService implements IGameService {
 
   async updateScore(): Promise<void> {
     const currentUser = JSON.parse(localStorage.user);
-    const db = await new IndexedDB('youjob13', 1);
-    await db.openReq([['score', { keyPath: 'id', autoIncrement: true }]]);
-    await db.add(
-      'score',
-      { points: this.score, user: currentUser },
-      'readwrite'
-    );
+    db.add('score', { points: this.score, user: currentUser });
   }
 
-  async stopGame(finishTime: number): Promise<void> {
-    await this.calculatePoints(finishTime);
-
-    alert(`
-    ${this.score},
-    ${this.numberOfComparisons},
-    ${this.numberOfFalseComparisons},
-    ${finishTime}`);
-
+  stopGame(finishTime: number): void {
+    this.calculatePoints(finishTime);
     this.updateScore();
   }
 

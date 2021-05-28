@@ -1,12 +1,12 @@
 import './bestScoreItem.scss';
 import userAvatarDefault from '../../../../assets/user_image_default.png';
 import BaseControl from '../../../shared/BaseControl/BaseControl';
-import { IScoreItem } from '../../../shared/interfaces/indexed-db-data-model';
+import { IScoreDBItem } from '../../../shared/interfaces/indexed-db-data-model';
 
 class BestScoreItem extends BaseControl<HTMLElement> {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
-    private scoreItem: IScoreItem
+    private scoreItem: IScoreDBItem
   ) {
     super(propsToBaseControl);
     this.render();
