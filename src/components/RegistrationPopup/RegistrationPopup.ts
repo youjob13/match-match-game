@@ -3,8 +3,8 @@ import BaseControl from '../shared/BaseControl/BaseControl';
 import Input from '../shared/Input/Input';
 import Popup from '../shared/Popup/Popup';
 import Button from '../shared/Button/Button';
+import UserAvatar from './UserAvatar/UserAvatar';
 import { IRegistrationService } from '../shared/interfaces/registration-service-model';
-import InputFile from './InputFile/InputFile';
 
 class RegistrationPopup extends Popup {
   private addUserBtn: Button;
@@ -43,14 +43,10 @@ class RegistrationPopup extends Popup {
     }
   };
 
-  private handleInputFile = (dataURL: string, name: string) => {
-    this.registrationService.changeValue(dataURL, name);
-  };
-
   private onAddUserBtnClick = (): void => {
     this.registrationService.sendData();
     this.closePopup();
-    this.renderHeader(); // TODO: think about
+    this.renderHeader();
   };
 
   private closePopup() {
@@ -74,19 +70,12 @@ class RegistrationPopup extends Popup {
       classes: ['popup-registr__form'],
     });
 
-    const userImage = new BaseControl<HTMLElement>({
-      tagName: 'img',
-      classes: ['popup-registr__img'],
-      attributes: { src: 'user_image_default.png', alt: '' },
-    });
-
-    const inputImage = new InputFile(
+    const userAvatarWrapper = new UserAvatar(
       {
-        tagName: 'input',
-        classes: ['popup-registr__input'],
-        attributes: { type: 'file', name: 'userImage' },
+        tagName: 'div',
+        classes: ['input_file-wrapper'],
       },
-      this.handleInputFile
+      this.registrationService
     );
 
     const inputsWrapper = new BaseControl<HTMLElement>({
@@ -197,11 +186,7 @@ class RegistrationPopup extends Popup {
       labelLastName.node,
       labelEmail.node
     );
-    inputsValue.node.append(
-      inputImage.node,
-      inputsWrapper.node,
-      userImage.node
-    );
+    inputsValue.node.append(inputsWrapper.node, userAvatarWrapper.node);
     buttonsWrapper.node.append(this.addUserBtn.node, cancelBtn.node);
     form.node.append(inputsValue.node, buttonsWrapper.node);
     this.popupInner.node.append(title.node, form.node);

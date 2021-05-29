@@ -1,4 +1,4 @@
-import BaseControl, { IAttr } from '../../shared/BaseControl/BaseControl';
+import BaseControl, { IAttr } from '../../../shared/BaseControl/BaseControl';
 
 class InputFile extends BaseControl<HTMLInputElement> {
   constructor(
