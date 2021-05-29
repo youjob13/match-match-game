@@ -7,7 +7,7 @@ import db from './IndexedDB';
 class RegistrationService implements IRegistrationService {
   private dataRegistration: IRegistrationServiceData;
 
-  isAuthorization: boolean;
+  isAuthorization = false;
 
   constructor() {
     this.dataRegistration = {
@@ -16,12 +16,14 @@ class RegistrationService implements IRegistrationService {
       email: '',
       userImage: '',
     };
-    this.isAuthorization = false;
   }
 
   logOut(): void {
     localStorage.removeItem('user');
     this.isAuthorization = false;
+    Object.keys(this.dataRegistration).forEach((prop) => {
+      this.dataRegistration[prop] = '';
+    });
   }
 
   init(): void {
@@ -46,12 +48,11 @@ class RegistrationService implements IRegistrationService {
       firstName: this.dataRegistration.firstName,
       lastName: this.dataRegistration.lastName,
       email: this.dataRegistration.email,
-      avatar: null,
+      avatar: this.dataRegistration.userImage,
     };
 
     localStorage.setItem('user', JSON.stringify(user));
     this.isAuthorization = true;
-
     await db.put('users', user);
   };
 }

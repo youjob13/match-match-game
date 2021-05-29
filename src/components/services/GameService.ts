@@ -27,10 +27,18 @@ class GameService implements IGameService {
 
   private numberOfFalseComparisons = 0;
 
+  private resetValues(): void {
+    this.numberOfComparisons = 0;
+    this.numberOfFalseComparisons = 0;
+  }
+
   private calculatePoints(finishTime: number): void {
-    this.score =
+    const points =
       (this.numberOfComparisons - this.numberOfFalseComparisons) * 100 -
       finishTime * 10;
+    this.score = points > 0 ? points : 0;
+
+    this.resetValues();
   }
 
   private setCategoriesToSettings(): void {

@@ -41,6 +41,7 @@ class IndexedDB implements IDataBase {
 
       openRequest.onsuccess = () => {
         this.db = openRequest.result;
+        console.log(this.db);
         resolve();
       };
 
@@ -88,16 +89,20 @@ class IndexedDB implements IDataBase {
       const storeUsers = transaction.objectStore(storageName);
       const request = storeUsers.index(cursorIndex).openCursor(null, 'prev');
       const resData: IScoreDBItem[] = [];
+      let index = 0;
 
       request.onsuccess = () => {
         const cursor = request.result;
-        if (cursor && cursor!.primaryKey <= 10) {
-          resData.push(cursor.value);
+        if (cursor) {
+          if (index < 10) {
+            resData.push(cursor.value);
+            index++;
+          }
           cursor.continue();
         }
       };
       request.onerror = () => {
-        throw new Error(`Ошибка: ${request.error}`);
+        throw new Error(`Error: ${request.error}`);
       };
       transaction.oncomplete = () => {
         resolve(resData);
@@ -106,6 +111,5 @@ class IndexedDB implements IDataBase {
   }
 }
 
-// export default IndexedDB;
 const db = new IndexedDB();
 export default db;

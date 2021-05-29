@@ -4,6 +4,7 @@ import Input from '../shared/Input/Input';
 import Popup from '../shared/Popup/Popup';
 import Button from '../shared/Button/Button';
 import { IRegistrationService } from '../shared/interfaces/registration-service-model';
+import InputFile from './InputFile/InputFile';
 
 class RegistrationPopup extends Popup {
   private addUserBtn: Button;
@@ -42,6 +43,10 @@ class RegistrationPopup extends Popup {
     }
   };
 
+  private handleInputFile = (dataURL: string, name: string) => {
+    this.registrationService.changeValue(dataURL, name);
+  };
+
   private onAddUserBtnClick = (): void => {
     this.registrationService.sendData();
     this.closePopup();
@@ -51,14 +56,6 @@ class RegistrationPopup extends Popup {
   private closePopup() {
     this.node.remove();
   }
-
-  // private loadImage = (): void => {
-  //   let f = inputImage.files[0];
-  //   if (f) {
-  //     userImage.src = URL.createObjectURL(f);
-  //     localStorage.setItem('myImage', userImage.src);
-  //   }
-  // }
 
   private render() {
     const title = new BaseControl<HTMLElement>({
@@ -82,14 +79,15 @@ class RegistrationPopup extends Popup {
       classes: ['popup-registr__img'],
       attributes: { src: 'user_image_default.png', alt: '' },
     });
-    // const inputImage = new Input(
-    //   {
-    //     tagName: 'input',
-    //     classes: ['popup-registr__input'],
-    //     attributes: { type: 'file', name: 'userImage' },
-    //   },
-    //   this.handleInput.bind(this)
-    // );
+
+    const inputImage = new InputFile(
+      {
+        tagName: 'input',
+        classes: ['popup-registr__input'],
+        attributes: { type: 'file', name: 'userImage' },
+      },
+      this.handleInputFile
+    );
 
     const inputsWrapper = new BaseControl<HTMLElement>({
       tagName: 'div',
@@ -199,7 +197,11 @@ class RegistrationPopup extends Popup {
       labelLastName.node,
       labelEmail.node
     );
-    inputsValue.node.append(inputsWrapper.node, userImage.node);
+    inputsValue.node.append(
+      inputImage.node,
+      inputsWrapper.node,
+      userImage.node
+    );
     buttonsWrapper.node.append(this.addUserBtn.node, cancelBtn.node);
     form.node.append(inputsValue.node, buttonsWrapper.node);
     this.popupInner.node.append(title.node, form.node);

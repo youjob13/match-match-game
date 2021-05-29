@@ -83,11 +83,20 @@ class Header extends BaseControl<HTMLElement> {
         this.onLogOutBtnClick
       );
 
+      const currentUser = JSON.parse(localStorage.user);
       const userAvatar = new BaseControl<HTMLElement>({
         tagName: 'img',
         classes: ['header__user-avatar'],
-        attributes: { src: defaultUserAvatar, alt: '' },
       });
+      if (currentUser.avatar) {
+        const baseImage = new Image();
+        baseImage.onload = () => {
+          userAvatar.node.setAttribute('src', currentUser.avatar);
+        };
+        baseImage.src = currentUser.avatar;
+      } else {
+        userAvatar.node.setAttribute('src', defaultUserAvatar);
+      }
       rightPartHeader.node.append(
         startGameBtn.node,
         userAvatar.node,

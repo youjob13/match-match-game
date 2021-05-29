@@ -15,7 +15,6 @@ class BestScore extends BaseControl<HTMLElement> {
 
   async init(): Promise<void> {
     await this.bestScoreService.getScoreData();
-    console.log(this.bestScoreService.scoreList);
     await this.render();
   }
 
