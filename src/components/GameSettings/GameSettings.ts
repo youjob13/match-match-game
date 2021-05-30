@@ -4,7 +4,7 @@ import ContainerWrapper from '../HOC/Container';
 import GameSettingItem from './GameSettingsItem/GameSettingItem';
 import { IGameService } from '../shared/interfaces/game-service-model';
 
-interface ISettings {
+export interface ISettings {
   settingName: string;
   options: string[];
   title: string;

@@ -21,24 +21,16 @@ class GameSettingItem extends BaseControl<HTMLElement> {
       classes: ['game-settings__item-select'],
       attributes: { type: 'text' },
     });
+    this.select.node.addEventListener('change', this.handleChange.bind(this));
     this.options = props.options;
     this.title = props.title;
     this.typeSetting = props.type;
-    this.init();
+    this.render();
   }
 
   private handleChange(): void {
     const selectedSetting: string = this.select.node.value;
     this.changeGameSettings(this.typeSetting, selectedSetting);
-  }
-
-  private init(): void {
-    this.eventListeners();
-    this.render();
-  }
-
-  private eventListeners(): void {
-    this.select.node.addEventListener('change', this.handleChange.bind(this));
   }
 
   private render(): void {

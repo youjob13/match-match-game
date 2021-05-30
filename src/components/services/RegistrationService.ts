@@ -9,6 +9,8 @@ class RegistrationService implements IRegistrationService {
 
   isAuthorization = false;
 
+  private isValidation: { [key: string]: boolean | undefined };
+
   constructor() {
     this.dataRegistration = {
       firstName: '',
@@ -16,6 +18,7 @@ class RegistrationService implements IRegistrationService {
       email: '',
       userImage: '',
     };
+    this.isValidation = {};
   }
 
   logOut(): void {
@@ -26,12 +29,21 @@ class RegistrationService implements IRegistrationService {
     });
   }
 
+  getIsValidForm(): boolean {
+    return Object.values(this.isValidation).includes(false);
+  }
+
   init(): void {
     if (localStorage.user) this.isAuthorization = true;
   }
 
-  changeValue = (value: string, name: string): void => {
+  changeValue = (
+    value: string,
+    name: string,
+    validationRes?: boolean
+  ): void => {
     this.dataRegistration[name] = value;
+    this.isValidation[name] = validationRes;
   };
 
   sendData = async (): Promise<void> => {

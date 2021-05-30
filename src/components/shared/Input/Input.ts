@@ -25,7 +25,8 @@ class Input extends BaseControl<HTMLInputElement> {
   }
 
   private validate(value: string, regExp: IRegExp): boolean {
-    const validationRes = new RegExp(regExp.exp, regExp.flags).test(value);
+    const reg = new RegExp(regExp.exp, regExp.flags);
+    const validationRes = reg.test(value);
     this.node.value = value.replace(/\s+/gi, '');
 
     if (validationRes && this.node.value.length <= 30) {

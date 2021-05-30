@@ -30,16 +30,14 @@ class RegistrationPopup extends Popup {
     name: string,
     validationRes?: boolean
   ): void => {
-    this.registrationService.changeValue(value, name);
+    this.registrationService.changeValue(value, name, validationRes);
 
-    if (validationRes !== undefined) {
-      if (!validationRes) {
-        this.addUserBtn.node.setAttribute('disabled', 'disabled');
-        this.addUserBtn.node.style.backgroundColor = 'gray';
-      } else {
-        this.addUserBtn.node.removeAttribute('disabled');
-        this.addUserBtn.node.style.backgroundColor = '';
-      }
+    if (this.registrationService.getIsValidForm()) {
+      this.addUserBtn.node.setAttribute('disabled', 'disabled');
+      this.addUserBtn.node.style.backgroundColor = 'gray';
+    } else {
+      this.addUserBtn.node.removeAttribute('disabled');
+      this.addUserBtn.node.style.backgroundColor = '';
     }
   };
 
@@ -101,7 +99,7 @@ class RegistrationPopup extends Popup {
         },
       },
       this.handleInput.bind(this),
-      { exp: '[a-zA-Z№]+' }
+      { exp: '[a-zа-я№]+', flags: 'i' }
     );
     const validateIndicatorFirstName = new BaseControl<HTMLElement>({
       tagName: 'div',
@@ -126,7 +124,7 @@ class RegistrationPopup extends Popup {
         },
       },
       this.handleInput.bind(this),
-      { exp: '[a-zA-Z№]+' }
+      { exp: '[a-zа-я№]+', flags: 'i' }
     );
     const validateIndicatorLastName = new BaseControl<HTMLElement>({
       tagName: 'div',
@@ -151,7 +149,10 @@ class RegistrationPopup extends Popup {
         },
       },
       this.handleInput.bind(this),
-      { exp: '^.+@[a-zA-z]+\\.[a-z]{2,3}' }
+      {
+        exp: '^(([^<>()[\\]\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\\]\\.,;:\\s@\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\"]{2,})$',
+        flags: 'i',
+      }
     );
     const validateIndicatorEmail = new BaseControl<HTMLElement>({
       tagName: 'div',
