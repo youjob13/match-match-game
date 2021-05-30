@@ -23,7 +23,7 @@ class UserAvatar extends BaseControl<HTMLElement> {
     this.userImage.node.setAttribute('src', dataURL);
   };
 
-  render() {
+  private render(): void {
     const userAvatar = new InputFile(
       {
         tagName: 'input',
@@ -32,7 +32,6 @@ class UserAvatar extends BaseControl<HTMLElement> {
       },
       this.handleInputFile
     );
-
     this.node.append(userAvatar.node, this.userImage.node);
   }
 }

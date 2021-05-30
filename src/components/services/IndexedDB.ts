@@ -41,7 +41,6 @@ class IndexedDB implements IDataBase {
 
       openRequest.onsuccess = () => {
         this.db = openRequest.result;
-        console.log(this.db);
         resolve();
       };
 

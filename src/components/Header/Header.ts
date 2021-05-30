@@ -31,6 +31,10 @@ class Header extends BaseControl<HTMLElement> {
     this.changeCurrentPage('game');
   };
 
+  private onStopBtnClick = (): void => {
+    this.changeCurrentPage('about-game');
+  };
+
   private onLogOutBtnClick = (): void => {
     this.registrationService.logOut();
     this.render();
@@ -65,14 +69,35 @@ class Header extends BaseControl<HTMLElement> {
     );
 
     if (this.registrationService.isAuthorization) {
-      const startGameBtn = new Button(
-        {
-          tagName: 'a',
-          classes: ['header__button', 'button'],
-          text: this.hash !== 'game' ? 'Start Game' : 'Stop Game',
-        },
-        this.onStartBtnClick
-      );
+      let currentButton: Button;
+      if (this.hash !== 'game') {
+        const startGameBtn = new Button(
+          {
+            tagName: 'a',
+            classes: ['header__button', 'button'],
+            text: this.hash !== 'game' ? 'Start Game' : 'Stop Game',
+          },
+          this.onStartBtnClick
+        );
+        currentButton = startGameBtn;
+      } else {
+        const stopGameBtn = new Button(
+          {
+            tagName: 'a',
+            classes: ['header__button', 'button'],
+            text: this.hash !== 'game' ? 'Start Game' : 'Stop Game',
+          },
+          this.onStopBtnClick
+        );
+        currentButton = stopGameBtn;
+      }
+
+      const currentUser = JSON.parse(localStorage.user); // TODO: service
+      const userName = new BaseControl<HTMLElement>({
+        tagName: 'p',
+        classes: ['header__user-name'],
+        text: currentUser.firstName,
+      });
 
       const logOut = new Button(
         {
@@ -83,7 +108,6 @@ class Header extends BaseControl<HTMLElement> {
         this.onLogOutBtnClick
       );
 
-      const currentUser = JSON.parse(localStorage.user);
       const userAvatar = new BaseControl<HTMLElement>({
         tagName: 'img',
         classes: ['header__user-avatar'],
@@ -98,7 +122,8 @@ class Header extends BaseControl<HTMLElement> {
         userAvatar.node.setAttribute('src', defaultUserAvatar);
       }
       rightPartHeader.node.append(
-        startGameBtn.node,
+        currentButton.node,
+        userName.node,
         userAvatar.node,
         logOut.node
       );

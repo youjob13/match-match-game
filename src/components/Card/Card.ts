@@ -1,29 +1,22 @@
 import './card.scss';
-import { ICardFromJSON } from '../shared/interfaces/card-model-json';
 import BaseControl from '../shared/BaseControl/BaseControl';
+import { ICardFromJSON } from '../shared/interfaces/card-model-json';
 import { IBaseControl } from '../shared/interfaces/base-control-model';
 
 export interface ICard extends IBaseControl<HTMLElement> {
   cardInfo: ICardFromJSON;
   category: string;
-  selectCard: (cardInfo: ICard) => void;
 }
 
 class Card extends BaseControl<HTMLElement> implements ICard {
   constructor(
     propsToBaseControl: { tagName: string; classes: string[] },
     public cardInfo: ICardFromJSON,
-    public selectCard: (card: ICard) => void,
     public category: string
   ) {
     super(propsToBaseControl);
-    this.node.addEventListener('click', this.onCardClick);
     this.render();
   }
-
-  private onCardClick = (): void => {
-    this.selectCard(this);
-  };
 
   private render(): void {
     const cardInner = new BaseControl<HTMLElement>({

@@ -5,11 +5,15 @@
   &__item {
     position: relative;
     z-index: 1;
+    height: 5em;
     min-width: 95px;
     padding: 0 10px;
     text-align: center;
     transition: 0.2s;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:hover,
     &.active {
       color: #fff;
@@ -20,7 +24,7 @@
         left: 0;
         top: -2rem;
         width: 100%;
-        height: calc(100% + 3rem);
+        height: calc(100% + 2rem);
         z-index: -1;
       }
     }

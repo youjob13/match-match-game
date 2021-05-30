@@ -10,8 +10,11 @@ class InputFile extends BaseControl<HTMLInputElement> {
     private handleInputFile: (dataURL: string, name: string) => void
   ) {
     super(propsToBaseControl);
-    this.node.addEventListener('input', (e: any) => {
-      const SRC = URL.createObjectURL(e.target.files[0]);
+    this.node.addEventListener('input', (e: Event) => {
+      const input = <HTMLInputElement>e.target;
+      const { files } = input;
+      const file: File = files![0];
+      const SRC = URL.createObjectURL(file);
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {

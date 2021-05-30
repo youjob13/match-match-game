@@ -19,6 +19,8 @@ class GameService implements IGameService {
 
   cards: ICardFromJSON[] = [];
 
+  cardsOnField: HTMLElement[] = [];
+
   private gameData: ICardsDataFromJSON[] = [];
 
   private score = 0;
@@ -26,6 +28,12 @@ class GameService implements IGameService {
   private numberOfComparisons = 0;
 
   private numberOfFalseComparisons = 0;
+
+  compareCards(prevCard: HTMLElement): void {
+    this.cardsOnField = this.cardsOnField.filter(
+      (card) => !card.isEqualNode(prevCard)
+    );
+  }
 
   private resetValues(): void {
     this.numberOfComparisons = 0;
