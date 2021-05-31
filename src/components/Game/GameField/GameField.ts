@@ -4,9 +4,10 @@ import Card from '../../Card/Card';
 import WinPopup from '../WinPopup/WinPopup';
 import { ITimer } from '../../shared/interfaces/timer-model';
 import { IGameService } from '../../shared/interfaces/game-service-model';
+import { IPropsToBaseControl } from '../../shared/interfaces/api';
 
 const TIME_TO_FLIP = 1;
-const COUNTDOWN_TO_STAT_GAME = 15;
+const COUNTDOWN_TO_START_GAME = 30;
 
 class GameField extends BaseControl<HTMLElement> {
   private openCard: HTMLElement | null;
@@ -14,7 +15,7 @@ class GameField extends BaseControl<HTMLElement> {
   private isCompared: boolean;
 
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     private gameService: IGameService,
     private changeCurrentPage: (path: string) => void,
     private timer: ITimer
@@ -114,34 +115,31 @@ class GameField extends BaseControl<HTMLElement> {
 
   private async init(): Promise<void> {
     await this.sort();
-    this.timer.start();
+
     this.eventListener();
 
     this.render();
   }
 
   private render(): void {
+    this.node.style.gridTemplateColumns = `repeat(${this.defineDifficulty()}, 1fr)`;
+
     this.gameService.cards.forEach((card) => {
       const cardElem = new Card(
         { tagName: 'div', classes: ['card', 'flipped'] },
         card,
         this.gameService.settings.category
       );
-      const gap = 1;
-      const cardWidth = 100 / this.defineDifficulty() - gap;
-      cardElem.node.style.flex = `${cardWidth}%`;
-      cardElem.node.style.maxWidth = `${cardWidth}%`;
       this.gameService.cardsOnField.push(cardElem.node);
       this.node.append(cardElem.node);
     });
 
-    setTimeout(
-      () =>
-        this.gameService.cardsOnField.forEach((card) =>
-          card.classList.remove('flipped')
-        ),
-      COUNTDOWN_TO_STAT_GAME * 1000
-    );
+    setTimeout(() => {
+      this.gameService.cardsOnField.forEach((card) =>
+        card.classList.remove('flipped')
+      );
+      this.timer.start();
+    }, COUNTDOWN_TO_START_GAME * 1000);
   }
 }
 

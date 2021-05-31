@@ -41,17 +41,18 @@ class RegistrationPopup extends Popup {
     }
   };
 
-  private onAddUserBtnClick = (): void => {
-    this.registrationService.sendData();
+  private onAddUserBtnClick = async (): Promise<void> => {
+    const response = await this.registrationService.sendData();
+    if (!response) return;
     this.closePopup();
     this.renderHeader();
   };
 
-  private closePopup() {
+  private closePopup(): void {
     this.node.remove();
   }
 
-  private render() {
+  private render(): void {
     const title = new BaseControl<HTMLElement>({
       tagName: 'h3',
       classes: ['popup-registr__title'],

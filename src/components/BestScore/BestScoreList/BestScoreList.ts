@@ -1,11 +1,12 @@
-import { IBestScoreService } from '../../shared/interfaces/best-score-service-model';
 import './bestScoreList.scss';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import BestScoreItem from './BestScoreItem/BestScoreItem';
+import { IBestScoreService } from '../../shared/interfaces/best-score-service-model';
+import { IPropsToBaseControl } from '../../shared/interfaces/api';
 
 class BestScoreList extends BaseControl<HTMLElement> {
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     private bestScoreService: IBestScoreService
   ) {
     super(propsToBaseControl);

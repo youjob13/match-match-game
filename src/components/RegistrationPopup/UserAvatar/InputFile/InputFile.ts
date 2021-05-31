@@ -1,12 +1,9 @@
-import BaseControl, { IAttr } from '../../../shared/BaseControl/BaseControl';
+import BaseControl from '../../../shared/BaseControl/BaseControl';
+import { IAttr, IPropsToBaseControl } from '../../../shared/interfaces/api';
 
 class InputFile extends BaseControl<HTMLInputElement> {
   constructor(
-    propsToBaseControl: {
-      tagName: string;
-      classes: string[];
-      attributes: IAttr;
-    },
+    propsToBaseControl: IPropsToBaseControl,
     private handleInputFile: (dataURL: string, name: string) => void
   ) {
     super(propsToBaseControl);

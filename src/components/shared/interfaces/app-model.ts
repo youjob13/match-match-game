@@ -1,7 +1,6 @@
-import { IRoute } from './route-model';
+import { IRoute } from './router-model';
 
 export interface IApplication {
-  app: HTMLElement | null;
   routes: IRoute[];
   init: () => void;
 }

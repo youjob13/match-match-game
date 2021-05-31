@@ -1,6 +1,6 @@
-import { IScoreDBItem } from './indexed-db-data-model';
+import { IScoreDBItem } from './api';
 
 export interface IBestScoreService {
   getScoreData: () => Promise<void>;
-  scoreList: IScoreDBItem[] | [];
+  scoreList: IScoreDBItem[];
 }

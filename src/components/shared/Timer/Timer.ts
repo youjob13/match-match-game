@@ -1,6 +1,7 @@
 import './timer.scss';
 import timerValidator from '../../functions/timerValidator';
 import BaseControl from '../BaseControl/BaseControl';
+import { IPropsToBaseControl } from '../interfaces/api';
 
 const START_TIMER_VALUE = '00:00';
 
@@ -11,7 +12,7 @@ class Timer extends BaseControl<HTMLElement> {
 
   private timerId: number | null;
 
-  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+  constructor(propsToBaseControl: IPropsToBaseControl) {
     super(propsToBaseControl);
     this.output = new BaseControl<HTMLElement>({
       tagName: 'output',

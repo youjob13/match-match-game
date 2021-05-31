@@ -1,6 +1,6 @@
 .game-field {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 1.2em;
+  display: grid;
+  margin: 0 16em;
+  gap: 0.44em;
+  overflow: hidden;
 }

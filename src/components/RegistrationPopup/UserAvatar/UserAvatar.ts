@@ -1,12 +1,13 @@
+import { IPropsToBaseControl, IBaseControl } from '../../shared/interfaces/api';
 import BaseControl from '../../shared/BaseControl/BaseControl';
-import { IRegistrationService } from '../../shared/interfaces/registration-service-model';
 import InputFile from './InputFile/InputFile';
+import { IRegistrationService } from '../../shared/interfaces/registration-service-model';
 
 class UserAvatar extends BaseControl<HTMLElement> {
-  private userImage: BaseControl<HTMLElement>;
+  private userImage: IBaseControl<HTMLElement>;
 
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     private registrationService: IRegistrationService
   ) {
     super(propsToBaseControl);

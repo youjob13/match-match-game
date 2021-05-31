@@ -1,10 +1,11 @@
 import './aboutGame.scss';
 import BaseControl from '../shared/BaseControl/BaseControl';
 import AboutGameList from './AboutGameList/AboutGameList';
-import ContainerWrapper from '../HOC/Container';
+import ContainerWrapper from '../shared/HOC/Container';
+import { IPropsToBaseControl } from '../shared/interfaces/api';
 
 class AboutGame extends BaseControl<HTMLElement> {
-  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+  constructor(propsToBaseControl: IPropsToBaseControl) {
     super(propsToBaseControl);
     this.render();
   }

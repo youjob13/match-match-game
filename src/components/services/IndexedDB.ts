@@ -1,4 +1,4 @@
-import { IScoreDBItem } from '../shared/interfaces/indexed-db-data-model';
+import { IScoreDBItem } from '../shared/interfaces/api';
 
 interface IDataBase {
   open: (dbName: string, version?: number) => Promise<void>;

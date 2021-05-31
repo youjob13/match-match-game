@@ -1,14 +1,12 @@
 .card {
   position: relative;
-  // flex: 1 0 22%;
-  // max-width: 168px;
-  height: 168px;
   transition: 0.5s;
   perspective: 25rem;
   cursor: pointer;
   border-radius: 4px;
   margin-bottom: 1%;
   &__inner {
+    padding-top: 100%;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;

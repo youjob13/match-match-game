@@ -5,26 +5,27 @@ import AboutGame from './components/AboutGame/AboutGame';
 import BestScore from './components/BestScore/BestScore';
 import GameSettings from './components/GameSettings/GameSettings';
 import Game from './components/Game/Game';
-import { IRoute } from './components/shared/interfaces/route-model';
-import { IRegistrationService } from './components/shared/interfaces/registration-service-model';
-import { IBestScoreService } from './components/shared/interfaces/best-score-service-model';
-import { IGameService } from './components/shared/interfaces/game-service-model';
 import db from './components/services/IndexedDB';
+import { IRoute, IRouter } from './components/shared/interfaces/router-model';
+import { IBestScoreService } from './components/shared/interfaces/best-score-service-model';
+import { IRegistrationService } from './components/shared/interfaces/registration-service-model';
+import { IGameService } from './components/shared/interfaces/game-service-model';
+import { IApplication } from './components/shared/interfaces/app-model';
 
 export type Page = AboutGame | GameSettings | Game | BestScore | null;
 
-class App {
+class App implements IApplication {
   readonly routes: IRoute[];
 
-  private router: Router;
+  private readonly router: IRouter;
 
   private currentPage: Page;
 
   constructor(
-    readonly app: HTMLElement | null,
-    private registrationService: IRegistrationService,
-    private gameService: IGameService,
-    private bestScoreService: IBestScoreService
+    private readonly app: HTMLElement | null,
+    private readonly registrationService: IRegistrationService,
+    private readonly gameService: IGameService,
+    private readonly bestScoreService: IBestScoreService
   ) {
     this.currentPage = null;
     this.routes = [
@@ -89,13 +90,19 @@ class App {
     this.router = new Router(this.routes);
   }
 
-  private changeCurrentPage = (path: string): void => {
-    this.router.changePath(path);
-  };
+  async init(): Promise<void> {
+    await this.openDB();
+    this.render();
+    this.eventListeners();
+  }
 
-  private initIndexedDB = async (): Promise<void> => {
+  private openDB = async (): Promise<void> => {
     this.registrationService.init();
     await db.open('youjob13');
+  };
+
+  private changeCurrentPage = (path: string): void => {
+    this.router.changePath(path);
   };
 
   private render(): void {
@@ -117,12 +124,6 @@ class App {
 
   private eventListeners(): void {
     window.onpopstate = () => this.render();
-  }
-
-  async init(): Promise<void> {
-    await this.initIndexedDB();
-    this.render();
-    this.eventListeners();
   }
 }
 

@@ -1,17 +1,4 @@
-import { IBaseControl } from '../interfaces/base-control-model';
-
-// TODO: recast
-export interface IAttr {
-  href?: string;
-  src?: unknown;
-  alt?: string;
-  placeholder?: string;
-  type?: string;
-  name?: string;
-  value?: string;
-  required?: boolean;
-  maxLength?: number;
-}
+import { IAttr, IBaseControl } from '../interfaces/api';
 
 class BaseControl<T extends HTMLElement> implements IBaseControl<T> {
   readonly node: T;

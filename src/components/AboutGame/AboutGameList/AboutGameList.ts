@@ -6,9 +6,10 @@ import imageThree from '../../../assets/about-game/3.png';
 
 import BaseControl from '../../shared/BaseControl/BaseControl';
 import AboutGameItem from './AboutGameItem/AboutGameItem';
+import { IPropsToBaseControl } from '../../shared/interfaces/api';
 
 class AboutGameList extends BaseControl<HTMLElement> {
-  constructor(propsToBaseControl: { tagName: string; classes: string[] }) {
+  constructor(propsToBaseControl: IPropsToBaseControl) {
     super(propsToBaseControl);
     this.render();
   }

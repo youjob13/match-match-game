@@ -1,5 +1,6 @@
 import './input.scss';
-import BaseControl, { IAttr } from '../BaseControl/BaseControl';
+import BaseControl from '../BaseControl/BaseControl';
+import { IAttr } from '../interfaces/api';
 
 interface IRegExp {
   exp: string;
@@ -48,9 +49,9 @@ class Input extends BaseControl<HTMLInputElement> {
     if (this.inputCallback)
       this.inputCallback(
         this.node.value,
-        this.propsToBaseControl.attributes.name || 'undefined',
+        this.propsToBaseControl.attributes.name.toString(),
         validationRes
-      ); // TODO: decide problem
+      );
   }
 }
 

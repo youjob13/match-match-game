@@ -1,4 +1,4 @@
-import { IRouter, IRoute } from '../interfaces/route-model';
+import { IRoute, IRouter } from '../interfaces/router-model';
 
 class Router implements IRouter {
   constructor(private routes: IRoute[]) {}

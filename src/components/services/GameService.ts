@@ -2,11 +2,9 @@ import getCardsAPI from '../api/CardsApi';
 import {
   ICardFromJSON,
   ICardsDataFromJSON,
-} from '../shared/interfaces/card-model-json';
-import {
-  IGameService,
   IGameSettings,
-} from '../shared/interfaces/game-service-model';
+} from '../shared/interfaces/api';
+import { IGameService } from '../shared/interfaces/game-service-model';
 import db from './IndexedDB';
 
 class GameService implements IGameService {

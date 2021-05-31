@@ -1,8 +1,4 @@
-import { ICardFromJSON } from './card-model-json';
-
-export interface IGameSettings {
-  [key: string]: string;
-}
+import { ICardFromJSON, IGameSettings } from './api';
 
 export interface IGameService {
   settings: IGameSettings;

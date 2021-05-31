@@ -1,3 +1,4 @@
+import { IPropsToBaseControl } from '../../shared/interfaces/api';
 import './navigation.scss';
 import gearImg from '../../../assets/header/gear.svg';
 import starImg from '../../../assets/header/star.svg';
@@ -8,7 +9,7 @@ import NavigationItem from './NavigationItem/NavigationItem';
 
 class Navigation extends BaseControl<HTMLElement> {
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     private changeCurrentPage: (path: string) => void,
     private hash: string
   ) {
@@ -26,7 +27,9 @@ class Navigation extends BaseControl<HTMLElement> {
         tagName: 'li',
         classes: [
           'navigation__item',
-          this.hash === 'about-game' || this.hash === '' ? 'active' : 'null',
+          this.hash === 'about-game' || this.hash === ''
+            ? 'active'
+            : 'non-active',
         ],
         text: 'About Game',
         iconUrl: questionImg,
@@ -40,7 +43,7 @@ class Navigation extends BaseControl<HTMLElement> {
         tagName: 'li',
         classes: [
           'navigation__item',
-          this.hash === 'best-score' ? 'active' : 'null',
+          this.hash === 'best-score' ? 'active' : 'non-active',
         ],
         text: 'Best Score',
         iconUrl: starImg,
@@ -54,7 +57,7 @@ class Navigation extends BaseControl<HTMLElement> {
         tagName: 'li',
         classes: [
           'navigation__item',
-          this.hash === 'settings' ? 'active' : 'null',
+          this.hash === 'settings' ? 'active' : 'non-active',
         ],
         text: 'Game Settings',
         iconUrl: gearImg,

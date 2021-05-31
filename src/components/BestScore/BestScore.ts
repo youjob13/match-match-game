@@ -1,12 +1,13 @@
 import './bestScore.scss';
 import BaseControl from '../shared/BaseControl/BaseControl';
-import ContainerWrapper from '../HOC/Container';
+import ContainerWrapper from '../shared/HOC/Container';
 import BestScoreList from './BestScoreList/BestScoreList';
 import { IBestScoreService } from '../shared/interfaces/best-score-service-model';
+import { IPropsToBaseControl } from '../shared/interfaces/api';
 
 class BestScore extends BaseControl<HTMLElement> {
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     private bestScoreService: IBestScoreService
   ) {
     super(propsToBaseControl);

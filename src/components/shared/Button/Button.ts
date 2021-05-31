@@ -1,22 +1,14 @@
-import BaseControl, { IAttr } from '../BaseControl/BaseControl';
+import BaseControl from '../BaseControl/BaseControl';
+import { IAttr, IPropsToBaseControl } from '../interfaces/api';
 import './button.scss';
 
 class Button extends BaseControl<HTMLElement> {
   constructor(
-    propsToBaseControl: {
-      tagName: string;
-      classes: string[];
-      text?: string;
-      attributes?: IAttr;
-    },
+    propsToBaseControl: IPropsToBaseControl,
     private onBtnClick: () => void
   ) {
     super(propsToBaseControl);
-    this.node.addEventListener('click', this.handleClick.bind(this));
-  }
-
-  private handleClick(): void {
-    this.onBtnClick();
+    this.node.onclick = () => this.onBtnClick();
   }
 }
 

@@ -1,5 +1,5 @@
+import { IScoreDBItem } from '../shared/interfaces/api';
 import { IBestScoreService } from '../shared/interfaces/best-score-service-model';
-import { IScoreDBItem } from '../shared/interfaces/indexed-db-data-model';
 import db from './IndexedDB';
 
 class BestScoreService implements IBestScoreService {

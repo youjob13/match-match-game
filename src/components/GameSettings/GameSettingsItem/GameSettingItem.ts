@@ -1,5 +1,5 @@
+import { IBaseControl, IPropsToBaseControl } from '../../shared/interfaces/api';
 import BaseControl from '../../shared/BaseControl/BaseControl';
-import { IBaseControl } from '../../shared/interfaces/base-control-model';
 
 class GameSettingItem extends BaseControl<HTMLElement> {
   private select: IBaseControl<HTMLInputElement>;
@@ -11,7 +11,7 @@ class GameSettingItem extends BaseControl<HTMLElement> {
   private typeSetting: string;
 
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     props: { title: string; options: string[]; type: string },
     private changeGameSettings: (typeSetting: string, settings: string) => void
   ) {

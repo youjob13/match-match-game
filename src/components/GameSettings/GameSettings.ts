@@ -1,20 +1,16 @@
+import { IPropsToBaseControl, ISettings } from '../shared/interfaces/api';
 import './gameSettings.scss';
 import BaseControl from '../shared/BaseControl/BaseControl';
-import ContainerWrapper from '../HOC/Container';
+import ContainerWrapper from '../shared/HOC/Container';
 import GameSettingItem from './GameSettingsItem/GameSettingItem';
-import { IGameService } from '../shared/interfaces/game-service-model';
 
-export interface ISettings {
-  settingName: string;
-  options: string[];
-  title: string;
-}
+import { IGameService } from '../shared/interfaces/game-service-model';
 
 class GameSettings extends BaseControl<HTMLElement> {
   private settings: ISettings[];
 
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     private gameService: IGameService
   ) {
     super(propsToBaseControl);

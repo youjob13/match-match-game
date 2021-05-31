@@ -1,20 +1,18 @@
+import { IPropsToBaseControl } from '../../shared/interfaces/api';
 import './logo.scss';
 import BaseControl from '../../shared/BaseControl/BaseControl';
 
 class Logo extends BaseControl<HTMLElement> {
   constructor(
-    propsToBaseControl: {
-      tagName: string;
-      classes: string[];
-    },
+    propsToBaseControl: IPropsToBaseControl,
     private changeCurrentPage: (path: string) => void
   ) {
     super(propsToBaseControl);
-    this.node.addEventListener('click', this.handleClick.bind(this));
+    this.node.addEventListener('click', this.onLogoClick.bind(this));
     this.render();
   }
 
-  private handleClick = (): void => {
+  private onLogoClick = (): void => {
     this.changeCurrentPage('');
   };
 

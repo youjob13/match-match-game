@@ -1,12 +1,15 @@
+import { IUser } from './api';
+
 export interface IRegistrationServiceData {
   [key: string]: string;
 }
 
 export interface IRegistrationService {
-  logOut: () => void;
+  currentUser: IUser | null;
   isAuthorization: boolean;
-  changeValue: (value: string, name: string, validationRes?: boolean) => void;
-  sendData: () => void;
+  logOut: () => void;
   init: () => void;
+  sendData: () => Promise<boolean>;
   getIsValidForm: () => boolean;
+  changeValue: (value: string, name: string, validationRes?: boolean) => void;
 }

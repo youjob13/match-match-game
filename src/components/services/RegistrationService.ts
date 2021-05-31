@@ -1,6 +1,7 @@
+import { IUser } from '../shared/interfaces/api';
 import {
-  IRegistrationServiceData,
   IRegistrationService,
+  IRegistrationServiceData,
 } from '../shared/interfaces/registration-service-model';
 import db from './IndexedDB';
 
@@ -8,6 +9,8 @@ class RegistrationService implements IRegistrationService {
   private dataRegistration: IRegistrationServiceData;
 
   isAuthorization = false;
+
+  currentUser: IUser | null;
 
   private isValidation: { [key: string]: boolean | undefined };
 
@@ -18,12 +21,14 @@ class RegistrationService implements IRegistrationService {
       email: '',
       userImage: '',
     };
+    this.currentUser = null;
     this.isValidation = {};
   }
 
   logOut(): void {
     localStorage.removeItem('user');
     this.isAuthorization = false;
+    this.currentUser = null;
     Object.keys(this.dataRegistration).forEach((prop) => {
       this.dataRegistration[prop] = '';
     });
@@ -34,7 +39,10 @@ class RegistrationService implements IRegistrationService {
   }
 
   init(): void {
-    if (localStorage.user) this.isAuthorization = true;
+    if (localStorage.user) {
+      this.isAuthorization = true;
+      this.currentUser = JSON.parse(localStorage.user);
+    }
   }
 
   changeValue = (
@@ -46,14 +54,14 @@ class RegistrationService implements IRegistrationService {
     this.isValidation[name] = validationRes;
   };
 
-  sendData = async (): Promise<void> => {
+  sendData = async (): Promise<boolean> => {
     if (
       !this.dataRegistration.firstName ||
       !this.dataRegistration.lastName ||
       !this.dataRegistration.email
     ) {
       alert('Заполните все поля');
-      return;
+      return false;
     }
 
     const user = {
@@ -64,8 +72,11 @@ class RegistrationService implements IRegistrationService {
     };
 
     localStorage.setItem('user', JSON.stringify(user));
+    this.currentUser = user;
     this.isAuthorization = true;
+
     await db.put('users', user);
+    return true;
   };
 }
 

@@ -1,29 +1,23 @@
 import './aboutGameItem.scss';
-
 import BaseControl from '../../../shared/BaseControl/BaseControl';
+import { IPropsToBaseControl } from '../../../shared/interfaces/api';
 
 class AboutGameItem extends BaseControl<HTMLElement> {
-  image: string;
+  private readonly image: string;
 
-  text: string;
+  private readonly text: string;
 
   constructor(
-    propsToBaseControl: {
-      tagName: string;
-      classes: string[];
-    },
+    propsToBaseControl: IPropsToBaseControl,
     props: { text: string; image: string }
   ) {
-    super({
-      tagName: propsToBaseControl.tagName,
-      classes: propsToBaseControl.classes,
-    });
+    super(propsToBaseControl);
     this.image = props.image;
     this.text = props.text;
     this.render();
   }
 
-  render(): void {
+  private render(): void {
     const figure = new BaseControl<HTMLElement>({
       tagName: 'figure',
       classes: ['about-game__item-inner'],

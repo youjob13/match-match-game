@@ -4,13 +4,13 @@ import Logo from './Logo/Logo';
 import Navigation from './Navigation/Navigation';
 import RegistrationPopup from '../RegistrationPopup/RegistrationPopup';
 import Button from '../shared/Button/Button';
-import { IRegistrationService } from '../shared/interfaces/registration-service-model';
-
 import defaultUserAvatar from '../../assets/user_image_default.png';
+import { IRegistrationService } from '../shared/interfaces/registration-service-model';
+import { IPropsToBaseControl } from '../shared/interfaces/api';
 
 class Header extends BaseControl<HTMLElement> {
   constructor(
-    propsToBaseControl: { tagName: string; classes: string[] },
+    propsToBaseControl: IPropsToBaseControl,
     private registrationService: IRegistrationService,
     private changeCurrentPage: (path: string) => void,
     private hash: string
@@ -42,6 +42,7 @@ class Header extends BaseControl<HTMLElement> {
 
   private render = (): void => {
     this.node.innerHTML = '';
+
     const leftPartHeader = new BaseControl<HTMLElement>({
       tagName: 'div',
       classes: ['header__left'],
@@ -68,14 +69,16 @@ class Header extends BaseControl<HTMLElement> {
       this.hash
     );
 
-    if (this.registrationService.isAuthorization) {
+    const { currentUser } = this.registrationService;
+    if (this.registrationService.isAuthorization && currentUser) {
       let currentButton: Button;
+
       if (this.hash !== 'game') {
         const startGameBtn = new Button(
           {
             tagName: 'a',
             classes: ['header__button', 'button'],
-            text: this.hash !== 'game' ? 'Start Game' : 'Stop Game',
+            text: 'Start Game',
           },
           this.onStartBtnClick
         );
@@ -85,14 +88,13 @@ class Header extends BaseControl<HTMLElement> {
           {
             tagName: 'a',
             classes: ['header__button', 'button'],
-            text: this.hash !== 'game' ? 'Start Game' : 'Stop Game',
+            text: 'Stop Game',
           },
           this.onStopBtnClick
         );
         currentButton = stopGameBtn;
       }
 
-      const currentUser = JSON.parse(localStorage.user); // TODO: service
       const userName = new BaseControl<HTMLElement>({
         tagName: 'p',
         classes: ['header__user-name'],
@@ -112,15 +114,17 @@ class Header extends BaseControl<HTMLElement> {
         tagName: 'img',
         classes: ['header__user-avatar'],
       });
+
       if (currentUser.avatar) {
         const baseImage = new Image();
         baseImage.onload = () => {
-          userAvatar.node.setAttribute('src', currentUser.avatar);
+          userAvatar.node.setAttribute('src', <string>currentUser.avatar);
         };
         baseImage.src = currentUser.avatar;
       } else {
         userAvatar.node.setAttribute('src', defaultUserAvatar);
       }
+
       rightPartHeader.node.append(
         currentButton.node,
         userName.node,
@@ -140,7 +144,6 @@ class Header extends BaseControl<HTMLElement> {
     }
 
     leftPartHeader.node.append(logotype.node, nav.node);
-
     this.node.append(leftPartHeader.node, rightPartHeader.node);
   };
 }

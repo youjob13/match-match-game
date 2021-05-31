@@ -1,5 +1,5 @@
 export interface IRouter {
-  getHash: () => void;
+  getHash: () => string;
   changePath: (path: string) => void;
   routeToPage: (parentNode: HTMLElement) => void;
 }
