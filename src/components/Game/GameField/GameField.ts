@@ -6,7 +6,7 @@ import { ITimer } from '../../shared/interfaces/timer-model';
 import { IGameService } from '../../shared/interfaces/game-service-model';
 import { IPropsToBaseControl } from '../../shared/interfaces/api';
 
-const TIME_TO_FLIP = 1;
+const TIME_TO_FLIP = 1.5;
 const COUNTDOWN_TO_START_GAME = 30;
 
 class GameField extends BaseControl<HTMLElement> {
@@ -115,9 +115,8 @@ class GameField extends BaseControl<HTMLElement> {
 
   private async init(): Promise<void> {
     await this.sort();
-
+    this.timer.startCountdown(COUNTDOWN_TO_START_GAME);
     this.eventListener();
-
     this.render();
   }
 

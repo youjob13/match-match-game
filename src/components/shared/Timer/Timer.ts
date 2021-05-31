@@ -12,6 +12,8 @@ class Timer extends BaseControl<HTMLElement> {
 
   private timerId: number | null;
 
+  private timerCountdown: number | null;
+
   constructor(propsToBaseControl: IPropsToBaseControl) {
     super(propsToBaseControl);
     this.output = new BaseControl<HTMLElement>({
@@ -20,6 +22,7 @@ class Timer extends BaseControl<HTMLElement> {
     });
     this.counter = 0;
     this.timerId = null;
+    this.timerCountdown = null;
     this.render(START_TIMER_VALUE);
   }
 
@@ -32,6 +35,19 @@ class Timer extends BaseControl<HTMLElement> {
     }, 1000);
   }
 
+  startCountdown(startTime: number): void {
+    this.timerCountdown = window.setTimeout(() => {
+      let startTimeCopy = startTime;
+      if (--startTimeCopy < 0) {
+        this.stopCountdown();
+      } else {
+        const time = timerValidator(startTimeCopy);
+        this.render(time);
+        this.startCountdown(startTimeCopy);
+      }
+    }, 1000);
+  }
+
   clearTimer(): void {
     this.counter = 0;
     this.render(START_TIMER_VALUE);
@@ -39,6 +55,10 @@ class Timer extends BaseControl<HTMLElement> {
 
   getFinishTime(): number {
     return this.counter;
+  }
+
+  stopCountdown(): void {
+    window.clearTimeout(this.timerCountdown || undefined);
   }
 
   stop(): void {

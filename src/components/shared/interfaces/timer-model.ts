@@ -3,4 +3,5 @@ export interface ITimer {
   clearTimer: () => void;
   stop: () => void;
   getFinishTime: () => number;
+  startCountdown: (startTime: number) => void;
 }

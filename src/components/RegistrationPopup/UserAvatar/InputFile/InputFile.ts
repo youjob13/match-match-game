@@ -1,5 +1,5 @@
 import BaseControl from '../../../shared/BaseControl/BaseControl';
-import { IAttr, IPropsToBaseControl } from '../../../shared/interfaces/api';
+import { IPropsToBaseControl } from '../../../shared/interfaces/api';
 
 class InputFile extends BaseControl<HTMLInputElement> {
   constructor(

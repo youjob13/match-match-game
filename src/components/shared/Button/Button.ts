@@ -1,5 +1,5 @@
 import BaseControl from '../BaseControl/BaseControl';
-import { IAttr, IPropsToBaseControl } from '../interfaces/api';
+import { IPropsToBaseControl } from '../interfaces/api';
 import './button.scss';
 
 class Button extends BaseControl<HTMLElement> {
