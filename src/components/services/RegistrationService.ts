@@ -41,7 +41,7 @@ class RegistrationService implements IRegistrationService {
   init(): void {
     if (localStorage.user) {
       this.isAuthorization = true;
-      this.currentUser = JSON.parse(localStorage.user);
+      localStorage.user && (this.currentUser = JSON.parse(localStorage.user));
     }
   }
 
