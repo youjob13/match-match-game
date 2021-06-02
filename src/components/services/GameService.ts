@@ -74,8 +74,10 @@ class GameService implements IGameService {
   }
 
   async updateScore(): Promise<void> {
-    const currentUser = JSON.parse(localStorage.user);
-    db.add('score', { points: this.score, user: currentUser });
+    if (localStorage.user) {
+      const currentUser = JSON.parse(localStorage.user);
+      db.add('score', { points: this.score, user: currentUser });
+    }
   }
 
   stopGame(finishTime: number): void {
