@@ -45,6 +45,7 @@ class GameField extends BaseControl<HTMLElement> {
   private compareCards(prevCard: HTMLElement, currentCard: HTMLElement): void {
     this.isCompared = true;
     this.gameService.incrementNumberOfComparisons();
+    this.node.style.pointerEvents = 'none';
 
     if (currentCard.isEqualNode(prevCard)) {
       currentCard.addEventListener('transitionend', (e: TransitionEvent) => {
@@ -53,6 +54,7 @@ class GameField extends BaseControl<HTMLElement> {
             prevCard.classList.add('matched');
             currentCard.classList.add('matched');
 
+            this.node.style.pointerEvents = 'all';
             this.isCompared = false;
             this.gameService.compareCards(prevCard);
 
@@ -65,29 +67,21 @@ class GameField extends BaseControl<HTMLElement> {
           }
         }
       });
-    } else {
-      currentCard.addEventListener('transitionend', (e: TransitionEvent) => {
-        if (e.propertyName === 'transform') {
-          if (
-            prevCard.classList.contains('flipped') &&
-            !currentCard.classList.contains('matched') &&
-            !prevCard.classList.contains('matched')
-          ) {
-            prevCard.classList.add('no-matched');
-            currentCard.classList.add('no-matched');
-            this.gameService.incrementNumberOfFalseComparisons();
-          }
-        }
-      });
-
+    } else if (
+      prevCard.classList.contains('flipped') &&
+      !currentCard.classList.contains('matched') &&
+      !prevCard.classList.contains('matched')
+    ) {
+      prevCard.classList.add('no-matched');
+      currentCard.classList.add('no-matched');
+      this.gameService.incrementNumberOfFalseComparisons();
       setTimeout(() => {
-        prevCard.classList.remove('flipped', 'no-matched');
-        currentCard.classList.remove('flipped', 'no-matched');
+        prevCard.classList.remove('no-matched', 'flipped');
+        currentCard.classList.remove('no-matched', 'flipped');
         this.isCompared = false;
+        this.node.style.pointerEvents = 'all';
       }, TIME_TO_FLIP * 1000);
     }
-
-    this.openCard = null;
   }
 
   private selectCard = (cardElem: HTMLElement): void => {
@@ -98,6 +92,7 @@ class GameField extends BaseControl<HTMLElement> {
 
     if (this.openCard) {
       this.compareCards(this.openCard, selectedCard);
+      this.openCard = null;
     } else {
       this.openCard = cardElem;
     }
@@ -107,7 +102,7 @@ class GameField extends BaseControl<HTMLElement> {
     this.node.addEventListener('click', (e: Event) => {
       const target = <HTMLElement>e.target;
       const targetElem = <HTMLElement>target.closest('.card');
-      if (targetElem) {
+      if (targetElem && !targetElem.classList.contains('flipped')) {
         this.selectCard(targetElem);
       }
     });
