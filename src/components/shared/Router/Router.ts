@@ -10,13 +10,11 @@ class Router implements IRouter {
   getHash = (): string => window.location.hash.slice(1);
 
   routeToPage(parentNode: HTMLElement): void {
-    const defineCurrentPage = () =>
-      this.routes.forEach(
-        (route) =>
-          route.path === this.getHash() && parentNode?.append(route.component())
-      );
-
-    defineCurrentPage();
+    const currentHash = this.getHash();
+    this.routes.forEach(
+      (route) =>
+        route.path === currentHash && parentNode?.append(route.component())
+    );
   }
 }
 

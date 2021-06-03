@@ -37,6 +37,7 @@ class Header extends BaseControl<HTMLElement> {
 
   private onLogOutBtnClick = (): void => {
     this.registrationService.logOut();
+    this.changeCurrentPage('');
     this.render();
   };
 
