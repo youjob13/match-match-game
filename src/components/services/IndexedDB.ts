@@ -51,13 +51,13 @@ class IndexedDB implements IDataBase {
   }
 
   put(storageName: string, data: unknown): Promise<unknown> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(storageName, 'readwrite');
       const storeUsers = transaction.objectStore(storageName);
       const request = storeUsers.put(data);
 
       request.onerror = () => {
-        throw new Error('Пользователь с таким email уже зарегистрирован');
+        reject(new Error('A user with the same email address already exists'));
       };
       transaction.oncomplete = () => {
         resolve(request.result);

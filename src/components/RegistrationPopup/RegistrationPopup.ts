@@ -41,7 +41,8 @@ class RegistrationPopup extends Popup {
     }
   };
 
-  private onAddUserBtnClick = async (): Promise<void> => {
+  private onAddUserBtnClick = async (e: Event): Promise<void> => {
+    e.preventDefault();
     const response = await this.registrationService.sendData();
     if (!response) return;
     this.closePopup();

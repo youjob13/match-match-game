@@ -71,12 +71,19 @@ class RegistrationService implements IRegistrationService {
       avatar: this.dataRegistration.userImage,
     };
 
-    localStorage.setItem('user', JSON.stringify(user));
-    this.currentUser = user;
-    this.isAuthorization = true;
+    let res = false;
 
-    await db.put('users', user);
-    return true;
+    try {
+      await db.put('users', user);
+      localStorage.setItem('user', JSON.stringify(user));
+      this.currentUser = user;
+      this.isAuthorization = true;
+      res = true;
+    } catch (err) {
+      alert(err);
+    }
+
+    return res;
   };
 }
 
