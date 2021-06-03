@@ -5,6 +5,7 @@ export interface IGameService {
   categories: string[];
   cards: ICardFromJSON[] | [];
   cardsOnField: HTMLElement[];
+  timerToFlipCardsId: number | null;
   startGame: () => void;
   stopGame: (finishTime: number) => void;
   incrementNumberOfComparisons: () => void;

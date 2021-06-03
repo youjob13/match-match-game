@@ -7,7 +7,7 @@ import { IGameService } from '../../shared/interfaces/game-service-model';
 import { IPropsToBaseControl } from '../../shared/interfaces/api';
 
 const TIME_TO_FLIP = 1.5;
-const COUNTDOWN_TO_START_GAME = 30;
+const COUNTDOWN_TO_START_GAME = 5;
 
 class GameField extends BaseControl<HTMLElement> {
   private openCard: HTMLElement | null;
@@ -102,6 +102,7 @@ class GameField extends BaseControl<HTMLElement> {
     this.node.addEventListener('click', (e: Event) => {
       const target = <HTMLElement>e.target;
       const targetElem = <HTMLElement>target.closest('.card');
+      // if (!targetElem.classList.contains('card')) return;
       if (targetElem && !targetElem.classList.contains('flipped')) {
         this.selectCard(targetElem);
       }
@@ -128,7 +129,7 @@ class GameField extends BaseControl<HTMLElement> {
       this.node.append(cardElem.node);
     });
 
-    setTimeout(() => {
+    this.gameService.timerToFlipCardsId = window.setTimeout(() => {
       this.gameService.cardsOnField.forEach((card) =>
         card.classList.remove('flipped')
       );

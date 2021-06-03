@@ -19,6 +19,8 @@ class GameService implements IGameService {
 
   cardsOnField: HTMLElement[] = [];
 
+  timerToFlipCardsId: number | null = null;
+
   private gameData: ICardsDataFromJSON[] = [];
 
   private score = 0;
@@ -69,6 +71,8 @@ class GameService implements IGameService {
   }
 
   async startGame(): Promise<void> {
+    window.clearTimeout(this.timerToFlipCardsId || undefined);
+    this.cardsOnField = [];
     await this.getData();
     this.setCardsOnCurrentGame(this.settings.category);
   }
